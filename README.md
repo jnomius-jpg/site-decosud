@@ -27,3 +27,6 @@ Dans `assets/style.css`, en haut (`:root`). Polices EB Garamond et DM Sans, héb
 
 ## Mise en ligne (GitHub Pages, gratuit)
 Settings → Pages → Source : « Deploy from a branch », branche `main`, dossier `/ (root)`.
+
+## Après une modification du style ou des scripts
+Dans chaque page, les fichiers `style.css`, `donnees.js` et `main.js` sont appelés avec un numéro (`?v=2611`). Changer ce numéro (dans les 4 pages) oblige les navigateurs à recharger la nouvelle version au lieu de garder l'ancienne en mémoire.
