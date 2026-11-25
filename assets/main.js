@@ -155,24 +155,11 @@
       .catch(fail);
   }
 
-  /* Formulaire de la page « Nous rendre visite » */
-  var form = document.querySelector("#demande-form");
-  if (form) {
-    var box = form.querySelector("[data-objets]");
-    var wanted = new URLSearchParams(location.search).get("objet");
-    box.innerHTML = D.pieces.map(function (p) {
-      return '<label><input type="checkbox" name="objets" value="' + esc(p.nom + " (" + p.par + ")") + '"' + (p.id === wanted ? " checked" : "") + "> " + esc(p.nom) + "</label>";
-    }).join("") + '<label><input type="checkbox" name="objets" value="Autre objet vu en boutique ou sur Instagram"> Autre objet</label>';
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      var objets = new FormData(form).getAll("objets");
-      sendForm(form, { objet: objets.join(", ") || "Non précisé" });
-    });
-  }
-
-  /* ---------- Panneau « Se renseigner » (page Sélection) ---------- */
+  /* ---------- Panneau « Se renseigner » (toutes les pages) ----------
+     S'ouvre depuis n'importe quel objet (.piece) ou bouton [data-ask]. */
   var univName = function (id) { var u = (D.univers || []).filter(function (x) { return x.id === id; })[0]; return u ? u.nom : ""; };
-  if (document.querySelector('[data-pieces="all"]')) {
+  var onSelection = !!document.querySelector('[data-pieces="all"]');
+  (function () {
     var panel = document.createElement("div");
     panel.className = "ask-panel";
     panel.hidden = true;
@@ -180,6 +167,7 @@
       '<div class="ask-sheet" role="dialog" aria-modal="true" aria-labelledby="ask-titre" tabindex="-1">' +
         '<button type="button" class="ask-close" aria-label="Fermer">×</button>' +
         '<div class="ask-head"></div>' +
+        '<p class="ask-intro">Ce petit formulaire vous permet d\u2019écrire directement à Lucie, qui tient la boutique. Elle vous répondra elle-même, avec la disponibilité de la pièce et, si vous habitez loin, les possibilités d\u2019envoi. Rien n\u2019est payé en ligne : tout se décide ensemble, simplement.</p>' +
         '<form class="ask-form" novalidate>' +
           '<input type="hidden" name="objet">' +
           '<div class="field ask-free"><label for="ask-objet">Objet(s) qui vous intéressent</label><input id="ask-objet" name="objet_libre" placeholder="ex. le vase Day-Dream, les verres Abeille…"></div>' +
@@ -193,21 +181,21 @@
           '<button class="pill ink" type="submit">Envoyer ma demande</button>' +
           '<p class="err" role="alert" hidden></p>' +
         '</form>' +
-        '<div class="ask-done" role="status" hidden>' + cig() + '<p>Merci, votre demande a bien été transmise à Lucie. Elle vous répondra très vite.</p><button type="button" class="pill ink ask-back">Retour à la sélection</button></div>' +
+        '<div class="ask-done" role="status" hidden>' + cig() + '<p>Merci, votre demande a bien été transmise à Lucie. Elle vous répondra très vite.</p><button type="button" class="pill ink ask-back">' + (onSelection ? "Retour à la sélection" : "Retour au site") + '</button></div>' +
       '</div>';
     document.body.appendChild(panel);
     var sheet = panel.querySelector(".ask-sheet"), askForm = panel.querySelector(".ask-form"), head = panel.querySelector(".ask-head");
-    var done = panel.querySelector(".ask-done"), opener = null;
+    var done = panel.querySelector(".ask-done"), intro = panel.querySelector(".ask-intro"), opener = null;
     var openPanel = function (p) {
       opener = document.activeElement;
-      askForm.reset(); askForm.classList.remove("sent"); askForm.hidden = false; done.hidden = true;
+      askForm.reset(); askForm.classList.remove("sent"); askForm.hidden = false; intro.hidden = false; done.hidden = true;
       askForm.querySelector(".err").hidden = true;
       askForm.elements.objet.value = p ? p.nom + (p.par ? " (" + p.par + ")" : "") : "";
       panel.querySelector(".ask-free").hidden = !!p;
       head.innerHTML = p
         ? '<div class="ask-thumb">' + (p.image ? '<img src="' + esc(p.image) + '" alt="">' : '<div class="placeholder grain" style="background:' + (COLORS[p.couleur] || COLORS.terra) + '">' + cig() + "</div>") + "</div>" +
           '<div><p class="eyebrow">' + esc(univName(p.univers)) + '</p><h2 id="ask-titre">' + esc(p.nom) + '</h2><p class="by">' + esc(p.par) + "</p></div>"
-        : '<div><p class="eyebrow">Une question, un envoi ?</p><h2 id="ask-titre">Faire une <em>demande</em></h2><p class="by">Lucie vous répond avec les disponibilités et les possibilités d\u2019envoi.</p></div>';
+        : '<div><p class="eyebrow">Une question, un envoi ?</p><h2 id="ask-titre">Faire une <em>demande</em></h2></div>';
       panel.hidden = false;
       document.documentElement.classList.add("no-scroll");
       requestAnimationFrame(function () { requestAnimationFrame(function () { panel.classList.add("in"); }); });
@@ -225,18 +213,19 @@
       e.preventDefault();
       var extra = {};
       if (!askForm.elements.objet.value) extra.objet = askForm.elements.objet_libre.value || "Demande générale";
-      sendForm(askForm, extra, function () { askForm.hidden = true; done.hidden = false; });
+      sendForm(askForm, extra, function () { askForm.hidden = true; intro.hidden = true; done.hidden = false; });
     });
-    document.querySelector('[data-pieces="all"]').addEventListener("click", function (e) {
-      var a = e.target.closest(".piece");
+    var byId = function (id) { return D.pieces.filter(function (p) { return p.id === id; })[0]; };
+    document.addEventListener("click", function (e) {
+      var a = e.target.closest(".piece, [data-ask]");
       if (!a) return;
       e.preventDefault();
-      openPanel(D.pieces.filter(function (p) { return p.id === a.getAttribute("data-id"); })[0]);
+      openPanel(a.classList.contains("piece") ? byId(a.getAttribute("data-id")) : null);
     });
-    document.querySelectorAll("[data-ask]").forEach(function (b) {
-      b.addEventListener("click", function (e) { e.preventDefault(); openPanel(null); });
-    });
-  }
+    /* Anciens liens « visite.html?objet=…#demande » : on ouvre directement le panneau */
+    var wanted = new URLSearchParams(location.search).get("objet");
+    if (wanted && byId(wanted)) openPanel(byId(wanted));
+  })();
 
   /* ---------- Pop-up d'accueil « Noël » ----------
      Réglage : SAISON_NOEL_ACTIVE en haut de donnees.js (true / false). */
