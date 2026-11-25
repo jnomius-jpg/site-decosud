@@ -26,7 +26,9 @@ window.DECOSUD = {
     { id: "noel",                 nom: "Noël" },
     { id: "arts-de-la-table",     nom: "Arts de la table" },
     { id: "matieres-et-lumieres", nom: "Matières & lumières" },
-    { id: "couleurs-du-sud",      nom: "Couleurs du Sud" }
+    { id: "couleurs-du-sud",      nom: "Couleurs du Sud" },
+    { id: "objets-de-decoration", nom: "Objets de décoration" },
+    { id: "linge-et-etoffes",     nom: "Linge & étoffes" }
   ],
 
   /* ---------- Les objets ----------
@@ -62,6 +64,16 @@ window.DECOSUD = {
     { id: "vases-bleus",      univers: "couleurs-du-sud", nom: "Vases en verre bleu",  par: "Verrerie",                    image: "assets/img/obj-vases-bleus.jpg" },
     { id: "bougies",          univers: "couleurs-du-sud", nom: "Bougies de printemps", par: "Senteurs",                    image: "assets/img/obj-bougies-printemps.jpg" },
     { id: "costa-nova",       univers: "couleurs-du-sud", nom: "Vaisselle en grès",    par: "Costa Nova",                  image: "", couleur: "terra" },
-    { id: "pas-dans-la-mer",  univers: "couleurs-du-sud", nom: "Créations",            par: "Gwenaëlle, Pas dans la mer",  image: "", couleur: "cobalt" }
+    { id: "pas-dans-la-mer",  univers: "couleurs-du-sud", nom: "Créations",            par: "Gwenaëlle, Pas dans la mer",  image: "", couleur: "cobalt" },
+
+    /* Objets de décoration */
+    { id: "vase-sculptural",  univers: "objets-de-decoration", nom: "Vase sculptural ajouré",      par: "Céramique",                image: "assets/img/univers-objets.jpg" },
+    { id: "jarres-turquoise", univers: "objets-de-decoration", nom: "Jarres en céramique turquoise", par: "Céramique émaillée",       image: "assets/img/ambiance-printemps.jpg" },
+    { id: "crabe-raye",       univers: "objets-de-decoration", nom: "Crabe rayé",                  par: "Les Curiosités de Fred",   image: "assets/img/insta-5.jpg" },
+
+    /* Linge & étoffes */
+    { id: "linge-brode",      univers: "linge-et-etoffes", nom: "Linge de table brodé",            par: "Lin et coton",             image: "assets/img/univers-linge.jpg" },
+    { id: "coussins-plaids",  univers: "linge-et-etoffes", nom: "Coussins brodés et plaids",       par: "Linge de maison",          image: "assets/img/insta-4.jpg" },
+    { id: "plaid-chocolat",   univers: "linge-et-etoffes", nom: "Plaid chocolat",                  par: "Linge de maison",          image: "assets/img/insta-3.jpg" }
   ]
 };

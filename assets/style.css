@@ -198,15 +198,33 @@ a:hover .placeholder { transform: scale(1.03); }
 /* ==========================================================
    COLLAGE (bandeau photo + aplats, esprit « Les Saisons »)
    ========================================================== */
-.collage { display: grid; grid-template-columns: 1.1fr .55fr 1.3fr .7fr; height: clamp(300px, 36vw, 520px); margin-top: clamp(40px, 5vw, 70px); }
-.collage > * { overflow: hidden; position: relative; }
-.collage img { width: 100%; height: 100%; object-fit: cover; }
-.collage .flat { display: flex; align-items: center; justify-content: center; }
-.collage .flat .cig { font-size: clamp(34px, 4.2vw, 64px); }
-.collage .f1 { background: var(--terra); color: var(--creme); }
-.collage .f2 { background: var(--ocre); color: var(--cobalt); }
-.collage .f2 .cig { transform: rotate(-22deg); }
-@media (max-width: 700px) { .collage { grid-template-columns: 1fr .6fr 1fr; height: 300px; } .collage > :nth-child(4) { display: none; } }
+/* Les Ambiances : 4 saisons, 2 lignes de 2 photos + bandes de couleur à cigale */
+.saisons { display: grid; grid-template-columns: 1.3fr .42fr 1.3fr .42fr; grid-template-rows: auto auto; column-gap: 0; margin-top: clamp(40px, 5vw, 70px); }
+.saisons.alt { grid-template-columns: .42fr 1.3fr .42fr 1.3fr; margin-top: clamp(48px, 5.5vw, 80px); }
+.saisons .k1 { grid-column: 1; } .saisons .k2 { grid-column: 2; } .saisons .k3 { grid-column: 3; } .saisons .k4 { grid-column: 4; }
+.sz-photo, .sz-band { grid-row: 1; }
+.sz-photo { aspect-ratio: 4 / 5; overflow: hidden; background: var(--sable); }
+.sz-photo img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 1.4s cubic-bezier(.22,.61,.36,1); }
+.sz-photo:hover img { transform: scale(1.03); }
+.sz-band { display: flex; align-items: center; justify-content: center; }
+.sz-band .cig { font-size: clamp(30px, 3.6vw, 56px); }
+.b-ocre { background: var(--ocre); color: var(--cobalt); }
+.b-cobalt { background: var(--cobalt); color: var(--ocre); }
+.b-cobalt .cig { transform: rotate(-22deg); }
+.b-terra { background: var(--terra); color: var(--lin); }
+.b-terra .cig { transform: rotate(18deg); }
+.b-sapin { background: #1E4D36; color: var(--ocre); }
+.sz-cap { grid-row: 2; padding: 22px 6px 0; text-align: center; }
+.sz-cap .h3 { margin: 0 0 6px; }
+.sz-cap p { font-family: var(--serif); font-size: 1.05rem; line-height: 1.55; color: var(--pierre); max-width: 34ch; margin: 0 auto; }
+@media (max-width: 700px) {
+  .saisons, .saisons.alt { grid-template-columns: 1fr; margin-top: 40px; }
+  .saisons > * { grid-column: 1 !important; grid-row: auto; }
+  .sz-band { height: 88px; margin: 34px 0; }
+  .sz-band .cig { font-size: 26px; transform: rotate(90deg); }
+  .saisons > .sz-band:first-child { margin-top: 0; }
+  .saisons > .sz-band:last-child { display: none; }
+}
 
 /* ==========================================================
    AMBIANCES (blocs alternés 60 / 40)
@@ -401,15 +419,14 @@ body::before {
   font-family: var(--serif); font-weight: 400; text-transform: uppercase;
   font-size: clamp(2.6rem, 5.6vw, 5rem); letter-spacing: .04em; line-height: 1; margin: 0 0 44px;
 }
-.passe { margin: 0 auto; width: 78%; max-width: 960px; aspect-ratio: 16 / 9; overflow: hidden; background: var(--sable); }
-.passe img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; display: block; }
+.passe { margin: 0 auto; width: 84%; max-width: 1200px; aspect-ratio: 24 / 10; overflow: hidden; background: var(--sable); }
+.passe img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
 .coups.section { padding-top: 56px; }
 .coups-title { font-size: clamp(2.6rem, 5.2vw, 4.6rem); }
 @media (max-width: 700px) {
   .cover { padding-top: calc(76px + 40px); }
   .cover-title { margin-bottom: 32px; }
-  .passe { width: 100%; aspect-ratio: 4 / 5; }
-  .passe img { object-position: center; }
+  .passe { width: 100%; }
   .coups.section { padding-top: 48px; }
 }
 
@@ -419,6 +436,13 @@ body::before {
 .amb.c-sapin .eyebrow { color: var(--creme); opacity: .8; }
 .amb.c-sapin .pill.ink { border-color: var(--creme); color: var(--creme); }
 .amb.c-sapin .pill.ink:hover { background: var(--creme); color: #1E4D36; }
+.amb.c-creme .amb-txt { background: var(--sable); color: var(--ink); }
+.amb.c-creme .cig, .amb.c-creme .eyebrow { color: var(--cobalt); }
+.amb.c-vermillon .amb-txt { background: var(--terra); color: var(--creme); }
+.amb.c-vermillon .cig { color: var(--ocre); }
+.amb.c-vermillon .eyebrow { color: var(--creme); opacity: .85; }
+.amb.c-vermillon .pill.ink { border-color: var(--creme); color: var(--creme); }
+.amb.c-vermillon .pill.ink:hover { background: var(--creme); color: var(--terra); }
 
 /* ---------- Pop-up d'accueil (saison) ---------- */
 .saison { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 20px;
