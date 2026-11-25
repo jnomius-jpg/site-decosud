@@ -11,7 +11,7 @@
 <meta name="theme-color" content="#FCFAF6">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/ebgaramond-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/style.css?v=2611">
+<link rel="stylesheet" href="assets/style.css?v=2611b">
 </head>
 <body class="home">
 <a class="skip" href="#contenu">Aller au contenu</a>
@@ -27,10 +27,7 @@
 <section class="cover">
   <h1 class="cover-title">Déco Sud</h1>
   <figure class="passe">
-    <picture>
-      <source media="(max-width: 700px)" srcset="assets/img/hero-portrait.jpg">
-      <img src="assets/img/hero-large.jpg" alt="La vitrine de Noël de Déco Sud : sapins givrés, étoiles lumineuses dorées, branches de sapin suspendues et fleurs rouges, sous la citation de Lamartine « Objets inanimés, avez-vous donc une âme ? »" fetchpriority="high">
-    </picture>
+    <img src="assets/img/hero-accueil.jpg" width="2400" height="1000" alt="Trois ambiances de la boutique Déco Sud : étagères éclairées le soir, carafes en verre orangé et sucrier en verre au soleil" fetchpriority="high">
   </figure>
 </section>
 
@@ -68,11 +65,21 @@
     <p class="lede intro">Une table que l'on dresse pour recevoir, une lampe qui adoucit le soir, un bleu qui rappelle la mer. À chaque saison, la boutique change de costume.</p>
   </div>
   <div class="wrap">
-    <div class="collage reveal">
-      <div><img src="assets/img/cc-drap-haomy.jpg" alt="" loading="lazy"></div>
-      <div class="flat f1 grain"><svg class="cig " aria-hidden="true"><use href="assets/cigales.svg#c"/></svg></div>
-      <div><img src="assets/img/guide-table-bleue.jpg" alt="" loading="lazy"></div>
-      <div class="flat f2 grain"><svg class="cig " aria-hidden="true"><use href="assets/cigales.svg#c"/></svg></div>
+    <div class="saisons reveal">
+      <div class="sz-photo k1"><img src="assets/img/ambiance-printemps.jpg" alt="Vases en céramique turquoise posés au bord d’une piscine" loading="lazy"></div>
+      <div class="sz-cap k1"><h3 class="h3"><em>Printemps</em></h3><p>Le retour de la lumière, les bleus clairs et l’envie d’ouvrir les fenêtres.</p></div>
+      <div class="sz-band b-ocre k2 grain"><svg class="cig " aria-hidden="true"><use href="assets/cigales.svg#c"/></svg></div>
+      <div class="sz-photo k3"><img src="assets/img/ambiance-ete.jpg" alt="Drap de plage rayé bleu posé sur un transat au bord de l’eau" loading="lazy"></div>
+      <div class="sz-cap k3"><h3 class="h3"><em>Été</em></h3><p>Matières légères, soleil franc et longues journées au bord de l’eau.</p></div>
+      <div class="sz-band b-cobalt k4 grain"><svg class="cig " aria-hidden="true"><use href="assets/cigales.svg#c"/></svg></div>
+    </div>
+    <div class="saisons alt reveal">
+      <div class="sz-band b-terra k1 grain"><svg class="cig " aria-hidden="true"><use href="assets/cigales.svg#c"/></svg></div>
+      <div class="sz-photo k2"><img src="assets/img/ambiance-automne.jpg" alt="Table d’automne dressée, branches de baies orangées, verres et pichet blanc" loading="lazy"></div>
+      <div class="sz-cap k2"><h3 class="h3"><em>Automne</em></h3><p>Couleurs chaudes, tables qui s’allongent et douceur des fins de journée.</p></div>
+      <div class="sz-band b-sapin k3 grain"><svg class="cig " aria-hidden="true"><use href="assets/cigales.svg#c"/></svg></div>
+      <div class="sz-photo k4"><img src="assets/img/ambiance-hiver.jpg" alt="Table de Noël, sapin doré, décorations brodées de perles et gobelets rayés rouge et or" loading="lazy"></div>
+      <div class="sz-cap k4"><h3 class="h3"><em>Hiver</em></h3><p>Bougies allumées, éclats dorés et plaisirs d’hiver autour de la maison.</p></div>
     </div>
   </div>
 </section>
@@ -123,6 +130,26 @@
       <h3 class="h2">Couleurs <em>du Sud</em></h3>
       <p>Jaune mimosa, bleu Méditerranée, terre cuite. Oser la couleur, par touches ou franchement, comme on ouvre les volets un matin de printemps.</p>
       <a class="pill ink" href="selection.html#couleurs-du-sud">Explorer la sélection <span aria-hidden="true">→</span></a>
+    </div>
+  </article>
+  <article class="amb c-creme reveal">
+    <div class="amb-img"><img src="assets/img/univers-objets.jpg" alt="Vase sculptural en céramique blanche ajourée" loading="lazy"></div>
+    <div class="amb-txt grain">
+      <svg class="cig " aria-hidden="true"><use href="assets/cigales.svg#c"/></svg>
+      <p class="eyebrow">Ambiance IV</p>
+      <h3 class="h2">Objets <em>de décoration</em></h3>
+      <p>Vases sculpturaux, céramiques brutes et pièces singulières. Ces détails qui donnent du caractère à un intérieur dès le premier regard.</p>
+      <a class="pill ink" href="selection.html#objets-de-decoration">Explorer la sélection <span aria-hidden="true">→</span></a>
+    </div>
+  </article>
+  <article class="amb flip c-vermillon reveal">
+    <div class="amb-img"><img src="assets/img/univers-linge.jpg" alt="Linge de table rayé et à carreaux, brodé de petits motifs rouges" loading="lazy"></div>
+    <div class="amb-txt grain">
+      <svg class="cig " aria-hidden="true"><use href="assets/cigales.svg#c"/></svg>
+      <p class="eyebrow">Ambiance V</p>
+      <h3 class="h2">Linge <em>&amp;</em> étoffes</h3>
+      <p>Lin lavé, cotons brodés, coussins et plaids. Des matières souples qui habillent une table ou un canapé et réchauffent la maison.</p>
+      <a class="pill ink" href="selection.html#linge-et-etoffes">Explorer la sélection <span aria-hidden="true">→</span></a>
     </div>
   </article>
 </section>
@@ -184,15 +211,14 @@
       <a class="link" href="https://www.instagram.com/decosud_83740/" target="_blank" rel="noopener">Voir notre Instagram @decosud_83740 <span aria-hidden="true">→</span></a>
     </div>
     <div class="ig-grid">
-      <!-- Remplacer chaque lien par l'adresse du post Instagram correspondant -->
-      <a href="https://www.instagram.com/decosud_83740/" target="_blank" rel="noopener" aria-label="Post Instagram : table de Noël en bleu"><div class="zoom"><img src="assets/img/insta-1.jpg" alt="" loading="lazy"></div></a>
-      <a href="https://www.instagram.com/decosud_83740/" target="_blank" rel="noopener" aria-label="Post Instagram : la boutique à Pâques"><div class="zoom"><img src="assets/img/insta-2.jpg" alt="" loading="lazy"></div></a>
-      <a href="https://www.instagram.com/decosud_83740/" target="_blank" rel="noopener" aria-label="Post Instagram : vase Day-Dream"><div class="zoom"><img src="assets/img/insta-3.jpg" alt="" loading="lazy"></div></a>
-      <a href="https://www.instagram.com/decosud_83740/" target="_blank" rel="noopener" aria-label="Post Instagram : les nouveaux luminaires"><div class="zoom"><img src="assets/img/insta-4.jpg" alt="" loading="lazy"></div></a>
-      <a href="https://www.instagram.com/decosud_83740/" target="_blank" rel="noopener" aria-label="Post Instagram : visite à la boutique"><div class="zoom"><img src="assets/img/insta-5.jpg" alt="" loading="lazy"></div></a>
-      <a href="https://www.instagram.com/decosud_83740/" target="_blank" rel="noopener" aria-label="Post Instagram : table d'automne"><div class="zoom"><img src="assets/img/insta-6.jpg" alt="" loading="lazy"></div></a>
-      <a href="https://www.instagram.com/decosud_83740/" target="_blank" rel="noopener" aria-label="Post Instagram : drap de plage Haomy"><div class="zoom"><img src="assets/img/insta-7.jpg" alt="" loading="lazy"></div></a>
-      <a href="https://www.instagram.com/decosud_83740/" target="_blank" rel="noopener" aria-label="Post Instagram : la vitrine et le radassier"><div class="zoom"><img src="assets/img/insta-8.jpg" alt="" loading="lazy"></div></a>
+      <a href="https://www.instagram.com/p/DUYZAbhCIk1/" target="_blank" rel="noopener noreferrer" aria-label="Voir le post sur Instagram (nouvel onglet)"><div class="zoom"><img src="assets/img/insta-1.jpg" alt="Table de printemps vichy jaune, verres abeilles et serviettes agrumes" loading="lazy"></div></a>
+      <a href="https://www.instagram.com/p/DUBOtZbiPbP/" target="_blank" rel="noopener noreferrer" aria-label="Voir le post sur Instagram (nouvel onglet)"><div class="zoom"><img src="assets/img/insta-2.jpg" alt="Sets et dessous-de-verre en perles corail et blanc motifs mer" loading="lazy"></div></a>
+      <a href="https://www.instagram.com/p/DeexZOzDjbP/" target="_blank" rel="noopener noreferrer" aria-label="Voir le post sur Instagram (nouvel onglet)"><div class="zoom"><img src="assets/img/insta-3.jpg" alt="Ambiance d’automne, plaid chocolat, pochette brodée et coupes en bois" loading="lazy"></div></a>
+      <a href="https://www.instagram.com/p/DeR5YVJjjKD/" target="_blank" rel="noopener noreferrer" aria-label="Voir le post sur Instagram (nouvel onglet)"><div class="zoom"><img src="assets/img/insta-4.jpg" alt="Banc en bois, coussins brodés, plaids et lampes chaleureuses" loading="lazy"></div></a>
+      <a href="https://www.instagram.com/p/DYzjMklCGz-/" target="_blank" rel="noopener noreferrer" aria-label="Voir le post sur Instagram (nouvel onglet)"><div class="zoom"><img src="assets/img/insta-5.jpg" alt="Coussins ronds surpiqués et crabe rayé Les Curiosités de Fred" loading="lazy"></div></a>
+      <a href="https://www.instagram.com/p/DVROkjjCDpA/" target="_blank" rel="noopener noreferrer" aria-label="Voir le post sur Instagram (nouvel onglet)"><div class="zoom"><img src="assets/img/insta-6.jpg" alt="Fauteuil kilim beige et noir, table de chevet en bois et grande lampe" loading="lazy"></div></a>
+      <a href="https://www.instagram.com/p/DPgRlAlCBY9/" target="_blank" rel="noopener noreferrer" aria-label="Voir le post sur Instagram (nouvel onglet)"><div class="zoom"><img src="assets/img/insta-7.jpg" alt="Table blanche au soleil d’automne, vaisselle perlée et poissons en bois" loading="lazy"></div></a>
+      <a href="https://www.instagram.com/p/DMR0L67ILoe/" target="_blank" rel="noopener noreferrer" aria-label="Voir le post sur Instagram (nouvel onglet)"><div class="zoom"><img src="assets/img/insta-8.jpg" alt="Vase figurine Day-Dream Pols Potten au soleil devant la boutique" loading="lazy"></div></a>
     </div>
   </div>
 </section>
@@ -215,7 +241,7 @@
     </div>
   </div>
 </footer>
-<script src="assets/donnees.js?v=2611"></script>
-<script src="assets/main.js?v=2611"></script>
+<script src="assets/donnees.js?v=2611b"></script>
+<script src="assets/main.js?v=2611b"></script>
 </body>
 </html>
