@@ -37,7 +37,7 @@
     var visual = p.image
       ? '<img src="' + esc(p.image) + '" alt="' + esc(p.nom + ", " + p.par) + '" loading="lazy">'
       : '<div class="placeholder grain" style="background:' + (COLORS[p.couleur] || COLORS.terra) + '">' + cig() + '<span>Photo à venir</span></div>';
-    return '<a class="piece reveal" href="visite.html?objet=' + encodeURIComponent(p.id) + '#demande">' +
+    return '<a class="piece reveal" data-univers="' + esc(p.univers || "") + '" href="visite.html?objet=' + encodeURIComponent(p.id) + '#demande">' +
       '<div class="zoom">' + visual + '</div>' +
       '<p class="name">' + esc(p.nom) + '</p>' +
       '<p class="by">' + esc(p.par) + '</p>' +
@@ -47,6 +47,39 @@
     var list = el.getAttribute("data-pieces") === "coups" ? D.pieces.filter(function (p) { return p.coupDeCoeur; }) : D.pieces;
     el.innerHTML = list.map(pieceHTML).join("");
   });
+
+  /* ---------- Filtres par univers (page Sélection) ----------
+     L'univers actif est dans l'adresse : selection.html#arts-de-la-table */
+  var filterBar = document.querySelector("[data-filters]");
+  if (filterBar) {
+    var univers = D.univers || [];
+    var countOf = function (id) { return D.pieces.filter(function (p) { return !id || p.univers === id; }).length; };
+    filterBar.innerHTML = [{ id: "", nom: "Tout" }].concat(univers).map(function (u) {
+      return '<button type="button" data-u="' + esc(u.id) + '" aria-pressed="false">' + esc(u.nom) + '<span class="count">' + countOf(u.id) + "</span></button>";
+    }).join("");
+    var applyFilter = function () {
+      var id = decodeURIComponent(location.hash.slice(1));
+      if (!univers.some(function (u) { return u.id === id; })) id = "";
+      filterBar.querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-u") === id); });
+      var shown = 0;
+      document.querySelectorAll('[data-pieces="all"] .piece').forEach(function (el) {
+        var ok = !id || el.getAttribute("data-univers") === id;
+        el.hidden = !ok;
+        if (ok) { shown++; el.classList.add("in"); }
+      });
+      var empty = document.querySelector(".empty");
+      if (empty) empty.hidden = shown > 0;
+    };
+    filterBar.addEventListener("click", function (e) {
+      var b = e.target.closest("button");
+      if (!b) return;
+      var id = b.getAttribute("data-u");
+      if (history.replaceState) history.replaceState(null, "", id ? "#" + id : location.pathname + location.search);
+      applyFilter();
+    });
+    window.addEventListener("hashchange", applyFilter);
+    applyFilter();
+  }
 
   /* Flèches du carrousel */
   document.querySelectorAll("[data-scroll]").forEach(function (btn) {
