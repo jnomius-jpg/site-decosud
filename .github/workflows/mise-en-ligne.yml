@@ -18,16 +18,24 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy:
+  # 1) Préparer le paquet du site
+  build:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
           path: .
+
+  # 2) Le publier, dans un job séparé : le paquet est alors bien enregistré
+  #    avant d'être lu (évite l'erreur « No artifacts named github-pages »).
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - id: deployment
         uses: actions/deploy-pages@v4
