@@ -6,11 +6,11 @@ Site statique (HTML, CSS, JavaScript), sans e-commerce, sans outil de constructi
 ## Les pages
 - `index.html` : accueil (coups de cœur, manifeste, ambiances, guides, visite, Instagram)
 - `selection.html` : la sélection d'objets, avec « Se renseigner » sur chaque pièce
-- `visite.html` : adresse, horaires, plan et formulaire de demande (e-mail ou WhatsApp)
+- `visite.html` : adresse, horaires, plan et formulaire de demande (envoyé par e-mail via Formspree)
 - `mentions-legales.html` : mentions légales et données personnelles
 
 ## Ce qu'on modifie le plus souvent
-**`assets/donnees.js`** : l'e-mail et le WhatsApp de la boutique, et la liste des objets.
+**`assets/donnees.js`** : l'e-mail de la boutique, l'adresse Formspree des formulaires, et la liste des objets.
 
 Ajouter ou changer un objet :
 1. Mettre la photo dans `assets/img/` (portrait 4:5, environ 1200 px de large, en .jpg).
