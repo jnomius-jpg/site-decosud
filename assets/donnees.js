@@ -3,6 +3,11 @@
    Tout ce qui change souvent est ici : coordonnées, univers et objets.
    ========================================================== */
 
+/* ---------- Saison de Noël ----------
+   true = le pop-up « Noël » s'affiche sur la page d'accueil (une fois par visite).
+   false = il disparaît. L'univers Noël, lui, reste dans la Sélection tant qu'il est listé plus bas. */
+const SAISON_NOEL_ACTIVE = true;
+
 window.DECOSUD = {
 
   /* ---------- Coordonnées ---------- */
@@ -18,6 +23,7 @@ window.DECOSUD = {
      sans accent ni espace (il sert dans l'adresse : selection.html#mon-id).
      Les filtres de la page Sélection apparaissent dans cet ordre. */
   univers: [
+    { id: "noel",                 nom: "Noël" },
     { id: "arts-de-la-table",     nom: "Arts de la table" },
     { id: "matieres-et-lumieres", nom: "Matières & lumières" },
     { id: "couleurs-du-sud",      nom: "Couleurs du Sud" }
@@ -32,6 +38,11 @@ window.DECOSUD = {
      - coupDeCoeur : true = l'objet apparaît aussi sur la page d'accueil.
   */
   pieces: [
+    /* Noël */
+    { id: "noel-decorations", univers: "noel", nom: "Décorations brodées de perles", par: "À suspendre au sapin", image: "assets/img/obj-noel-decorations.jpg" },
+    { id: "noel-sapin",       univers: "noel", nom: "Sapin doré",                    par: "Décoration de table",  image: "assets/img/obj-noel-sapin.jpg" },
+    { id: "noel-seau",        univers: "noel", nom: "Seau à champagne doré",         par: "Tables de fête",       image: "assets/img/obj-noel-seau.jpg" },
+
     /* Arts de la table */
     { id: "verres-abeille",   univers: "arts-de-la-table", nom: "Verres Abeille",             par: "La Rochère",          image: "assets/img/cc-verres-abeille.jpg", coupDeCoeur: true },
     { id: "pichet",           univers: "arts-de-la-table", nom: "Pichet en faïence blanche",  par: "Arts de la table",    image: "assets/img/obj-pichet.jpg" },

@@ -405,3 +405,44 @@ body::before {
   .passe img { object-position: center; }
   .coups.section { padding-top: 48px; }
 }
+
+/* ---------- Univers Noël : aplat vert sapin ---------- */
+.amb.c-sapin .amb-txt { background: #1E4D36; color: var(--creme); }
+.amb.c-sapin .cig { color: var(--ocre); }
+.amb.c-sapin .eyebrow { color: var(--creme); opacity: .8; }
+.amb.c-sapin .pill.ink { border-color: var(--creme); color: var(--creme); }
+.amb.c-sapin .pill.ink:hover { background: var(--creme); color: #1E4D36; }
+
+/* ---------- Pop-up d'accueil (saison) ---------- */
+.saison { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 20px;
+  background: rgba(20, 19, 17, .55); opacity: 0; transition: opacity .7s ease; }
+.saison.in { opacity: 1; }
+.saison-card { position: relative; width: 100%; max-width: 780px; max-height: calc(100vh - 40px); overflow: auto;
+  display: grid; grid-template-columns: 1fr 1fr; padding: 22px; border-radius: 4px; background: var(--lin);
+  box-shadow: 0 30px 80px rgba(20, 19, 17, .25); transform: translateY(14px); transition: transform .9s cubic-bezier(.22,.61,.36,1); }
+.saison.in .saison-card { transform: none; }
+.saison-img { position: relative; margin: 0; aspect-ratio: 4 / 5; overflow: hidden; }
+.saison-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.saison-img::after { content: ""; position: absolute; inset: 75% 0 0; background: linear-gradient(to bottom, rgba(20,19,17,0), rgba(20,19,17,.5)); }
+.saison-img figcaption { position: absolute; left: 24px; bottom: 16px; z-index: 1; color: #fff;
+  font-family: var(--serif); font-weight: 600; font-size: clamp(3.2rem, 6vw, 4.2rem); line-height: 1; letter-spacing: -.01em; }
+.saison-txt { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 32px clamp(24px, 4vw, 48px); }
+.saison-txt .cig { color: var(--ocre); font-size: 10px; margin-bottom: 22px; }
+.saison-txt h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(1.7rem, 2.6vw, 2.2rem); line-height: 1.15; margin: 0 0 16px; }
+.saison-txt p { font-family: var(--serif); font-size: 1.08rem; line-height: 1.6; margin: 0 0 28px; max-width: 30ch; }
+.saison-txt .pill { align-self: center; margin: 0; }
+.saison-close { position: absolute; top: 6px; right: 8px; z-index: 2; width: 36px; height: 36px; border: 0; background: none;
+  font: 300 26px/1 var(--sans); color: var(--ink); cursor: pointer; opacity: .6; transition: opacity .3s; }
+.saison-close:hover { opacity: 1; }
+.saison-card:focus { outline: none; }
+@media (max-width: 700px) {
+  .saison { padding: 16px; }
+  .saison-card { grid-template-columns: 1fr; padding: 16px; max-width: 420px; }
+  .saison-img { aspect-ratio: 4 / 4.2; }
+  .saison-img figcaption { left: 18px; bottom: 12px; font-size: 3.2rem; }
+  .saison-txt { padding: 26px 12px 14px; }
+  .saison-txt .cig { margin-bottom: 14px; }
+  .saison-txt p { margin-bottom: 22px; }
+  .saison-close { top: 26px; right: 26px; width: 32px; height: 32px; border-radius: 50%; background: var(--lin); opacity: .92; font-size: 22px; }
+}
+@media (prefers-reduced-motion: reduce) { .saison, .saison-card { transition: none; } }

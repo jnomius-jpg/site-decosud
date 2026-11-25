@@ -176,6 +176,43 @@
     }
   }
 
+  /* ---------- Pop-up d'accueil « Noël » ----------
+     Réglage : SAISON_NOEL_ACTIVE en haut de donnees.js (true / false). */
+  var noelOn = typeof SAISON_NOEL_ACTIVE !== "undefined" && SAISON_NOEL_ACTIVE;
+  if (noelOn && document.body.classList.contains("home")) {
+    var seen = false;
+    try { seen = sessionStorage.getItem("decosud-noel") === "1"; } catch (e) {}
+    if (!seen) setTimeout(function () {
+      var lastFocus = document.activeElement;
+      var pop = document.createElement("div");
+      pop.className = "saison";
+      pop.innerHTML =
+        '<div class="saison-card" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="saison-titre">' +
+          '<button type="button" class="saison-close" aria-label="Fermer">×</button>' +
+          '<figure class="saison-img"><img src="assets/img/noel-popup.jpg" alt="Décorations de Noël brodées de perles, photophores rayés rouge et blanc et petit sapin doré à nœud de velours"><figcaption aria-hidden="true">Noël</figcaption></figure>' +
+          '<div class="saison-txt">' + cig() +
+            '<h2 id="saison-titre">Noël chez <em>Déco Sud</em></h2>' +
+            '<p>Découvrez notre sélection de décorations, de lumières d\u2019hiver et d\u2019idées cadeaux pour les fêtes.</p>' +
+            '<a class="pill ink" href="selection.html#noel">Découvrir l\u2019univers Noël <span aria-hidden="true">→</span></a>' +
+          '</div>' +
+        '</div>';
+      document.body.appendChild(pop);
+      try { sessionStorage.setItem("decosud-noel", "1"); } catch (e) {}
+      var close = function () {
+        pop.classList.remove("in");
+        document.removeEventListener("keydown", onKey);
+        setTimeout(function () { pop.remove(); }, 700);
+        if (lastFocus && lastFocus.focus) lastFocus.focus();
+      };
+      var onKey = function (e) { if (e.key === "Escape") close(); };
+      pop.addEventListener("click", function (e) { if (e.target === pop || e.target.closest(".saison-close")) close(); });
+      pop.querySelector(".pill").addEventListener("click", function () { pop.remove(); });
+      document.addEventListener("keydown", onKey);
+      requestAnimationFrame(function () { requestAnimationFrame(function () { pop.classList.add("in"); }); });
+      pop.querySelector(".saison-card").focus({ preventScroll: true });
+    }, 1200);
+  }
+
   /* Liens e-mail / WhatsApp affichés dans le pied de page */
   document.querySelectorAll("[data-email]").forEach(function (a) {
     if (C.email) { a.href = "mailto:" + C.email; a.textContent = C.email; } else { a.href = "visite.html#demande"; a.textContent = "Écrire à la boutique"; }
