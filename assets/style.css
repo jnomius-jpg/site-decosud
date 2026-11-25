@@ -513,3 +513,6 @@ html.no-scroll { overflow: hidden; }
 .ask-done p { font-family: var(--serif); font-size: 1.35rem; line-height: 1.5; margin: 22px auto 30px; max-width: 26ch; }
 .ask-done .pill { margin: 0; align-self: center; }
 @media (prefers-reduced-motion: reduce) { .ask-panel, .ask-sheet { transition: none; } }
+.ask-intro { font-family: var(--serif); font-style: italic; font-size: 1.02rem; line-height: 1.55; color: var(--pierre); margin: -8px 0 28px; }
+.request-en { align-self: end; }
+.request-en .en { margin-top: 0; }
