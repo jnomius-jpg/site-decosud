@@ -270,26 +270,30 @@ a:hover .placeholder { transform: scale(1.03); }
 /* ==========================================================
    PIED DE PAGE
    ========================================================== */
-/* Pied de page : bandeau fin terracotta, texture papier (classe grain dans le HTML) */
-.footer { --soft: rgba(252, 250, 246, .78); background: var(--terra); color: var(--creme); padding: 36px 0 24px; font-size: 13px; font-weight: 300; line-height: 1.7; }
-.footer .foot-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 28px 40px; flex-wrap: wrap; }
-.footer .foot-block p { margin: 0; color: var(--soft); }
-.footer .foot-hours p { white-space: nowrap; }
-.footer abbr { text-decoration: none; text-transform: uppercase; letter-spacing: .12em; font-size: 11px; color: var(--creme); }
-.footer a { color: var(--soft); text-decoration: underline; text-decoration-color: transparent; text-decoration-thickness: 1px; text-underline-offset: 4px; transition: text-decoration-color .35s, color .35s; }
-.footer a:hover { text-decoration-color: currentColor; color: var(--creme); }
-.footer .logo { color: var(--creme); text-decoration: none; display: inline-flex; }
-.footer .logo .cig { color: var(--ocre); }
-.footer .rail { display: flex; gap: 9px; margin-top: 8px; font-size: 6px; }
-.footer .rail .cig:nth-child(1) { color: var(--creme); }
-.footer .rail .cig:nth-child(2) { color: var(--cobalt); }
-.footer .rail .cig:nth-child(3) { color: var(--ocre); }
-.footer .rail .cig:nth-child(4) { color: #1E4D36; }
-.footer .legal { margin-top: 28px; padding-top: 0; border-top: 1px solid rgba(252, 250, 246, .2); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px 12px; font-size: .75rem; color: var(--soft); }
-.footer .legal > * { margin-top: 24px; }
-.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-@media (max-width: 1240px) { .footer .foot-row { display: grid; grid-template-columns: auto auto; justify-content: space-between; gap: 24px 40px; } }
-@media (max-width: 560px) { .footer { padding: 32px 0 22px; font-size: 12px; } .footer abbr { font-size: 10px; letter-spacing: .1em; } .footer .foot-row { grid-template-columns: 1fr; gap: 18px; } }
+/* Pied de page : miroir de l'en-tête (fond papier, filet fin en haut) */
+.footer { background: var(--lin); color: var(--ink); border-top: 1px solid rgba(30, 29, 26, .25); padding: 36px 0 24px; }
+.footer .foot-line { display: flex; justify-content: space-between; align-items: center; gap: 12px 32px; }
+.footer .foot-nav { display: flex; flex-wrap: wrap; gap: 8px clamp(18px, 2.4vw, 38px); }
+.footer .foot-nav a { font-size: 12.5px; letter-spacing: .04em; position: relative; padding: 4px 0; }
+.footer .foot-nav a::after { content: ""; position: absolute; left: 0; right: 100%; bottom: 0; height: 1px; background: currentColor; transition: right var(--slow); }
+.footer .foot-nav a:hover::after { right: 0; }
+.footer .foot-info { margin-top: 24px; font-size: .85rem; font-weight: 300; color: var(--pierre); align-items: baseline; }
+.footer .foot-info p { margin: 0; }
+.footer .foot-info a, .footer .foot-legal a { text-decoration: underline; text-decoration-color: transparent; text-decoration-thickness: 1px; text-underline-offset: 4px; transition: text-decoration-color .35s, color .35s; }
+.footer .foot-info a:hover, .footer .foot-legal a:hover { text-decoration-color: currentColor; color: var(--ink); }
+.footer .foot-hours, .footer .foot-info a { white-space: nowrap; }
+.footer abbr { text-decoration: none; text-transform: uppercase; letter-spacing: .12em; font-size: .72rem; color: var(--ink); }
+.footer .sep { margin: 0 12px; opacity: .5; }
+.footer .foot-legal { margin-top: 24px; font-size: .75rem; color: var(--pierre); }
+.footer .foot-legal > :first-child, .footer .foot-legal > :last-child { flex: 1; }
+.footer .foot-legal > :last-child { text-align: right; }
+.footer .rail { display: flex; gap: 9px; font-size: 6px; }
+.footer .rail .cig:nth-child(1) { color: var(--terra); }
+.footer .rail .cig:nth-child(2) { color: var(--ocre); }
+.footer .rail .cig:nth-child(3) { color: var(--olive); }
+.footer .rail .cig:nth-child(4) { color: var(--cobalt); }
+@media (max-width: 1100px) { .footer .foot-line, .footer .foot-info { flex-direction: column; align-items: center; text-align: center; } .footer .foot-nav { justify-content: center; } .footer .foot-legal > :last-child { text-align: center; } }
+@media (max-width: 560px) { .footer .foot-info { font-size: .8rem; line-height: 1.7; } .footer .foot-nav { gap: 6px 18px; } }
 
 /* ==========================================================
    PAGES INTÉRIEURES
