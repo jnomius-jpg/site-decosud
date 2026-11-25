@@ -13,7 +13,7 @@
 <link rel="preload" href="assets/fonts/ebgaramond-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/style.css">
 </head>
-<body class="">
+<body class="home">
 <a class="skip" href="#contenu">Aller au contenu</a>
 <header class="header">
   <div class="wrap bar">
@@ -24,23 +24,20 @@
 </header>
 <main id="contenu">
 
-<section class="hero">
-  <picture>
-    <source media="(max-aspect-ratio: 4/5)" srcset="assets/img/hero-portrait.jpg">
-    <img src="assets/img/hero-large.jpg" alt="Le mur de cyanotypes bleus et les vases en verre de la boutique Déco Sud, baignés de soleil" fetchpriority="high">
-  </picture>
-  <div class="txt wrap">
-    <p class="sub">Boutique de décoration · La Cadière-d'Azur</p>
-    <h1>Des objets choisis, <em>une lumière</em> du Sud.</h1>
-    <a class="link" href="#coups">Découvrir l'univers <span aria-hidden="true">→</span></a>
-  </div>
+<section class="cover">
+  <h1 class="cover-title">Déco Sud</h1>
+  <figure class="passe">
+    <picture>
+      <source media="(max-width: 700px)" srcset="assets/img/hero-portrait.jpg">
+      <img src="assets/img/hero-large.jpg" alt="La vitrine de Noël de Déco Sud : sapins givrés, étoiles lumineuses dorées, branches de sapin suspendues et fleurs rouges, sous la citation de Lamartine « Objets inanimés, avez-vous donc une âme ? »" fetchpriority="high">
+    </picture>
+  </figure>
 </section>
 
-<section class="section" id="coups">
+<section class="section coups" id="coups">
   <div class="wrap">
-    <div class="center reveal">
-      <p class="eyebrow">En ce moment en boutique</p>
-      <h2 class="display caps">Nos coups de cœur</h2>
+    <div class="center">
+      <h2 class="display coups-title">Nos coups de cœur</h2>
     </div>
     <div class="scroller" data-pieces="coups"></div>
     <noscript><p class="center"><a class="link" href="selection.html">Voir la sélection</a></p></noscript>
