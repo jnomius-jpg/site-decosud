@@ -11,7 +11,7 @@
   function esc(s) {
     return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; });
   }
-  var COLORS = { terra: "#C85A32", cobalt: "#1D4E89", ocre: "#D99B26", olive: "#3A5A40" };
+  var COLORS = { terra: "#D94826", cobalt: "#004A99", ocre: "#F2B705", olive: "#1E7F43" };
 
   /* ---------- En-tête : transparent sur la photo, plein au scroll ---------- */
   var header = document.querySelector(".header");
@@ -36,7 +36,7 @@
   function pieceHTML(p) {
     var visual = p.image
       ? '<img src="' + esc(p.image) + '" alt="' + esc(p.nom + ", " + p.par) + '" loading="lazy">'
-      : '<div class="placeholder" style="background:' + (COLORS[p.couleur] || COLORS.terra) + '">' + cig() + '<span>Photo à venir</span></div>';
+      : '<div class="placeholder grain" style="background:' + (COLORS[p.couleur] || COLORS.terra) + '">' + cig() + '<span>Photo à venir</span></div>';
     return '<a class="piece reveal" href="visite.html?objet=' + encodeURIComponent(p.id) + '#demande">' +
       '<div class="zoom">' + visual + '</div>' +
       '<p class="name">' + esc(p.nom) + '</p>' +

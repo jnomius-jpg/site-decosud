@@ -23,7 +23,7 @@ Ajouter ou changer un objet :
 **Horaires** : ils apparaissent dans `index.html`, `visite.html` et le pied de page de chaque page ; l'indicateur « ouvert / fermé » se règle dans `assets/main.js` (`SLOTS`, en minutes depuis minuit).
 
 ## Couleurs et polices
-Dans `assets/style.css`, en haut (`:root`). Polices Cormorant Garamond et DM Sans, hébergées dans `assets/fonts/` (pas d'appel à Google).
+Dans `assets/style.css`, en haut (`:root`). Polices EB Garamond et DM Sans, hébergées dans `assets/fonts/` (pas d'appel à Google).
 
 ## Mise en ligne (GitHub Pages, gratuit)
 Settings → Pages → Source : « Deploy from a branch », branche `main`, dossier `/ (root)`.
