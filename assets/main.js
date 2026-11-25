@@ -151,7 +151,7 @@
       }
     };
     fetch(C.formspree, { method: "POST", body: data, headers: { Accept: "application/json" } })
-      .then(function (r) { if (!r.ok) throw new Error(r.status); form.classList.add("sent"); if (onDone) onDone(); })
+      .then(function (r) { if (!r.ok) throw new Error(r.status); form.classList.add("sent"); if (window.umami) umami.track("envoi-formulaire"); if (onDone) onDone(); })
       .catch(fail);
   }
 
