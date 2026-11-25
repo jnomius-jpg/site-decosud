@@ -41,11 +41,11 @@
         <p class="addr">Déco Sud<br>8 rue Gabriel Péri<br>83740 La Cadière-d'Azur</p>
         <ul class="hours">
   <li data-day="1"><span>Lundi</span><span>Fermé</span></li>
-  <li data-day="2"><span>Mardi</span><span>10 h – 13 h · 16 h – 19 h 30</span></li>
-  <li data-day="3"><span>Mercredi</span><span>10 h – 13 h · 16 h – 19 h 30</span></li>
-  <li data-day="4"><span>Jeudi</span><span>10 h – 13 h · 16 h – 19 h 30</span></li>
-  <li data-day="5"><span>Vendredi</span><span>10 h – 13 h · 16 h – 19 h 30</span></li>
-  <li data-day="6"><span>Samedi</span><span>10 h – 13 h · 16 h – 19 h 30</span></li>
+  <li data-day="2"><span>Mardi</span><span>10 h – 12 h 30 · 14 h 30 – 18 h 30</span></li>
+  <li data-day="3"><span>Mercredi</span><span>10 h – 12 h 30 · 14 h 30 – 18 h 30</span></li>
+  <li data-day="4"><span>Jeudi</span><span>10 h – 12 h 30 · 14 h 30 – 18 h 30</span></li>
+  <li data-day="5"><span>Vendredi</span><span>10 h – 12 h 30 · 14 h 30 – 18 h 30</span></li>
+  <li data-day="6"><span>Samedi</span><span>10 h – 12 h 30 · 14 h 30 – 18 h 30</span></li>
   <li data-day="0"><span>Dimanche</span><span>10 h – 13 h</span></li>
 </ul>
         <div class="actions">
@@ -75,24 +75,25 @@
       <p class="en"><strong>Living abroad?</strong> Many of our pieces can travel. Tell us what you like and where you live, in English if you prefer: we will reply with availability and shipping options.</p>
     </div>
     <form class="form reveal" id="demande-form" novalidate>
-      <div class="field"><label for="nom">Nom</label><input id="nom" name="nom" autocomplete="name" required></div>
+      <div class="field"><label for="nom">Prénom et nom</label><input id="nom" name="nom" autocomplete="name" required></div>
       <div class="field"><label for="email">E-mail</label><input id="email" name="email" type="email" autocomplete="email" required></div>
       <div class="field"><label for="tel">Téléphone <span style="text-transform:none;letter-spacing:0">(facultatif)</span></label><input id="tel" name="tel" type="tel" autocomplete="tel"></div>
       <div class="field"><label for="pays">Ville et pays de livraison</label><input id="pays" name="pays" placeholder="ex. Lyon, France · London, UK"></div>
       <fieldset class="field full"><legend>Objets qui vous intéressent</legend><div class="checks" data-objets></div></fieldset>
       <div class="field full"><label for="message">Votre message</label><textarea id="message" name="message" placeholder="Couleur, quantité, question sur une pièce vue en boutique ou sur Instagram…"></textarea></div>
-      <p class="note full">Vos informations ne sont pas enregistrées par ce site. Le bouton ouvre votre messagerie avec un message prêt à envoyer à la boutique ; elles servent uniquement à vous répondre. <a href="mentions-legales.html#donnees" style="text-decoration:underline">En savoir plus</a>.</p>
+      <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <p class="note full">Votre demande est transmise par e-mail à la boutique (via le service Formspree) et sert uniquement à vous répondre. <a href="mentions-legales.html#donnees" style="text-decoration:underline">En savoir plus</a>.</p>
       <div class="buttons full">
-        <button class="pill solid" type="submit">Envoyer par e-mail</button>
-        <button class="pill" type="button" data-whatsapp>Envoyer par WhatsApp</button>
+        <button class="pill solid" type="submit">Envoyer ma demande</button>
       </div>
-      <p class="ok full">Votre messagerie s'ouvre : il ne reste qu'à appuyer sur « Envoyer ». Merci !</p>
+      <p class="err full" role="alert" hidden></p>
+      <p class="ok full" role="status">Merci, votre demande a bien été transmise à Lucie. Elle vous répondra très vite.</p>
     </form>
   </div>
 </section>
 
 </main>
-<footer class="footer">
+<footer class="footer grain">
   <div class="wrap">
     <div class="cols">
       <div>
@@ -111,11 +112,11 @@
         <h4>Horaires</h4>
         <ul class="hours">
   <li data-day="1"><span>Lundi</span><span>Fermé</span></li>
-  <li data-day="2"><span>Mardi</span><span>10 h – 13 h · 16 h – 19 h 30</span></li>
-  <li data-day="3"><span>Mercredi</span><span>10 h – 13 h · 16 h – 19 h 30</span></li>
-  <li data-day="4"><span>Jeudi</span><span>10 h – 13 h · 16 h – 19 h 30</span></li>
-  <li data-day="5"><span>Vendredi</span><span>10 h – 13 h · 16 h – 19 h 30</span></li>
-  <li data-day="6"><span>Samedi</span><span>10 h – 13 h · 16 h – 19 h 30</span></li>
+  <li data-day="2"><span>Mardi</span><span>10 h – 12 h 30 · 14 h 30 – 18 h 30</span></li>
+  <li data-day="3"><span>Mercredi</span><span>10 h – 12 h 30 · 14 h 30 – 18 h 30</span></li>
+  <li data-day="4"><span>Jeudi</span><span>10 h – 12 h 30 · 14 h 30 – 18 h 30</span></li>
+  <li data-day="5"><span>Vendredi</span><span>10 h – 12 h 30 · 14 h 30 – 18 h 30</span></li>
+  <li data-day="6"><span>Samedi</span><span>10 h – 12 h 30 · 14 h 30 – 18 h 30</span></li>
   <li data-day="0"><span>Dimanche</span><span>10 h – 13 h</span></li>
 </ul>
       </div>
@@ -126,7 +127,6 @@
         <a href="visite.html">Nous rendre visite</a>
         <a href="visite.html#demande">Faire une demande</a>
         <a href="https://www.instagram.com/decosud_83740/" target="_blank" rel="noopener" style="margin-top:14px">Instagram</a>
-        <a data-wa-link href="#" target="_blank" rel="noopener">WhatsApp</a>
       </div>
     </div>
     <div class="legal">

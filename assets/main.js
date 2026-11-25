@@ -37,11 +37,11 @@
     var visual = p.image
       ? '<img src="' + esc(p.image) + '" alt="' + esc(p.nom + ", " + p.par) + '" loading="lazy">'
       : '<div class="placeholder grain" style="background:' + (COLORS[p.couleur] || COLORS.terra) + '">' + cig() + '<span>Photo à venir</span></div>';
-    return '<a class="piece reveal" data-univers="' + esc(p.univers || "") + '" href="visite.html?objet=' + encodeURIComponent(p.id) + '#demande">' +
+    return '<a class="piece reveal" data-id="' + esc(p.id) + '" data-univers="' + esc(p.univers || "") + '" href="visite.html?objet=' + encodeURIComponent(p.id) + '#demande">' +
       '<div class="zoom">' + visual + '</div>' +
       '<p class="name">' + esc(p.nom) + '</p>' +
       '<p class="by">' + esc(p.par) + '</p>' +
-      '<span class="ask">Se renseigner</span></a>';
+      '<span class="ask">Se renseigner <span aria-hidden="true">→</span></span></a>';
   }
   document.querySelectorAll("[data-pieces]").forEach(function (el) {
     var list = el.getAttribute("data-pieces") === "coups" ? D.pieces.filter(function (p) { return p.coupDeCoeur; }) : D.pieces;
@@ -102,7 +102,8 @@
   }
 
   /* ---------- Horaires : jour en cours + ouvert / fermé (heure de Paris) ---------- */
-  var SLOTS = { 0: [[600, 780]], 1: [], 2: [[600, 780], [960, 1170]], 3: [[600, 780], [960, 1170]], 4: [[600, 780], [960, 1170]], 5: [[600, 780], [960, 1170]], 6: [[600, 780], [960, 1170]] };
+  var AM = [600, 750], PM = [870, 1110]; /* 10 h – 12 h 30, 14 h 30 – 18 h 30 */
+  var SLOTS = { 0: [[600, 780]], 1: [], 2: [AM, PM], 3: [AM, PM], 4: [AM, PM], 5: [AM, PM], 6: [AM, PM] };
   try {
     var parts = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Paris", weekday: "short", hour: "2-digit", minute: "2-digit", hour12: false }).formatToParts(new Date());
     var get = function (t) { return (parts.find(function (p) { return p.type === t; }) || {}).value; };
@@ -126,7 +127,35 @@
     });
   }
 
-  /* ---------- Formulaire de demande ---------- */
+  /* ---------- Envoi des demandes (Formspree, sans quitter le site) ---------- */
+  function sendForm(form, extra, onDone) {
+    var err = form.querySelector(".err");
+    var btn = form.querySelector('[type="submit"]');
+    if (!form.reportValidity()) return;
+    var data = new FormData(form);
+    Object.keys(extra || {}).forEach(function (k) { data.set(k, extra[k]); });
+    data.delete("objet_libre"); data.delete("objets");
+    Array.from(data.keys()).forEach(function (k) { if (k !== "_gotcha" && data.get(k) === "") data.delete(k); });
+    data.set("_subject", "Demande depuis le site" + (data.get("objet") ? " : " + data.get("objet") : "") + " (" + (data.get("nom") || "") + ")");
+    if (data.get("email")) data.set("_replyto", data.get("email"));
+    if (err) err.hidden = true;
+    btn.disabled = true;
+    var label = btn.textContent;
+    btn.textContent = "Envoi en cours…";
+    var fail = function () {
+      btn.disabled = false; btn.textContent = label;
+      if (err) {
+        err.innerHTML = "L'envoi n'a pas abouti (connexion interrompue ?). Réessayez dans un instant, ou écrivez-nous directement à " +
+          '<a href="mailto:' + esc(C.email) + '">' + esc(C.email) + "</a> ou au " + esc(C.telephone) + ".";
+        err.hidden = false;
+      }
+    };
+    fetch(C.formspree, { method: "POST", body: data, headers: { Accept: "application/json" } })
+      .then(function (r) { if (!r.ok) throw new Error(r.status); form.classList.add("sent"); if (onDone) onDone(); })
+      .catch(fail);
+  }
+
+  /* Formulaire de la page « Nous rendre visite » */
   var form = document.querySelector("#demande-form");
   if (form) {
     var box = form.querySelector("[data-objets]");
@@ -134,46 +163,79 @@
     box.innerHTML = D.pieces.map(function (p) {
       return '<label><input type="checkbox" name="objets" value="' + esc(p.nom + " (" + p.par + ")") + '"' + (p.id === wanted ? " checked" : "") + "> " + esc(p.nom) + "</label>";
     }).join("") + '<label><input type="checkbox" name="objets" value="Autre objet vu en boutique ou sur Instagram"> Autre objet</label>';
-
-    var wa = form.querySelector("[data-whatsapp]");
-    if (wa && !C.whatsapp) wa.hidden = true;
-
-    function message() {
-      var f = new FormData(form);
-      var objets = f.getAll("objets");
-      return [
-        "Bonjour Lucie,",
-        "",
-        objets.length ? "Je suis intéressé(e) par : " + objets.join(", ") + "." : "",
-        f.get("message") || "",
-        "",
-        "Livraison souhaitée : " + (f.get("pays") || "à préciser"),
-        "",
-        f.get("nom") || "",
-        f.get("email") || "",
-        f.get("tel") || ""
-      ].filter(function (l, i, a) { return !(l === "" && a[i - 1] === ""); }).join("\n");
-    }
-
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      if (!form.reportValidity()) return;
-      if (!C.email) {
-        form.querySelector(".ok").textContent = "L'envoi par e-mail arrive très bientôt. En attendant, appelez-nous au " + C.telephone + ".";
-        form.classList.add("sent");
-        return;
-      }
-      var subject = "Demande depuis le site — " + (new FormData(form).get("nom") || "");
-      location.href = "mailto:" + C.email + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(message());
-      form.classList.add("sent");
+      var objets = new FormData(form).getAll("objets");
+      sendForm(form, { objet: objets.join(", ") || "Non précisé" });
     });
-    if (wa) {
-      wa.addEventListener("click", function () {
-        if (!form.reportValidity()) return;
-        window.open("https://wa.me/" + C.whatsapp + "?text=" + encodeURIComponent(message()), "_blank", "noopener");
-        form.classList.add("sent");
-      });
-    }
+  }
+
+  /* ---------- Panneau « Se renseigner » (page Sélection) ---------- */
+  var univName = function (id) { var u = (D.univers || []).filter(function (x) { return x.id === id; })[0]; return u ? u.nom : ""; };
+  if (document.querySelector('[data-pieces="all"]')) {
+    var panel = document.createElement("div");
+    panel.className = "ask-panel";
+    panel.hidden = true;
+    panel.innerHTML =
+      '<div class="ask-sheet" role="dialog" aria-modal="true" aria-labelledby="ask-titre" tabindex="-1">' +
+        '<button type="button" class="ask-close" aria-label="Fermer">×</button>' +
+        '<div class="ask-head"></div>' +
+        '<form class="ask-form" novalidate>' +
+          '<input type="hidden" name="objet">' +
+          '<div class="field ask-free"><label for="ask-objet">Objet(s) qui vous intéressent</label><input id="ask-objet" name="objet_libre" placeholder="ex. le vase Day-Dream, les verres Abeille…"></div>' +
+          '<div class="field"><label for="ask-nom">Prénom et nom</label><input id="ask-nom" name="nom" autocomplete="name" required></div>' +
+          '<div class="field"><label for="ask-email">E-mail</label><input id="ask-email" name="email" type="email" autocomplete="email" required></div>' +
+          '<div class="field"><label for="ask-tel">Téléphone <span class="opt">(facultatif)</span></label><input id="ask-tel" name="tel" type="tel" autocomplete="tel"></div>' +
+          '<div class="field"><label for="ask-ville">Ville / code postal <span class="opt">(facultatif, pour estimer l\u2019envoi)</span></label><input id="ask-ville" name="ville" autocomplete="address-level2"></div>' +
+          '<div class="field"><label for="ask-msg">Message</label><textarea id="ask-msg" name="message" rows="4" placeholder="Disponibilité, couleur, envoi…"></textarea></div>' +
+          '<input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">' +
+          '<p class="note">Votre demande est envoyée par e-mail à la boutique (via Formspree), uniquement pour vous répondre. <a href="mentions-legales.html#donnees">En savoir plus</a>.</p>' +
+          '<button class="pill ink" type="submit">Envoyer ma demande</button>' +
+          '<p class="err" role="alert" hidden></p>' +
+        '</form>' +
+        '<div class="ask-done" role="status" hidden>' + cig() + '<p>Merci, votre demande a bien été transmise à Lucie. Elle vous répondra très vite.</p><button type="button" class="pill ink ask-back">Retour à la sélection</button></div>' +
+      '</div>';
+    document.body.appendChild(panel);
+    var sheet = panel.querySelector(".ask-sheet"), askForm = panel.querySelector(".ask-form"), head = panel.querySelector(".ask-head");
+    var done = panel.querySelector(".ask-done"), opener = null;
+    var openPanel = function (p) {
+      opener = document.activeElement;
+      askForm.reset(); askForm.classList.remove("sent"); askForm.hidden = false; done.hidden = true;
+      askForm.querySelector(".err").hidden = true;
+      askForm.elements.objet.value = p ? p.nom + (p.par ? " (" + p.par + ")" : "") : "";
+      panel.querySelector(".ask-free").hidden = !!p;
+      head.innerHTML = p
+        ? '<div class="ask-thumb">' + (p.image ? '<img src="' + esc(p.image) + '" alt="">' : '<div class="placeholder grain" style="background:' + (COLORS[p.couleur] || COLORS.terra) + '">' + cig() + "</div>") + "</div>" +
+          '<div><p class="eyebrow">' + esc(univName(p.univers)) + '</p><h2 id="ask-titre">' + esc(p.nom) + '</h2><p class="by">' + esc(p.par) + "</p></div>"
+        : '<div><p class="eyebrow">Une question, un envoi ?</p><h2 id="ask-titre">Faire une <em>demande</em></h2><p class="by">Lucie vous répond avec les disponibilités et les possibilités d\u2019envoi.</p></div>';
+      panel.hidden = false;
+      document.documentElement.classList.add("no-scroll");
+      requestAnimationFrame(function () { requestAnimationFrame(function () { panel.classList.add("in"); }); });
+      sheet.focus({ preventScroll: true });
+    };
+    var closePanel = function () {
+      panel.classList.remove("in");
+      document.documentElement.classList.remove("no-scroll");
+      setTimeout(function () { panel.hidden = true; }, 450);
+      if (opener && opener.focus) opener.focus({ preventScroll: true });
+    };
+    panel.addEventListener("click", function (e) { if (e.target === panel || e.target.closest(".ask-close, .ask-back")) closePanel(); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !panel.hidden) closePanel(); });
+    askForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var extra = {};
+      if (!askForm.elements.objet.value) extra.objet = askForm.elements.objet_libre.value || "Demande générale";
+      sendForm(askForm, extra, function () { askForm.hidden = true; done.hidden = false; });
+    });
+    document.querySelector('[data-pieces="all"]').addEventListener("click", function (e) {
+      var a = e.target.closest(".piece");
+      if (!a) return;
+      e.preventDefault();
+      openPanel(D.pieces.filter(function (p) { return p.id === a.getAttribute("data-id"); })[0]);
+    });
+    document.querySelectorAll("[data-ask]").forEach(function (b) {
+      b.addEventListener("click", function (e) { e.preventDefault(); openPanel(null); });
+    });
   }
 
   /* ---------- Pop-up d'accueil « Noël » ----------
@@ -213,11 +275,8 @@
     }, 1200);
   }
 
-  /* Liens e-mail / WhatsApp affichés dans le pied de page */
+  /* Lien e-mail affiché dans le pied de page */
   document.querySelectorAll("[data-email]").forEach(function (a) {
-    if (C.email) { a.href = "mailto:" + C.email; a.textContent = C.email; } else { a.href = "visite.html#demande"; a.textContent = "Écrire à la boutique"; }
-  });
-  document.querySelectorAll("[data-wa-link]").forEach(function (a) {
-    if (C.whatsapp) a.href = "https://wa.me/" + C.whatsapp; else a.hidden = true;
+    if (C.email) { a.href = "mailto:" + C.email; a.textContent = C.email; }
   });
 })();

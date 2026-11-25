@@ -12,8 +12,8 @@ window.DECOSUD = {
 
   /* ---------- Coordonnées ---------- */
   contact: {
-    email: "",               // À COMPLÉTER, ex. "bonjour@decosud.fr" (sans e-mail, le formulaire propose le téléphone)
-    whatsapp: "",            // À COMPLÉTER, format international sans espaces ni +, ex. "33612345678" (vide = bouton masqué)
+    email: "decosud83740@gmail.com",
+    formspree: "https://formspree.io/f/xppdbjob",   // adresse d'envoi des formulaires (Formspree)
     telephone: "04 94 98 21 77",
     instagram: "https://www.instagram.com/decosud_83740/"
   },
