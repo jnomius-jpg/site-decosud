@@ -113,6 +113,36 @@
 .k-fin .deck { font-size: clamp(1.4rem, 2.2vw, 2rem); margin: .4em 0 30px; }
 .k-fin .k-meta { margin-bottom: 34px; }
 
+
+/* ---------- Révision : blanc pur, plus d'air, rubriques centrées façon magazine ---------- */
+body.cc, .cc .header, .cc .footer, .cc .header .nav { background: #fff; }
+body.cc::before { display: none; }
+.k-sec { padding-top: clamp(150px, 16vw, 250px); }
+.k-center { text-align: center; max-width: 820px; margin: 0 auto; }
+.k-center .cig { font-size: 13px; color: var(--ink); display: block; margin: 0 auto 34px; }
+.k-center .cig.m { color: var(--moutarde); }
+.k-center h2 { font-size: clamp(2.4rem, 4.2vw, 4rem); }
+.k-center .k-deck { font-size: clamp(1.35rem, 2vw, 1.9rem); margin-top: .35em; }
+/* Grille Participer : resserrée au centre, photos hautes, beaucoup de blanc autour */
+.k-grid { max-width: 1180px; margin: clamp(80px, 8vw, 120px) auto 0; gap: clamp(28px, 3.4vw, 56px); }
+.k-grid .img { aspect-ratio: 3 / 4; }
+.k-grid .k-meta { margin: 20px 0 10px; font-size: 14px; }
+.k-grid h3 { font-size: clamp(1.45rem, 1.9vw, 1.8rem); line-height: 1.05; margin-bottom: 12px; }
+.k-grid p { font-size: 14.5px; line-height: 1.6; }
+.k-note { max-width: 1180px; margin: clamp(80px, 8vw, 120px) auto 0; border-top: 1px solid var(--ink); text-align: center; justify-content: center; flex-direction: column; align-items: center; }
+/* Dates : tableau étroit et centré */
+.k-table { max-width: 820px; margin: clamp(70px, 7vw, 100px) auto 0; border-top: 1px solid var(--ink); }
+.k-table li { padding: 26px 0; }
+.k-table .quoi { font-size: clamp(1.2rem, 1.6vw, 1.45rem); }
+.k-table .quand { font-size: 14px; }
+.k-table .note { font-size: 13px; }
+/* Champs à compléter : discrets, entre crochets, sans surlignage */
+.cc .todo { background: none; padding: 0; font-style: italic; color: #8A8780; }
+.cc .todo::before { content: "["; } .cc .todo::after { content: "]"; }
+@media (max-width: 900px) {
+  .k-grid { gap: 70px; } .k-grid .img { aspect-ratio: 3 / 4; }
+}
+
 /* ---------- Mobile ---------- */
 @media (max-width: 900px) {
   .k-cover { height: auto; aspect-ratio: 4 / 5.4; min-height: 0; }
@@ -173,23 +203,23 @@
 <!-- 3. Participer -->
 <section class="k-sec k-noprint" id="participer">
   <div class="wrap">
-    <div class="k-head reveal"><h2>Participer</h2><svg class="cig" aria-hidden="true"><use href="assets/cigales.svg#c"/></svg></div>
+    <div class="k-center reveal"><svg class="cig" aria-hidden="true"><use href="assets/cigales.svg#c"/></svg><h2 class="k-caps">Participer</h2><p class="k-deck">Trois façons de tenter sa chance, sans rien acheter.</p></div>
     <ol class="k-grid">
       <li class="reveal">
-        <div class="img"><img src="assets/img/concours/dentelle.jpg" alt="Le fauteuil devant un rideau de dentelle, ombres de feuillage au mur." width="1200" height="1500" loading="lazy"></div>
-        <p class="k-meta">01, sur Instagram</p>
+        <div class="img"><img src="assets/img/concours/dentelle.jpg" alt="Le fauteuil devant un rideau de dentelle, ombres de feuillage au mur." width="1200" height="1600" loading="lazy"></div>
+        <p class="k-meta">01 &nbsp;Sur Instagram</p>
         <h3 class="k-caps">Abonnez-vous et répondez</h3>
         <p>Abonnez-vous à @decosud_83740, puis répondez en commentaire, sous la publication du concours, à notre question&#8239;: <span class="todo">question déco et conditions exactes à compléter</span>.</p>
       </li>
       <li class="reveal">
-        <div class="img"><img src="assets/img/concours/porte-verticale.jpg" alt="Le fauteuil devant une porte en bois, en plein soleil." width="1200" height="1500" loading="lazy"></div>
-        <p class="k-meta">02, à la boutique</p>
+        <div class="img"><img src="assets/img/concours/porte-verticale.jpg" alt="Le fauteuil devant une porte en bois, en plein soleil." width="1200" height="1600" loading="lazy"></div>
+        <p class="k-meta">02 &nbsp;À la boutique</p>
         <h3 class="k-caps">Glissez votre bulletin</h3>
         <p>Passez au 8 rue Gabriel Péri et déposez votre bulletin dans l'urne. Sans achat, une fois par personne&#8239;: c'est une chance de plus.</p>
       </li>
       <li class="reveal">
-        <div class="img"><img src="assets/img/concours/toit.jpg" alt="Le fauteuil sur un toit de tuiles provençales, ciel bleu." width="1072" height="1340" loading="lazy"></div>
-        <p class="k-meta">03, le tirage</p>
+        <div class="img"><img src="assets/img/concours/toit.jpg" alt="Le fauteuil sur un toit de tuiles provençales, ciel bleu." width="1072" height="1429" loading="lazy"></div>
+        <p class="k-meta">03 &nbsp;Le tirage</p>
         <h3 class="k-caps">Le fauteuil est à vous</h3>
         <p>Tirage au sort à la boutique le <span class="todo">date à compléter</span>. La personne gagnante est prévenue par message et vient chercher son fauteuil avant Noël.</p>
       </li>
@@ -204,7 +234,7 @@
 <!-- 4. Les dates -->
 <section class="k-sec k-noprint" id="dates">
   <div class="wrap">
-    <div class="k-head reveal"><h2>Les dates</h2><svg class="cig m" aria-hidden="true"><use href="assets/cigales.svg#c"/></svg></div>
+    <div class="k-center reveal"><svg class="cig m" aria-hidden="true"><use href="assets/cigales.svg#c"/></svg><h2 class="k-caps">Les dates</h2><p class="k-deck">Du lancement à la remise du fauteuil.</p></div>
     <ul class="k-table reveal">
       <li><span class="quoi">Ouverture du jeu</span><span class="quand"><span class="todo">date et heure à compléter</span></span></li>
       <li><span class="quoi">Dernier bulletin à la boutique</span><span class="quand"><span class="todo">date à compléter</span></span><span class="note">Aux heures d'ouverture.</span></li>
