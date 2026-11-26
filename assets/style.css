@@ -523,6 +523,8 @@ html.no-scroll { overflow: hidden; }
 .ask-head.has-gallery { flex-direction: column; align-items: stretch; gap: 20px; }
 .ask-main { width: 100%; height: min(52vh, 125vw); overflow: hidden; background: var(--sable); }
 .ask-main img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ask-cap { font-size: 12px; color: var(--pierre); margin: 8px 0 0; min-height: 1em; }
+.ask-cap:empty { display: none; }
 .ask-thumbs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
 .ask-thumbs button { width: 52px; aspect-ratio: 4 / 5; padding: 0; border: 1px solid transparent; background: var(--sable); cursor: pointer; opacity: .6; transition: opacity .3s, border-color .3s; }
 .ask-thumbs button:hover, .ask-thumbs button[aria-pressed="true"] { opacity: 1; border-color: var(--ink); }
