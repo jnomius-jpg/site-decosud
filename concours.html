@@ -19,15 +19,14 @@
 <style>
 /* ==========================================================
    PAGE CONCOURS — styles propres à cette page
-   Palette : noir, papier, moutarde du velours.
+   Palette : papier, encre (lignes, chiffres, textes), moutarde clair du velours.
    ========================================================== */
-.cc { --noir: #171614; --moutarde: #DDA22A; --moutarde-fonce: #B8820F; --papier: var(--lin); }
+.cc { --noir: #171614; --moutarde: #DDA22A; --moutarde-fonce: #B8820F; --moutarde-clair: #F1DA9E; --papier: var(--lin); --pierre: #4A4741; }
 
 /* Légendes éditoriales (petites capitales) */
 .cap { display: flex; justify-content: space-between; gap: 18px; margin-top: 14px;
-  font-size: 10.5px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--pierre); }
+  font-size: 10.5px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--ink); opacity: .78; }
 .cap b { font-weight: 500; color: var(--ink); }
-.on-noir .cap, .on-noir .cap b { color: rgba(252, 250, 246, .62); }
 
 /* ---------- 1. Grande photo ---------- */
 .cc-hero { padding-top: 76px; }
@@ -58,64 +57,53 @@
 .cc-diptyque .img { overflow: hidden; background: var(--sable); }
 .cc-diptyque img { width: 100%; height: 100%; object-fit: cover; }
 
-/* ---------- 3. Participer (aplat noir, cigales moutarde) ---------- */
-.on-noir { background: var(--noir); color: var(--papier); }
-.cc-noir { position: relative; isolation: isolate; overflow: hidden; }
-.cc-noir::before { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
-  background: url(assets/img/concours/semis-moutarde.svg) 0 0 / 300px; opacity: .09; }
-.cc-noir::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  background-image: var(--grain); background-size: 240px; opacity: .09; mix-blend-mode: screen; }
-.cc-noir > * { position: relative; z-index: 2; }
-.cc-participer { padding: clamp(110px, 13vw, 200px) 0 clamp(60px, 7vw, 100px); }
+/* ---------- 3. Participer (fond papier ; le noir ne sert qu'aux lignes, chiffres et textes) ---------- */
+.cc-participer { padding: clamp(40px, 5vw, 80px) 0 clamp(110px, 13vw, 200px); }
 .cc-entete { display: grid; grid-template-columns: 5fr 7fr; gap: 40px; align-items: end;
-  padding-bottom: clamp(50px, 6vw, 90px); border-bottom: 1px solid rgba(252, 250, 246, .22); }
-.cc-entete .eyebrow { color: var(--moutarde); }
-.cc-entete h2 { font-family: var(--serif); font-weight: 400; margin: 0; font-size: clamp(3rem, 6.4vw, 6rem); line-height: 1; }
-.cc-entete > p { margin: 0; max-width: 30em; justify-self: end; font-family: var(--serif); font-size: 1.15rem; color: rgba(252, 250, 246, .78); }
+  padding-bottom: clamp(36px, 4vw, 56px); border-bottom: 1px solid var(--ink); }
+.cc-entete h2 { font-family: var(--serif); font-weight: 400; margin: 0; font-size: clamp(2.8rem, 5.4vw, 5rem); line-height: 1; }
+.cc-entete > p { margin: 0; max-width: 28em; justify-self: end; font-family: var(--serif); font-style: italic; font-size: 1.15rem; }
 .cc-etapes { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); }
-.cc-etapes li { padding: clamp(44px, 5vw, 70px) clamp(22px, 3vw, 48px) 0 0; }
-.cc-etapes li + li { padding-left: clamp(22px, 3vw, 48px); border-left: 1px solid rgba(252, 250, 246, .22); }
-.cc-num { display: block; font-family: var(--serif); font-weight: 400; font-size: clamp(4rem, 7vw, 6.6rem); line-height: 1;
-  color: var(--moutarde); letter-spacing: -.02em; font-variant-numeric: lining-nums; }
-.cc-etapes h3 { font-family: var(--serif); font-weight: 400; font-size: clamp(1.6rem, 2.2vw, 2rem); margin: 26px 0 14px; }
-.cc-etapes p { font-size: 15px; color: rgba(252, 250, 246, .78); max-width: 26em; }
-.cc-etapes .lieu { display: block; margin-bottom: 4px; font-size: 10.5px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: rgba(252, 250, 246, .5); }
-.cc-garde { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 40px; margin-top: clamp(70px, 8vw, 120px);
-  padding-top: 26px; border-top: 1px solid rgba(252, 250, 246, .22); font-size: 13px; color: rgba(252, 250, 246, .62); }
-.cc-garde strong { font-weight: 500; color: var(--papier); }
-.on-noir .todo { background: rgba(221, 162, 42, .28); color: var(--papier); }
+.cc-etapes li { padding: clamp(40px, 4.5vw, 64px) clamp(22px, 3vw, 48px) 0 0; }
+.cc-etapes li + li { padding-left: clamp(22px, 3vw, 48px); border-left: 1px solid var(--line); }
+.cc-num { display: block; font-family: var(--serif); font-weight: 400; font-size: clamp(3.6rem, 6vw, 5.6rem); line-height: 1;
+  color: var(--ink); letter-spacing: -.02em; font-variant-numeric: lining-nums; }
+.cc-etapes h3 { font-family: var(--serif); font-weight: 400; font-style: italic; font-size: clamp(1.5rem, 2vw, 1.85rem); margin: 22px 0 14px; }
+.cc-etapes p { font-size: 14.5px; max-width: 26em; }
+.cc-etapes .lieu { display: block; margin-bottom: 6px; font-size: 10px; font-weight: 500; letter-spacing: .22em; text-transform: uppercase; }
+.cc-garde { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 40px; margin-top: clamp(60px, 7vw, 100px);
+  padding-top: 20px; border-top: 1px solid var(--line); font-size: 12.5px; }
+.cc-garde strong { font-weight: 500; }
 
 /* ---------- 4. Les dates (tableau fin, comme les horaires) ---------- */
-.cc-dates { padding: clamp(110px, 13vw, 200px) 0 clamp(70px, 8vw, 120px); }
+.cc-dates { padding: 0 0 clamp(110px, 13vw, 200px); }
 .cc-deux { display: grid; grid-template-columns: 4fr 8fr; gap: clamp(30px, 6vw, 110px); align-items: start; }
 .cc-deux h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(2.4rem, 4vw, 3.6rem); line-height: 1.05; margin: 0; }
 .cc-table { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ink); }
 .cc-table li { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: baseline; padding: 18px 0; border-bottom: 1px solid var(--line); }
 .cc-table .quoi { font-family: var(--serif); font-size: clamp(1.15rem, 1.5vw, 1.35rem); }
-.cc-table .quand { font-size: 14px; color: var(--pierre); text-align: right; }
-.cc-table .note { grid-column: 1 / -1; margin-top: -6px; font-size: 13px; color: var(--pierre); }
+.cc-table .quand { font-size: 13.5px; text-align: right; font-variant-numeric: lining-nums; }
+.cc-table .note { grid-column: 1 / -1; margin-top: -6px; font-size: 12.5px; font-style: italic; font-family: var(--serif); }
 
-/* ---------- 5. Le fauteuil (aplat moutarde, cigales noires) ---------- */
-.cc-moutarde { position: relative; isolation: isolate; overflow: hidden; background: var(--moutarde); color: var(--noir); }
+/* ---------- 5. Le fauteuil (aplat moutarde clair, semis de cigales très estompé) ---------- */
+.cc-moutarde { position: relative; isolation: isolate; overflow: hidden; background: var(--moutarde-clair); color: var(--ink); }
 .cc-moutarde::before { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
-  background: url(assets/img/concours/semis-noir.svg) 150px 40px / 300px; opacity: .12; }
+  background: url(assets/img/concours/semis-noir.svg) 0 0 / 360px; opacity: .045; }
 .cc-moutarde::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  background-image: var(--grain); background-size: 240px; opacity: .12; mix-blend-mode: multiply; }
+  background-image: var(--grain); background-size: 240px; opacity: .06; mix-blend-mode: multiply; }
 .cc-moutarde > * { position: relative; z-index: 2; }
-.cc-fauteuil { padding: clamp(110px, 13vw, 200px) 0; }
+.cc-fauteuil { padding: clamp(100px, 12vw, 180px) 0; }
 .cc-fauteuil .grille { display: grid; grid-template-columns: 6fr 5fr; gap: clamp(36px, 6vw, 110px); align-items: center; }
 .cc-fauteuil figure { margin: 0; }
-.cc-fauteuil .img { aspect-ratio: 4 / 3; overflow: hidden; box-shadow: 0 30px 60px -40px rgba(23, 22, 20, .55); }
+.cc-fauteuil .img { aspect-ratio: 4 / 3; overflow: hidden; }
 .cc-fauteuil img { width: 100%; height: 100%; object-fit: cover; }
-.cc-fauteuil .cap, .cc-fauteuil .cap b { color: rgba(23, 22, 20, .7); }
-.cc-fauteuil .eyebrow { color: var(--noir); opacity: .7; }
-.cc-fauteuil h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(3rem, 6vw, 5.6rem); line-height: 1; margin: 0 0 28px; }
-.cc-fauteuil .accroche { font-family: var(--serif); font-style: italic; font-size: clamp(1.2rem, 1.6vw, 1.4rem); line-height: 1.5; margin: 0 0 40px; max-width: 24em; }
-.cc-fiche { margin: 0; border-top: 1px solid var(--noir); }
-.cc-fiche > div { display: grid; grid-template-columns: 9em 1fr; gap: 16px; padding: 15px 0; border-bottom: 1px solid rgba(23, 22, 20, .28); align-items: baseline; }
-.cc-fiche dt { font-size: 10.5px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; }
-.cc-fiche dd { margin: 0; font-family: var(--serif); font-size: 1.2rem; }
-.cc-moutarde .todo { background: rgba(252, 250, 246, .55); }
+.cc-fauteuil h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(2.8rem, 5.4vw, 5rem); line-height: 1; margin: 0 0 24px; }
+.cc-fauteuil .accroche { font-family: var(--serif); font-style: italic; font-size: clamp(1.15rem, 1.5vw, 1.35rem); line-height: 1.5; margin: 0 0 36px; max-width: 24em; }
+.cc-fiche { margin: 0; border-top: 1px solid var(--ink); }
+.cc-fiche > div { display: grid; grid-template-columns: 9em 1fr; gap: 16px; padding: 14px 0; border-bottom: 1px solid rgba(30, 29, 26, .2); align-items: baseline; }
+.cc-fiche dt { font-size: 10px; font-weight: 500; letter-spacing: .22em; text-transform: uppercase; }
+.cc-fiche dd { margin: 0; font-family: var(--serif); font-size: 1.15rem; }
+.cc-moutarde .todo { background: rgba(252, 250, 246, .6); }
 
 /* ---------- 6. Règlement (volet dépliable) ---------- */
 .cc-regl { padding: clamp(110px, 13vw, 200px) 0; }
@@ -139,16 +127,14 @@
 .regl ul { padding-left: 1.1em; margin: 0 0 1em; }
 .regl p { break-inside: avoid-column; }
 
-/* ---------- 7. À la boutique (bandeau noir de fin) ---------- */
-.cc-fin { padding: clamp(100px, 12vw, 180px) 0; text-align: center; }
-.cc-fin .seal { font-size: 15px; gap: 22px; margin-bottom: 40px; }
+/* ---------- 7. À la boutique (fond papier, filet fin) ---------- */
+.cc-fin { padding: clamp(100px, 12vw, 170px) 0; text-align: center; border-top: 1px solid var(--line); }
+.cc-fin .seal { font-size: 12px; gap: 18px; margin-bottom: 34px; }
 .cc-fin .seal .cig { color: var(--moutarde); }
-.cc-fin .seal .cig:nth-child(2) { color: var(--papier); }
-.cc-fin h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(2.4rem, 4.6vw, 4.2rem); line-height: 1.08; margin: 0 auto 26px; max-width: 14em; text-wrap: balance; }
-.cc-fin .adresse { font-family: var(--serif); font-size: 1.2rem; color: rgba(252, 250, 246, .78); margin: 0 0 6px; }
-.cc-fin .horaires { font-size: 13px; letter-spacing: .06em; color: rgba(252, 250, 246, .6); margin: 0 0 40px; }
-.cc-fin .pill { border-color: var(--moutarde); color: var(--moutarde); }
-.cc-fin .pill:hover { background: var(--moutarde); color: var(--noir); border-color: var(--moutarde); }
+.cc-fin .seal .cig:nth-child(2) { color: var(--ink); }
+.cc-fin h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(2.4rem, 4.4vw, 4rem); line-height: 1.08; margin: 0 auto 24px; max-width: 14em; text-wrap: balance; }
+.cc-fin .adresse { font-family: var(--serif); font-size: 1.2rem; margin: 0 0 6px; }
+.cc-fin .horaires { font-size: 12.5px; letter-spacing: .06em; margin: 0 0 36px; }
 
 /* ---------- Mobile ---------- */
 @media (max-width: 900px) {
@@ -156,7 +142,7 @@
   .cc-entete, .cc-deux, .cc-fauteuil .grille { grid-template-columns: 1fr; }
   .cc-entete > p { justify-self: start; }
   .cc-etapes { grid-template-columns: 1fr; }
-  .cc-etapes li, .cc-etapes li + li { padding: 44px 0 40px; border-left: 0; border-bottom: 1px solid rgba(252, 250, 246, .22); }
+  .cc-etapes li, .cc-etapes li + li { padding: 40px 0 36px; border-left: 0; border-bottom: 1px solid var(--line); }
   .cc-etapes li:last-child { border-bottom: 0; padding-bottom: 0; }
   .cc-diptyque { grid-template-columns: 1fr; }
   .cc-diptyque .b { margin: 0 0 0 22%; }
@@ -227,7 +213,7 @@
 </section>
 
 <!-- 3. Participer -->
-<section class="cc-participer on-noir cc-noir" id="participer">
+<section class="cc-participer" id="participer">
   <div class="wrap">
     <div class="cc-entete reveal">
       <div>
@@ -364,13 +350,13 @@
 </section>
 
 <!-- 7. À la boutique -->
-<section class="cc-fin on-noir cc-noir">
+<section class="cc-fin">
   <div class="wrap reveal">
     <div class="seal" aria-hidden="true"><svg class="cig" style="transform:rotate(-14deg)"><use href="assets/cigales.svg#c"/></svg><svg class="cig"><use href="assets/cigales.svg#c"/></svg><svg class="cig" style="transform:rotate(14deg)"><use href="assets/cigales.svg#c"/></svg></div>
     <h2>Venez l'essayer à la boutique</h2>
     <p class="adresse">8 rue Gabriel Péri, La Cadière-d'Azur</p>
     <p class="horaires">Du mardi au samedi, 10 h – 12 h 30 et 14 h 30 – 18 h 30 · le dimanche, 10 h – 13 h</p>
-    <a class="pill" href="https://www.google.com/maps/dir/?api=1&amp;destination=D%C3%A9co%20Sud%2C%208%20rue%20Gabriel%20P%C3%A9ri%2C%2083740%20La%20Cadi%C3%A8re-d%27Azur" data-umami-event="clic-itineraire" target="_blank" rel="noopener">Itinéraire</a>
+    <a class="link" href="https://www.google.com/maps/dir/?api=1&amp;destination=D%C3%A9co%20Sud%2C%208%20rue%20Gabriel%20P%C3%A9ri%2C%2083740%20La%20Cadi%C3%A8re-d%27Azur" data-umami-event="clic-itineraire" target="_blank" rel="noopener">Itinéraire</a>
   </div>
 </section>
 
