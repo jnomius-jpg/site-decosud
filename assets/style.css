@@ -594,3 +594,24 @@ body.has-ruban { padding-top: 36px; }
   border: 0; background: none; font: 300 18px/1 var(--sans); color: var(--ink); opacity: .5; cursor: pointer; }
 .ruban-close:hover { opacity: 1; }
 @media (max-width: 700px) { .ruban .long { display: none; } body.has-ruban .ruban { padding: 0 40px 0 16px; gap: 10px; font-size: 14px; } }
+
+/* ---------- Volet de saison (inspiré des volets latéraux d'actualité) ---------- */
+.volet { position: fixed; inset: 0; z-index: 200; background: rgba(30, 29, 26, 0); transition: background .6s ease; }
+.volet.in { background: rgba(30, 29, 26, .22); }
+.volet-sheet { position: absolute; top: 0; right: 0; bottom: 0; width: min(460px, 100%); overflow-y: auto;
+  background: var(--sable); padding: 26px clamp(26px, 3vw, 44px) 44px; border-left: 1px solid var(--line);
+  transform: translateX(100%); transition: transform .7s cubic-bezier(.22,.61,.36,1); }
+.volet.in .volet-sheet { transform: none; }
+.volet-sheet:focus { outline: none; }
+.volet-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 26px; }
+.volet-top .eyebrow { margin: 0; color: var(--ink); }
+.volet-close { width: 34px; height: 34px; margin-left: -8px; border: 0; background: none; font: 300 28px/1 var(--sans); color: var(--ink); cursor: pointer; }
+.volet-img { margin: 0; }
+.volet-img img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+.volet-img figcaption { margin-top: 10px; font-family: var(--serif); font-style: italic; font-size: .92rem; color: var(--pierre); text-align: right; }
+.volet-txt { text-align: center; padding-top: 30px; }
+.volet-txt .cig { font-size: 9px; color: var(--ocre); margin-bottom: 16px; }
+.volet-txt h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(1.9rem, 2.4vw, 2.3rem); line-height: 1.1; margin: 0 0 16px; }
+.volet-txt p { font-family: var(--serif); font-size: 1.1rem; line-height: 1.6; max-width: 32ch; margin: 0 auto 26px; }
+.volet-txt .volet-note { font-size: .92rem; color: var(--pierre); margin: 30px auto 0; padding-top: 18px; border-top: 1px solid var(--line); max-width: 26ch; }
+@media (prefers-reduced-motion: reduce) { .volet, .volet-sheet { transition: none; } }

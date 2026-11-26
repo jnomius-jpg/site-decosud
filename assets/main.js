@@ -309,15 +309,51 @@
     if (wanted && byId(wanted)) openPanel(byId(wanted));
   })();
 
-  /* ---------- Bande « Noël » en haut de page (remplace l'ancienne pop-up) ----------
+  /* ---------- Saison « Noël » : fine bande en haut de page + volet latéral ----------
      Réglage : SAISON_NOEL_ACTIVE en haut de donnees.js (true / false).
-     Fermée par le visiteur, elle ne revient pas pendant la visite. */
+     Le volet s'ouvre de lui-même une fois par visite sur l'accueil (grands écrans),
+     et à chaque clic sur « Découvrir » dans la bande. */
   var noelOn = typeof SAISON_NOEL_ACTIVE !== "undefined" && SAISON_NOEL_ACTIVE;
   var head = document.querySelector(".header");
   if (noelOn && head) {
-    var closed = false;
-    try { closed = sessionStorage.getItem("decosud-ruban") === "1"; } catch (e) {}
-    if (!closed) {
+    var store = function (k, v) { try { if (v) sessionStorage.setItem(k, v); return sessionStorage.getItem(k); } catch (e) { return null; } };
+
+    var volet = document.createElement("div");
+    volet.className = "volet";
+    volet.hidden = true;
+    volet.innerHTML =
+      '<aside class="volet-sheet" role="dialog" aria-modal="true" aria-labelledby="volet-titre" tabindex="-1">' +
+        '<div class="volet-top"><button type="button" class="volet-close" aria-label="Fermer">×</button><p class="eyebrow">La saison</p></div>' +
+        '<figure class="volet-img"><img src="assets/img/noel-popup.jpg" alt="Décorations de Noël brodées de perles, photophores rayés rouge et blanc et petit sapin doré à nœud de velours"><figcaption>Photophores et décorations brodées, en boutique</figcaption></figure>' +
+        '<div class="volet-txt">' + cig() +
+          '<h2 id="volet-titre">Noël chez <em>Déco Sud</em></h2>' +
+          '<p>Des lumières d\u2019hiver, des tables de fête et des cadeaux choisis un à un. Venez les voir en vrai, ou commencez par la sélection.</p>' +
+          '<a class="link" href="selection.html#noel">L\u2019univers Noël <span aria-hidden="true">→</span></a>' +
+          '<p class="volet-note">La boutique vous accueille du mardi au dimanche.</p>' +
+        '</div>' +
+      '</aside>';
+    document.body.appendChild(volet);
+    var lastFocus = null;
+    var onKey = function (e) { if (e.key === "Escape") closeVolet(); };
+    var openVolet = function () {
+      lastFocus = document.activeElement;
+      volet.hidden = false;
+      document.documentElement.classList.add("no-scroll");
+      requestAnimationFrame(function () { requestAnimationFrame(function () { volet.classList.add("in"); }); });
+      volet.querySelector(".volet-sheet").focus({ preventScroll: true });
+      document.addEventListener("keydown", onKey);
+      store("decosud-volet", "1");
+    };
+    var closeVolet = function () {
+      volet.classList.remove("in");
+      document.documentElement.classList.remove("no-scroll");
+      document.removeEventListener("keydown", onKey);
+      setTimeout(function () { volet.hidden = true; }, 600);
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    };
+    volet.addEventListener("click", function (e) { if (e.target === volet || e.target.closest(".volet-close")) closeVolet(); });
+
+    if (store("decosud-ruban") !== "1") {
       var ruban = document.createElement("div");
       ruban.className = "ruban";
       ruban.innerHTML = cig() +
@@ -326,11 +362,16 @@
         '<button type="button" class="ruban-close" aria-label="Fermer le bandeau">×</button>';
       head.insertBefore(ruban, head.firstChild);
       document.body.classList.add("has-ruban");
+      ruban.querySelector("a").addEventListener("click", function (e) { e.preventDefault(); openVolet(); });
       ruban.querySelector(".ruban-close").addEventListener("click", function () {
         ruban.remove();
         document.body.classList.remove("has-ruban");
-        try { sessionStorage.setItem("decosud-ruban", "1"); } catch (e) {}
+        store("decosud-ruban", "1");
       });
+    }
+
+    if (document.body.classList.contains("home") && store("decosud-volet") !== "1" && window.matchMedia("(min-width: 900px)").matches) {
+      setTimeout(openVolet, 1400);
     }
   }
 
