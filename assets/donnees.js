@@ -33,10 +33,16 @@ window.DECOSUD = {
 
   /* ---------- Les objets ----------
      Pour ajouter un objet : copier un bloc { ... }, changer les textes.
-     - univers : l'id d'un univers ci-dessus.
+     - univers : l'id d'un univers ci-dessus, ou son nom tel qu'écrit ci-dessus.
+       Plusieurs univers : une liste, ex. univers: ["Arts de la table", "Noël"].
+       L'objet apparaît une seule fois dans « Tout », et dans chacun de ses univers.
      - nom / par : titre et sous-titre affichés sous la photo.
-     - image : chemin de la photo (format portrait 4:5 conseillé, 1200 px de haut).
+     - image : photo principale, celle de la grille (portrait 4:5 conseillé, 1200 px de haut).
+       Le nom du fichier s'écrit exactement comme dans le dossier assets/img/ :
+       majuscules, espaces et accents compris (ex. "assets/img/Vase Écume bleu.jpg").
        Laisser "" tant que la photo n'est pas prête : une cigale colorée s'affiche à la place.
+     - images : photos supplémentaires (facultatif), ex. images: ["assets/img/vase-2.jpg", "assets/img/vase-3.jpg"].
+       Elles apparaissent en petites vignettes dans le volet « Se renseigner ».
      - couleur : couleur de la cigale de remplacement (terra, cobalt, ocre, olive).
      - coupDeCoeur : 1, 2, 3… = l'objet apparaît aussi sur la page d'accueil, dans cet ordre.
      Détails affichés seulement dans le volet « Se renseigner » (laisser de côté ce qui ne sert pas) :
@@ -72,8 +78,6 @@ window.DECOSUD = {
     { id: "gouttes-led",      univers: "noel", nom: "Gouttes lumineuses LED",      par: "Verre mercurisé doré · 3 formats",    image: "assets/img/gouttes-led.jpg",
       formatsTarifs: "Petit modèle (12 €) · Moyen modèle (17 €) · Grand modèle (22 €)",
       description: "Gouttes lumineuses en verre doré effet mercurisé, éclairées par LED. À poser seules ou en trio." },
-    { id: "noel-sapin",       univers: "noel", nom: "Sapin doré",                  par: "Décoration de table",                 image: "assets/img/obj-noel-sapin.jpg" },
-    { id: "noel-seau",        univers: "noel", nom: "Seau à champagne doré",       par: "Tables de fête",                      image: "assets/img/obj-noel-seau.jpg" },
 
     /* Arts de la table */
     { id: "verres-piano",     univers: "arts-de-la-table", nom: "Verres Piano",              par: "Véritable cristallin · Eau & Vin", image: "assets/img/verres-piano.jpg",
@@ -101,8 +105,7 @@ window.DECOSUD = {
     /* Couleurs du Sud */
     { id: "cyanotypes",       univers: "couleurs-du-sud", nom: "Cyanotypes",           par: "Artiste de La Cadière",       image: "assets/img/cc-cyanotypes.jpg",
       formats: "Plusieurs tirages et formats disponibles en boutique",
-      description: "Tirages originaux réalisés par une artiste de La Cadière-d'Azur. Chaque pièce est singulière : précisez vos envies dans votre message, Lucie vous enverra les modèles disponibles en boutique." },
-    { id: "drap-haomy",       univers: "couleurs-du-sud", nom: "Drap de plage",        par: "Haomy",                       image: "assets/img/cc-drap-haomy.jpg" },
+      description: "Tirages originaux réalisés par un artiste de La Cadière-d'Azur. Chaque pièce est singulière : précisez vos envies dans votre message, Lucie vous enverra les modèles disponibles en boutique." },
     { attente: true, univers: "couleurs-du-sud" },
     { attente: true, univers: "couleurs-du-sud" },
     { id: "costa-nova",       univers: "couleurs-du-sud", nom: "Vaisselle en grès",    par: "Costa Nova",                  image: "", couleur: "terra" },
@@ -110,7 +113,6 @@ window.DECOSUD = {
 
     /* Objets de décoration */
     { id: "vase-sculptural",  univers: "objets-de-decoration", nom: "Vase sculptural ajouré",        par: "Céramique",          image: "assets/img/univers-objets.jpg" },
-    { id: "jarres-turquoise", univers: "objets-de-decoration", nom: "Jarres en céramique turquoise", par: "Céramique émaillée", image: "assets/img/ambiance-printemps.jpg" },
     { attente: true, univers: "objets-de-decoration" },
 
     /* Linge & étoffes */
@@ -121,7 +123,5 @@ window.DECOSUD = {
     { id: "plaid-tartan",     univers: "linge-et-etoffes", nom: "Plaid Brun & Écru ou Tartan Kaki", par: "130 × 170 cm · Frangé", image: "assets/img/plaid-tartan-brun-kaki.jpg",
       coloris: "Brun & écru · Tartan kaki", tarif: "89 €",
       description: "Plaid épais et moelleux à franges (130 × 170 cm), décliné en carreaux brun et écru ou tartan kaki pour réchauffer un canapé ou un bout de lit." },
-    { id: "linge-brode",      univers: "linge-et-etoffes", nom: "Linge de table brodé",             par: "Lin et coton",        image: "assets/img/univers-linge.jpg" },
-    { id: "coussins-plaids",  univers: "linge-et-etoffes", nom: "Coussins brodés et plaids",        par: "Linge de maison",     image: "assets/img/insta-4.jpg" }
   ]
 };

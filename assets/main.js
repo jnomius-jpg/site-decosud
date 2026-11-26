@@ -13,6 +13,22 @@
   }
   var COLORS = { terra: "#D94826", cobalt: "#004A99", ocre: "#F2B705", olive: "#1E7F43" };
 
+  /* Chemin d'image : on garde le nom exact (majuscules, espaces, accents) et on l'encode pour l'adresse */
+  function src(path) {
+    var s = String(path || "");
+    try { s = decodeURI(s); } catch (e) {}
+    return esc(encodeURI(s.normalize ? s.normalize("NFC") : s));
+  }
+
+  /* Univers : un id, un nom, ou une liste des deux → liste d'ids */
+  var norm = function (t) { return String(t).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/&/g, "et").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); };
+  var UNIV_IDS = {};
+  (D.univers || []).forEach(function (u) { UNIV_IDS[norm(u.id)] = u.id; UNIV_IDS[norm(u.nom)] = u.id; });
+  D.pieces.forEach(function (p) {
+    p._univ = [].concat(p.univers || []).map(function (u) { return UNIV_IDS[norm(u)] || String(u); });
+    p._images = [p.image].concat(p.images || []).filter(Boolean);
+  });
+
   /* ---------- En-tête : transparent sur la photo, plein au scroll ---------- */
   var header = document.querySelector(".header");
   if (header && !document.body.classList.contains("page")) {
@@ -42,16 +58,16 @@
   ];
   D.pieces.filter(function (p) { return p.attente; }).forEach(function (p, i) { p._wait = WAIT[i % WAIT.length]; });
   function waitHTML(p) {
-    return '<div class="piece wait reveal" data-univers="' + esc(p.univers || "") + '">' +
+    return '<div class="piece wait reveal" data-univers="' + esc(p._univ.join(" ")) + '">' +
       '<div class="zoom"><div class="placeholder grain" style="background:' + p._wait.bg + ";color:" + p._wait.fg + '">' + cig() + "<span>Photo à venir</span></div></div>" +
       '<p class="name">Nouvelles pièces en chemin</p></div>';
   }
   function pieceHTML(p) {
     if (p.attente) return waitHTML(p);
     var visual = p.image
-      ? '<img src="' + esc(p.image) + '" alt="' + esc(p.nom + ", " + p.par) + '" loading="lazy">'
+      ? '<img src="' + src(p.image) + '" alt="' + esc(p.nom + ", " + p.par) + '" loading="lazy">'
       : '<div class="placeholder grain" style="background:' + (COLORS[p.couleur] || COLORS.terra) + '">' + cig() + '<span>Photo à venir</span></div>';
-    return '<a class="piece reveal" data-id="' + esc(p.id) + '" data-univers="' + esc(p.univers || "") + '" href="visite.html?objet=' + encodeURIComponent(p.id) + '#demande">' +
+    return '<a class="piece reveal" data-id="' + esc(p.id) + '" data-univers="' + esc(p._univ.join(" ")) + '" href="visite.html?objet=' + encodeURIComponent(p.id) + '#demande">' +
       '<div class="zoom">' + visual + '</div>' +
       '<p class="name">' + esc(p.nom) + '</p>' +
       '<p class="by">' + esc(p.par) + '</p>' +
@@ -69,7 +85,7 @@
   var filterBar = document.querySelector("[data-filters]");
   if (filterBar) {
     var univers = D.univers || [];
-    var countOf = function (id) { return D.pieces.filter(function (p) { return !p.attente && (!id || p.univers === id); }).length; };
+    var countOf = function (id) { return D.pieces.filter(function (p) { return !p.attente && (!id || p._univ.indexOf(id) > -1); }).length; };
     filterBar.innerHTML = [{ id: "", nom: "Tout" }].concat(univers).map(function (u) {
       return '<button type="button" data-u="' + esc(u.id) + '" aria-pressed="false">' + esc(u.nom) + '<span class="count">' + countOf(u.id) + "</span></button>";
     }).join("");
@@ -79,7 +95,7 @@
       filterBar.querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-u") === id); });
       var shown = 0;
       document.querySelectorAll('[data-pieces="all"] .piece').forEach(function (el) {
-        var ok = !id || el.getAttribute("data-univers") === id;
+        var ok = !id || (el.getAttribute("data-univers") || "").split(" ").indexOf(id) > -1;
         el.hidden = !ok;
         if (ok) { shown++; el.classList.add("in"); }
       });
@@ -210,9 +226,16 @@
       askForm.querySelector(".err").hidden = true;
       askForm.elements.objet.value = p ? p.nom + (p.par ? " (" + p.par + ")" : "") : "";
       panel.querySelector(".ask-free").hidden = !!p;
+      var gallery = p && p._images.length > 1;
+      head.classList.toggle("has-gallery", !!gallery);
       head.innerHTML = p
-        ? '<div class="ask-thumb">' + (p.image ? '<img src="' + esc(p.image) + '" alt="">' : '<div class="placeholder grain" style="background:' + (COLORS[p.couleur] || COLORS.terra) + '">' + cig() + "</div>") + "</div>" +
-          '<div><p class="eyebrow">' + esc(univName(p.univers)) + '</p><h2 id="ask-titre">' + esc(p.nom) + '</h2><p class="by">' + esc(p.par) + "</p></div>"
+        ? (gallery
+            ? '<div class="ask-gallery"><div class="ask-main"><img src="' + src(p._images[0]) + '" alt="' + esc(p.nom) + ', photo 1"></div>' +
+              '<div class="ask-thumbs">' + p._images.map(function (im, i) {
+                return '<button type="button" aria-label="Voir la photo ' + (i + 1) + '" aria-pressed="' + (i === 0) + '" data-src="' + src(im) + '"><img src="' + src(im) + '" alt="" loading="lazy"></button>';
+              }).join("") + "</div></div>"
+            : '<div class="ask-thumb">' + (p.image ? '<img src="' + src(p.image) + '" alt="">' : '<div class="placeholder grain" style="background:' + (COLORS[p.couleur] || COLORS.terra) + '">' + cig() + "</div>") + "</div>") +
+          '<div><p class="eyebrow">' + esc(p._univ.map(univName).filter(Boolean).join(" · ")) + '</p><h2 id="ask-titre">' + esc(p.nom) + '</h2><p class="by">' + esc(p.par) + "</p></div>"
         : '<div><p class="eyebrow">Une question, un envoi ?</p><h2 id="ask-titre">Faire une <em>demande</em></h2></div>';
       /* Petit bloc de détails : seulement les champs renseignés */
       var rows = [];
@@ -237,6 +260,16 @@
       setTimeout(function () { panel.hidden = true; }, 450);
       if (opener && opener.focus) opener.focus({ preventScroll: true });
     };
+    /* Mini-galerie : une vignette remplace la photo principale */
+    head.addEventListener("click", function (e) {
+      var t = e.target.closest(".ask-thumbs button");
+      if (!t) return;
+      var main = head.querySelector(".ask-main img");
+      var i = Array.prototype.indexOf.call(t.parentNode.children, t);
+      main.src = t.getAttribute("data-src");
+      main.alt = main.alt.replace(/photo \d+$/, "photo " + (i + 1));
+      head.querySelectorAll(".ask-thumbs button").forEach(function (b) { b.setAttribute("aria-pressed", b === t); });
+    });
     panel.addEventListener("click", function (e) { if (e.target === panel || e.target.closest(".ask-close, .ask-back")) closePanel(); });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !panel.hidden) closePanel(); });
     askForm.addEventListener("submit", function (e) {
