@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Un fauteuil pour Noël — Decosud</title>
+<!-- Page du jeu-concours : PAS ENCORE PUBLIÉE. Ni dans le menu, ni dans le sitemap, ni dans les moteurs de recherche.
+     Le jour du lancement : retirer la ligne « robots » ci-dessous, ajouter la page à sitemap.xml et, si on le souhaite, un lien dans le menu. -->
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Jeu-concours de Noël de Déco Sud, boutique de décoration à La Cadière-d'Azur : un fauteuil Sheoma à gagner. Gratuit et sans obligation d'achat.">
+<meta property="og:title" content="Un fauteuil pour Noël — Decosud">
+<meta property="og:description" content="Un fauteuil Sheoma à gagner pour Noël. Participation gratuite sur Instagram et à la boutique, à La Cadière-d'Azur.">
+<meta property="og:image" content="https://chezdecosud.fr/assets/img/concours/plage-large.jpg">
+<meta name="theme-color" content="#FCFAF6">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/ebgaramond-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/style.css?v=2611h">
+<script defer src="https://cloud.umami.is/script.js" data-website-id="2d82ac18-5d5f-419b-af55-7a590ce804e8"></script>
+<style>
+/* ==========================================================
+   PAGE CONCOURS — styles propres à cette page
+   Modèle : Kinfolk. Fond papier, filets noirs de structure, grands titres
+   en capitales, photos en grand, cigales pleines (noires ou moutarde) en
+   quelques points précis. Aucun aplat de couleur.
+   ========================================================== */
+.cc { --moutarde: #D99A1E; }
+.cc main { padding-top: 76px; }
+
+/* Typo maison Kinfolk : capitales serif, légendes sans en bas de casse */
+.k-caps { font-family: var(--serif); font-weight: 400; text-transform: uppercase; letter-spacing: -.005em; line-height: .95; margin: 0; }
+.k-deck { font-family: var(--serif); font-weight: 400; line-height: 1.12; margin: 0; letter-spacing: -.005em; }
+.k-meta { font-family: var(--sans); font-weight: 400; font-size: 15px; letter-spacing: .01em; margin: 0; }
+.k-rule { border: 0; border-top: 2px solid var(--ink); margin: 0; }
+.k-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; padding-bottom: 22px; border-bottom: 2px solid var(--ink); }
+.k-head h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(2.2rem, 3.4vw, 3.2rem); line-height: 1; margin: 0; }
+.k-head .cig { font-size: 15px; color: var(--ink); margin-bottom: 4px; }
+.k-head .cig.m { color: var(--moutarde); }
+.k-sec { padding: clamp(110px, 12vw, 190px) 0 0; }
+
+/* ---------- 1. Couverture : photo pleine largeur, titre géant en capitales ---------- */
+.k-cover { position: relative; height: calc(100svh - 76px); min-height: 560px; overflow: hidden; color: #fff; }
+.k-cover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 58%; }
+.k-cover::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(20,18,14,.28) 0%, rgba(20,18,14,0) 30%, rgba(20,18,14,0) 62%, rgba(20,18,14,.34) 100%); }
+.k-cover .haut, .k-cover .bas { position: absolute; z-index: 2; left: var(--gutter); right: var(--gutter); }
+.k-cover .haut { top: clamp(26px, 3.4vw, 48px); }
+.k-cover .haut p { font-family: var(--serif); font-size: clamp(1.3rem, 2.2vw, 2.1rem); line-height: 1.2; margin: 0; max-width: 24em; }
+.k-cover .bas { bottom: clamp(18px, 2.6vw, 36px); }
+.k-cover h1 { font-size: clamp(3rem, 7.4vw, 9rem); white-space: nowrap; letter-spacing: -.015em; }
+.k-cover .cig { position: absolute; z-index: 2; right: var(--gutter); top: clamp(30px, 3.6vw, 52px); font-size: 17px; color: var(--moutarde); transform: rotate(16deg); }
+
+/* ---------- 2. Le mot de Lucie : texte à gauche, photo à droite ---------- */
+.k-split { display: grid; grid-template-columns: 1fr minmax(0, 31%); gap: clamp(40px, 8vw, 160px); align-items: start; padding-top: clamp(80px, 9vw, 140px); }
+.k-split .titre { font-size: clamp(2.6rem, 4.4vw, 4.4rem); }
+.k-split .deck { font-size: clamp(2rem, 3.4vw, 3.4rem); margin-top: .1em; max-width: 15em; }
+.k-split .k-meta { margin-top: clamp(30px, 3vw, 44px); }
+.k-split figure { margin: 0; }
+.k-split .img { aspect-ratio: 4 / 5; overflow: hidden; }
+.k-split img, .k-grid img, .k-fauteuil img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ---------- 3. Participer : grille de trois, comme une sélection de magazine ---------- */
+.k-grid { list-style: none; margin: clamp(60px, 7vw, 100px) auto 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+.k-grid .img { aspect-ratio: 4 / 5; overflow: hidden; background: var(--sable); }
+.k-grid .k-meta { margin: 14px 0 12px; }
+.k-grid h3 { font-size: clamp(1.7rem, 2.3vw, 2.2rem); margin-bottom: 14px; }
+.k-grid p { font-size: 15px; max-width: 25em; }
+.k-note { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px 40px; margin: clamp(60px, 6vw, 90px) 0 0; padding-top: 18px; border-top: 1px solid var(--ink); font-size: 13.5px; }
+.k-note p { margin: 0; }
+
+/* ---------- 4. Les dates : tableau à filets ---------- */
+.k-table { list-style: none; margin: 0; padding: 0; }
+.k-table li { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: baseline; padding: 22px 0; border-bottom: 1px solid var(--ink); }
+.k-table .quoi { font-family: var(--serif); font-size: clamp(1.3rem, 1.9vw, 1.7rem); }
+.k-table .quand { font-size: 15px; text-align: right; }
+.k-table .note { grid-column: 1 / -1; margin-top: -8px; font-size: 13.5px; }
+
+/* ---------- 5. Le fauteuil : photo à gauche, fiche à droite ---------- */
+.k-fauteuil { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(40px, 6vw, 110px); align-items: start; padding-top: clamp(60px, 7vw, 100px); }
+.k-fauteuil figure { margin: 0; }
+.k-fauteuil .img { aspect-ratio: 4 / 3; overflow: hidden; }
+.k-fauteuil figcaption { margin-top: 12px; }
+.k-fauteuil .titre { font-size: clamp(2.6rem, 4.4vw, 4.4rem); }
+.k-fauteuil .deck { font-size: clamp(1.5rem, 2.2vw, 2.1rem); margin: .25em 0 clamp(34px, 4vw, 54px); }
+.k-fiche { margin: 0; border-top: 2px solid var(--ink); }
+.k-fiche > div { display: grid; grid-template-columns: 8.5em 1fr; gap: 16px; padding: 15px 0; border-bottom: 1px solid var(--ink); align-items: baseline; }
+.k-fiche dt { font-size: 14px; }
+.k-fiche dd { margin: 0; font-family: var(--serif); font-size: 1.2rem; }
+
+/* ---------- 6. Règlement ---------- */
+.k-regl { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: clamp(30px, 6vw, 110px); padding-top: clamp(40px, 5vw, 70px); }
+.k-regl .intro { font-family: var(--serif); font-size: 1.25rem; line-height: 1.45; margin: 0 0 26px; max-width: 18em; }
+.cc-volet { border-bottom: 1px solid var(--ink); }
+.cc-volet summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 0 0 22px; font-family: var(--serif); font-size: clamp(1.3rem, 1.9vw, 1.7rem); }
+.cc-volet summary::-webkit-details-marker { display: none; }
+.cc-volet summary .plus { position: relative; flex: none; width: 20px; height: 20px; }
+.cc-volet summary .plus::before, .cc-volet summary .plus::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1.5px; background: currentColor; transition: transform .5s ease; }
+.cc-volet summary .plus::after { transform: rotate(90deg); }
+.cc-volet[open] summary .plus::after { transform: rotate(0); }
+.provisoire { display: inline-block; margin: 4px 0 26px; padding: 6px 12px; border: 1px solid var(--ink); font-size: 12px; letter-spacing: .04em; }
+.regl { padding: 4px 0 40px; columns: 2 20em; column-gap: clamp(30px, 4vw, 56px); }
+.regl h3 { font-family: var(--serif); font-weight: 400; font-size: 1.15rem; text-transform: uppercase; margin: 24px 0 6px; break-after: avoid; }
+.regl h3:first-child { margin-top: 0; }
+.regl p, .regl li { font-size: 14px; line-height: 1.65; }
+.regl ul { padding-left: 1.1em; margin: 0 0 1em; }
+.regl p { break-inside: avoid-column; }
+
+/* ---------- 7. Fin ---------- */
+.k-fin { padding: clamp(130px, 15vw, 230px) 0 clamp(110px, 12vw, 180px); text-align: center; }
+.k-fin .trio { display: flex; justify-content: center; gap: 20px; font-size: 14px; margin-bottom: 40px; }
+.k-fin .trio .cig:nth-child(1) { transform: rotate(-16deg); }
+.k-fin .trio .cig:nth-child(2) { color: var(--moutarde); }
+.k-fin .trio .cig:nth-child(3) { transform: rotate(16deg); }
+.k-fin .titre { font-size: clamp(2.8rem, 6.4vw, 6.4rem); }
+.k-fin .deck { font-size: clamp(1.4rem, 2.2vw, 2rem); margin: .4em 0 30px; }
+.k-fin .k-meta { margin-bottom: 34px; }
+
+
+/* ---------- Révision : blanc pur, plus d'air, rubriques centrées façon magazine ---------- */
+body.cc, .cc .header, .cc .footer, .cc .header .nav { background: #fff; }
+body.cc::before { display: none; }
+.k-sec { padding-top: clamp(150px, 16vw, 250px); }
+.k-center { text-align: center; max-width: 820px; margin: 0 auto; }
+.k-center .cig { font-size: 13px; color: var(--ink); display: block; margin: 0 auto 34px; }
+.k-center .cig.m { color: var(--moutarde); }
+.k-center h2 { font-size: clamp(2.4rem, 4.2vw, 4rem); }
+.k-center .k-deck { font-size: clamp(1.35rem, 2vw, 1.9rem); margin-top: .35em; }
+/* Grille Participer : resserrée au centre, photos hautes, beaucoup de blanc autour */
+.k-grid { max-width: 1180px; margin: clamp(80px, 8vw, 120px) auto 0; gap: clamp(28px, 3.4vw, 56px); }
+.k-grid .img { aspect-ratio: 3 / 4; }
+.k-grid .k-meta { margin: 20px 0 10px; font-size: 14px; }
+.k-grid h3 { font-size: clamp(1.45rem, 1.9vw, 1.8rem); line-height: 1.05; margin-bottom: 12px; }
+.k-grid p { font-size: 14.5px; line-height: 1.6; }
+.k-note { max-width: 1180px; margin: clamp(80px, 8vw, 120px) auto 0; border-top: 1px solid var(--ink); text-align: center; justify-content: center; flex-direction: column; align-items: center; }
+/* Dates : tableau étroit et centré */
+.k-table { max-width: 820px; margin: clamp(70px, 7vw, 100px) auto 0; border-top: 1px solid var(--ink); }
+.k-table li { padding: 26px 0; }
+.k-table .quoi { font-size: clamp(1.2rem, 1.6vw, 1.45rem); }
+.k-table .quand { font-size: 14px; }
+.k-table .note { font-size: 13px; }
+/* Champs à compléter : discrets, entre crochets, sans surlignage */
+.cc .todo { background: none; padding: 0; font-style: italic; color: #8A8780; }
+.cc .todo::before { content: "["; } .cc .todo::after { content: "]"; }
+@media (max-width: 900px) {
+  .k-grid { gap: 70px; } .k-grid .img { aspect-ratio: 3 / 4; }
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 900px) {
+  .k-cover { height: auto; aspect-ratio: 4 / 5.4; min-height: 0; }
+  .k-cover h1 { white-space: normal; font-size: 11.4vw; }
+  .k-cover .bas { top: calc(clamp(26px, 3.4vw, 48px) + 2.6em); bottom: auto; }
+  .k-cover .cig { display: none; }
+  .k-split, .k-fauteuil, .k-regl { grid-template-columns: 1fr; }
+  .k-split figure { width: 72%; margin-left: auto; }
+  .k-grid { grid-template-columns: 1fr; gap: 56px; }
+  .k-grid .img { aspect-ratio: 4 / 4.4; }
+  .k-fiche > div { grid-template-columns: 7em 1fr; }
+}
+@media print {
+  .header, .footer, .k-cover, .k-noprint, .k-regl > div:first-child { display: none !important; }
+  .cc-volet > *:not(summary) { display: block !important; }
+  body::before { display: none; }
+}
+</style>
+</head>
+<body class="page cc">
+<a class="skip" href="#contenu">Aller au contenu</a>
+<header class="header">
+  <div class="wrap bar">
+    <a class="logo" href="index.html" aria-label="Déco Sud, accueil"><span class="a">DÉCO</span><span class="b">Sud</span><svg class="cig " aria-hidden="true"><use href="assets/cigales.svg#c"/></svg></a>
+    <nav class="nav" aria-label="Navigation principale"><a href="index.html#maison">La Boutique</a><a href="selection.html">Sélection</a><a href="index.html#ambiances">Ambiances</a><a href="index.html#guides">Les Guides</a><a href="visite.html">Nous rendre visite</a></nav>
+    <button class="menu-btn" aria-expanded="false" aria-label="Ouvrir le menu">Menu</button>
+  </div>
+</header>
+<main id="contenu">
+
+<!-- 1. Couverture -->
+<section class="k-cover k-noprint" aria-label="Le fauteuil">
+  <picture>
+    <source media="(max-width: 900px)" srcset="assets/img/concours/plage-portrait.jpg">
+    <img src="assets/img/concours/plage-large.jpg" alt="Le fauteuil Sheoma, velours moutarde et cadre noir, posé seul sur le sable sous un grand ciel bleu." width="2000" height="1250" fetchpriority="high">
+  </picture>
+  <div class="haut"><p>Le jeu-concours de Noël de Déco Sud.</p></div>
+  <svg class="cig" aria-hidden="true"><use href="assets/cigales.svg#c"/></svg>
+  <div class="bas"><h1 class="k-caps">Un fauteuil pour Noël</h1></div>
+</section>
+
+<!-- 2. Le mot de Lucie -->
+<section class="k-noprint">
+  <div class="wrap">
+    <div class="k-split">
+      <div class="reveal">
+        <p class="k-caps titre">Le mot de Lucie</p>
+        <p class="k-deck deck">Depuis qu'il est arrivé à la boutique, je l'imagine chez vous, près d'une fenêtre, avec un livre et un plaid. Cette année, c'est lui que je glisse sous le sapin.</p>
+        <p class="k-meta">Lucie, Déco Sud, La Cadière-d'Azur</p>
+      </div>
+      <figure class="reveal">
+        <div class="img"><img src="assets/img/concours/jarre-verticale.jpg" alt="Le fauteuil près d'une jarre en terre cuite, devant une porte en bois, dans la lumière du soir." width="1200" height="1500" loading="lazy"></div>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- 3. Participer -->
+<section class="k-sec k-noprint" id="participer">
+  <div class="wrap">
+    <div class="k-center reveal"><svg class="cig" aria-hidden="true"><use href="assets/cigales.svg#c"/></svg><h2 class="k-caps">Participer</h2><p class="k-deck">Trois façons de tenter sa chance, sans rien acheter.</p></div>
+    <ol class="k-grid">
+      <li class="reveal">
+        <div class="img"><img src="assets/img/concours/dentelle.jpg" alt="Le fauteuil devant un rideau de dentelle, ombres de feuillage au mur." width="1200" height="1600" loading="lazy"></div>
+        <p class="k-meta">01 &nbsp;Sur Instagram</p>
+        <h3 class="k-caps">Abonnez-vous et répondez</h3>
+        <p>Abonnez-vous à @decosud_83740, puis répondez en commentaire, sous la publication du concours, à notre question&#8239;: <span class="todo">question déco et conditions exactes à compléter</span>.</p>
+      </li>
+      <li class="reveal">
+        <div class="img"><img src="assets/img/concours/porte-verticale.jpg" alt="Le fauteuil devant une porte en bois, en plein soleil." width="1200" height="1600" loading="lazy"></div>
+        <p class="k-meta">02 &nbsp;À la boutique</p>
+        <h3 class="k-caps">Glissez votre bulletin</h3>
+        <p>Passez au 8 rue Gabriel Péri et déposez votre bulletin dans l'urne. Sans achat, une fois par personne&#8239;: c'est une chance de plus.</p>
+      </li>
+      <li class="reveal">
+        <div class="img"><img src="assets/img/concours/toit.jpg" alt="Le fauteuil sur un toit de tuiles provençales, ciel bleu." width="1072" height="1429" loading="lazy"></div>
+        <p class="k-meta">03 &nbsp;Le tirage</p>
+        <h3 class="k-caps">Le fauteuil est à vous</h3>
+        <p>Tirage au sort à la boutique le <span class="todo">date à compléter</span>. La personne gagnante est prévenue par message et vient chercher son fauteuil avant Noël.</p>
+      </li>
+    </ol>
+    <div class="k-note reveal">
+      <p><strong style="font-weight:500">Gratuit et sans obligation d'achat.</strong> Un seul compte vous écrira&#8239;: @decosud_83740, et jamais pour vous demander un paiement ou un clic sur un lien.</p>
+      <p>Opération ni organisée ni parrainée par Instagram.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 4. Les dates -->
+<section class="k-sec k-noprint" id="dates">
+  <div class="wrap">
+    <div class="k-center reveal"><svg class="cig m" aria-hidden="true"><use href="assets/cigales.svg#c"/></svg><h2 class="k-caps">Les dates</h2><p class="k-deck">Du lancement à la remise du fauteuil.</p></div>
+    <ul class="k-table reveal">
+      <li><span class="quoi">Ouverture du jeu</span><span class="quand"><span class="todo">date et heure à compléter</span></span></li>
+      <li><span class="quoi">Dernier bulletin à la boutique</span><span class="quand"><span class="todo">date à compléter</span></span><span class="note">Aux heures d'ouverture.</span></li>
+      <li><span class="quoi">Clôture sur Instagram</span><span class="quand"><span class="todo">date et heure à compléter</span></span></li>
+      <li><span class="quoi">Tirage au sort, à la boutique</span><span class="quand"><span class="todo">date à compléter</span>, au plus tard le 18 décembre</span></li>
+      <li><span class="quoi">Remise du fauteuil</span><span class="quand">À la boutique, avant Noël</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- 5. Le fauteuil -->
+<section class="k-sec k-noprint" id="fauteuil">
+  <div class="wrap">
+    <div class="k-head reveal"><h2>Le lot</h2><svg class="cig" aria-hidden="true"><use href="assets/cigales.svg#c"/></svg></div>
+    <div class="k-fauteuil">
+      <figure class="reveal">
+        <div class="img"><img src="assets/img/concours/velours-guepards.jpg" alt="Gros plan du dossier : guépards en rangs sur le velours moutarde, cadre noir." width="1080" height="810" loading="lazy"></div>
+        <figcaption class="k-meta">Le dossier, en détail</figcaption>
+      </figure>
+      <div class="reveal">
+        <p class="k-caps titre">Le fauteuil</p>
+        <p class="k-deck deck">Un velours moutarde, des guépards qui défilent sur le dossier, un cadre noir aux lignes nettes.</p>
+        <dl class="k-fiche">
+          <div><dt>Maison</dt><dd>Sheoma</dd></div>
+          <div><dt>Modèle</dt><dd><span class="todo">nom du modèle à compléter</span></dd></div>
+          <div><dt>Matières</dt><dd><span class="todo">assise, dossier, cadre : à compléter</span></dd></div>
+          <div><dt>Dimensions</dt><dd><span class="todo">L × P × H, hauteur d'assise : à compléter</span></dd></div>
+          <div><dt>Valeur</dt><dd><span class="todo">prix public TTC à compléter</span></dd></div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. Le règlement -->
+<section class="k-sec" id="reglement">
+  <div class="wrap">
+    <div class="k-head reveal k-noprint"><h2>Le règlement</h2><svg class="cig" aria-hidden="true"><use href="assets/cigales.svg#c"/></svg></div>
+    <div class="k-regl">
+      <div class="reveal">
+        <p class="intro">Tout ce qu'il faut savoir, en détail. Aussi disponible à la boutique, sur simple demande.</p>
+        <a class="link" href="assets/concours/reglement-concours-noel.pdf" download>Télécharger en PDF</a>
+      </div>
+      <div class="reveal">
+        <details class="cc-volet">
+          <summary><span class="txt">Lire le règlement complet</span><span class="plus" aria-hidden="true"></span></summary>
+          <p class="provisoire">Version provisoire, à valider avant publication</p>
+        <!-- DEBUT-REGLEMENT (ce bloc sert aussi à fabriquer le PDF) -->
+        <div class="regl">
+          <h3>Article 1 · Organisateur</h3>
+          <p>La société Déco Sud, SAS au capital de <span class="todo">montant</span> €, immatriculée au RCS de <span class="todo">ville</span>, SIRET 938 418 001 00013, dont le siège est situé 8 rue Gabriel Péri, 83740 La Cadière-d'Azur (ci-après « l'Organisateur »), organise un jeu gratuit et sans obligation d'achat intitulé « Un fauteuil pour Noël » (ci-après « le Jeu »).</p>
+
+          <h3>Article 2 · Durée</h3>
+          <p>Le Jeu se déroule du <span class="todo">date et heure</span> au <span class="todo">date et heure</span> inclus, heure de Paris.</p>
+
+          <h3>Article 3 · Qui peut participer</h3>
+          <p>Le Jeu est ouvert à toute personne physique majeure résidant en <span class="todo">France métropolitaine (zone à confirmer)</span>, à l'exclusion des personnes ayant participé à son organisation et des membres de leur foyer. Une même personne ne peut utiliser qu'un seul compte Instagram pour participer.</p>
+
+          <h3>Article 4 · Comment participer</h3>
+          <p>Deux façons de participer, cumulables, dans la limite d'une participation par façon et par personne (soit deux chances au plus)&#8239;:</p>
+          <ul>
+            <li><strong>Sur Instagram</strong>&#8239;: être abonné au compte @decosud_83740 et publier, sous la publication du Jeu, un commentaire répondant à la question posée. <span class="todo">Mécanique définitive à confirmer (identification d'amis : oui ou non, nombre).</span> Plusieurs commentaires d'un même compte ne comptent qu'une fois.</li>
+            <li><strong>À la boutique</strong>&#8239;: remplir un bulletin de participation, disponible gratuitement et sans achat aux heures d'ouverture, et le déposer dans l'urne.</li>
+          </ul>
+          <p>Toute participation incomplète, frauduleuse, automatisée ou contraire au présent règlement est nulle.</p>
+
+          <h3>Article 5 · Le lot</h3>
+          <p>Le Jeu est doté d'un lot unique&#8239;: un fauteuil de la maison Sheoma, <span class="todo">modèle, matières, dimensions</span>, d'une valeur commerciale indicative de <span class="todo">prix public</span> € TTC. Le lot ne peut être ni échangé, ni repris, ni converti en argent. En cas de force majeure, l'Organisateur peut le remplacer par un lot de valeur équivalente.</p>
+
+          <h3>Article 6 · Le tirage au sort</h3>
+          <p>Le tirage au sort a lieu le <span class="todo">date, au plus tard le 18 décembre 2026</span>, à la boutique, parmi l'ensemble des participations valides, au moyen de <span class="todo">outil de tirage à préciser</span>, en présence de <span class="todo">témoin à préciser</span>. Une personne gagnante et deux suppléants, dans l'ordre du tirage, sont désignés.</p>
+
+          <h3>Article 7 · Annonce et remise du lot</h3>
+          <p>La personne gagnante est prévenue par message privé envoyé depuis le seul compte officiel @decosud_83740, ou par téléphone ou e-mail si elle a participé par bulletin. Sans réponse de sa part sous 72 heures, le lot revient au premier suppléant, puis au second, qui disposent chacun de 48 heures. Son prénom ou son pseudonyme n'est publié qu'avec son accord.</p>
+          <p>Le fauteuil est à retirer à la boutique, aux heures d'ouverture, jusqu'au <span class="todo">date</span>, sur présentation d'une pièce d'identité. L'Organisateur ne demande jamais de paiement, de coordonnées bancaires ni de clic sur un lien.</p>
+
+          <h3>Article 8 · Instagram</h3>
+          <p>Le Jeu n'est ni organisé, ni parrainé, ni géré par Instagram ou Meta Platforms, Inc., qui ne pourront être tenus pour responsables de son déroulement. Chaque participant dégage Instagram de toute responsabilité. Les informations communiquées le sont à l'Organisateur et non à Instagram.</p>
+
+          <h3>Article 9 · Données personnelles</h3>
+          <p>Déco Sud traite les données des participants (pseudonyme Instagram et, pour les bulletins, nom, prénom, téléphone ou e-mail) uniquement pour organiser le Jeu, effectuer le tirage et contacter la personne gagnante. Elles ne sont ni vendues ni transmises, et sont détruites <span class="todo">au plus tard trois mois après le tirage (durée à valider)</span>. Aucune lettre d'information n'est envoyée sans un accord séparé et explicite, recueilli par une case distincte sur le bulletin.</p>
+          <p>Chaque participant peut demander l'accès, la rectification ou l'effacement de ses données, ou s'opposer à leur traitement, en écrivant à decosud83740@gmail.com ou au 8 rue Gabriel Péri, 83740 La Cadière-d'Azur. Il peut aussi saisir la CNIL (cnil.fr).</p>
+
+          <h3>Article 10 · Responsabilité</h3>
+          <p>L'Organisateur ne saurait être tenu pour responsable d'un dysfonctionnement d'Instagram ou d'internet empêchant une participation. Il se réserve le droit d'écourter, de prolonger ou d'annuler le Jeu en cas de force majeure, en informant les participants par les mêmes moyens que l'annonce du Jeu.</p>
+
+          <h3>Article 11 · Accès au règlement</h3>
+          <p>Le présent règlement est consultable gratuitement sur chezdecosud.fr et à la boutique, et adressé gratuitement à toute personne qui en fait la demande. <span class="todo">Dépôt chez un commissaire de justice : facultatif, à décider.</span></p>
+
+          <h3>Article 12 · Loi applicable</h3>
+          <p>Le présent règlement est soumis au droit français. Toute réclamation doit être adressée par écrit à l'Organisateur au plus tard <span class="todo">délai à préciser</span> après le tirage. À défaut d'accord amiable, le litige sera porté devant les tribunaux compétents.</p>
+        </div>
+        <!-- FIN-REGLEMENT -->
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. Fin -->
+<section class="k-fin k-noprint">
+  <div class="wrap reveal">
+    <div class="trio" aria-hidden="true"><svg class="cig" aria-hidden="true"><use href="assets/cigales.svg#c"/></svg><svg class="cig" aria-hidden="true"><use href="assets/cigales.svg#c"/></svg><svg class="cig" aria-hidden="true"><use href="assets/cigales.svg#c"/></svg></div>
+    <p class="k-caps titre">Venez l'essayer</p>
+    <p class="k-deck deck">8 rue Gabriel Péri, La Cadière-d'Azur</p>
+    <p class="k-meta">Du mardi au samedi, 10 h – 12 h 30 et 14 h 30 – 18 h 30. Le dimanche, 10 h – 13 h.</p>
+    <a class="link" href="https://www.google.com/maps/dir/?api=1&amp;destination=D%C3%A9co%20Sud%2C%208%20rue%20Gabriel%20P%C3%A9ri%2C%2083740%20La%20Cadi%C3%A8re-d%27Azur" data-umami-event="clic-itineraire" target="_blank" rel="noopener">Itinéraire</a>
+  </div>
+</section>
+
+</main>
+<footer class="footer">
+  <div class="wrap">
+    <div class="foot-line foot-top">
+      <a class="logo" href="index.html" aria-label="Déco Sud, accueil"><span class="a">DÉCO</span><span class="b">Sud</span><svg class="cig " aria-hidden="true"><use href="assets/cigales.svg#c"/></svg></a>
+      <nav class="foot-nav" aria-label="Liens du pied de page"><a href="selection.html">Sélection</a><a href="index.html#ambiances">Ambiances</a><a href="index.html#guides">Les Guides</a><a href="visite.html">Nous rendre visite</a><a href="visite.html#demande" data-ask>Demande</a><a href="https://www.instagram.com/decosud_83740/" data-umami-event="clic-instagram" target="_blank" rel="noopener">Instagram</a></nav>
+    </div>
+    <div class="foot-line foot-info">
+      <p>8 rue Gabriel Péri, 83740 La Cadière-d'Azur · <a href="https://www.google.com/maps/dir/?api=1&amp;destination=D%C3%A9co%20Sud%2C%208%20rue%20Gabriel%20P%C3%A9ri%2C%2083740%20La%20Cadi%C3%A8re-d%27Azur" data-umami-event="clic-itineraire" target="_blank" rel="noopener">Itinéraire</a> · <a href="tel:+33494982177" data-umami-event="clic-telephone" >04 94 98 21 77</a> · <a data-email href="mailto:decosud83740@gmail.com">decosud83740@gmail.com</a></p>
+      <p class="foot-hours"><abbr title="Du mardi au samedi">Mar–Sam</abbr> · 10h–12h30 · 14h30–18h30<span class="sep" aria-hidden="true">|</span><abbr title="Dimanche">Dim</abbr> · 10h–13h</p>
+    </div>
+    <div class="foot-line foot-legal">
+      <span>© Déco Sud, La Cadière-d'Azur</span>
+      <div class="rail"><svg class="cig " aria-hidden="true"><use href="assets/cigales.svg#c"/></svg><svg class="cig " aria-hidden="true"><use href="assets/cigales.svg#c"/></svg><svg class="cig " aria-hidden="true"><use href="assets/cigales.svg#c"/></svg><svg class="cig " aria-hidden="true"><use href="assets/cigales.svg#c"/></svg></div>
+      <a href="mentions-legales.html">Mentions légales</a>
+    </div>
+  </div>
+</footer>
+<script src="assets/donnees.js?v=2611h"></script>
+<script src="assets/main.js?v=2611h"></script>
+</body>
+</html>
