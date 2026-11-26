@@ -26,7 +26,12 @@
   (D.univers || []).forEach(function (u) { UNIV_IDS[norm(u.id)] = u.id; UNIV_IDS[norm(u.nom)] = u.id; });
   D.pieces.forEach(function (p) {
     p._univ = [].concat(p.univers || []).map(function (u) { return UNIV_IDS[norm(u)] || String(u); });
-    p._images = [p.image].concat(p.images || []).filter(Boolean);
+    /* Photos : "chemin" ou { src: "chemin", legende: "Corail rose", variante: false } */
+    p._images = [p.image].concat(p.images || []).filter(Boolean).map(function (im) {
+      if (typeof im === "string") return { src: im, legende: "", variante: "" };
+      return { src: im.src || "", legende: im.legende || "", variante: im.variante === false ? "" : (im.variante || im.legende || "") };
+    });
+    p._image = p._images[0] ? p._images[0].src : "";
   });
 
   /* ---------- En-tête : transparent sur la photo, plein au scroll ---------- */
@@ -64,8 +69,8 @@
   }
   function pieceHTML(p) {
     if (p.attente) return waitHTML(p);
-    var visual = p.image
-      ? '<img src="' + src(p.image) + '" alt="' + esc(p.nom + ", " + p.par) + '" loading="lazy">'
+    var visual = p._image
+      ? '<img src="' + src(p._image) + '" alt="' + esc(p.nom + ", " + p.par) + '" loading="lazy">'
       : '<div class="placeholder grain" style="background:' + (COLORS[p.couleur] || COLORS.terra) + '">' + cig() + '<span>Photo à venir</span></div>';
     return '<a class="piece reveal" data-id="' + esc(p.id) + '" data-univers="' + esc(p._univ.join(" ")) + '" href="visite.html?objet=' + encodeURIComponent(p.id) + '#demande">' +
       '<div class="zoom">' + visual + '</div>' +
@@ -219,9 +224,11 @@
     document.body.appendChild(panel);
     var sheet = panel.querySelector(".ask-sheet"), askForm = panel.querySelector(".ask-form"), head = panel.querySelector(".ask-head");
     var details = panel.querySelector(".ask-details");
+    var current = null, prefill = "";
     var done = panel.querySelector(".ask-done"), intro = panel.querySelector(".ask-intro"), opener = null;
     var openPanel = function (p) {
       opener = document.activeElement;
+      current = p; prefill = "";
       askForm.reset(); askForm.classList.remove("sent"); askForm.hidden = false; intro.hidden = false; done.hidden = true;
       askForm.querySelector(".err").hidden = true;
       askForm.elements.objet.value = p ? p.nom + (p.par ? " (" + p.par + ")" : "") : "";
@@ -230,11 +237,12 @@
       head.classList.toggle("has-gallery", !!gallery);
       head.innerHTML = p
         ? (gallery
-            ? '<div class="ask-gallery"><div class="ask-main"><img src="' + src(p._images[0]) + '" alt="' + esc(p.nom) + ', photo 1"></div>' +
+            ? '<div class="ask-gallery"><div class="ask-main"><img src="' + src(p._images[0].src) + '" alt="' + esc(p.nom + (p._images[0].legende ? ", " + p._images[0].legende : "")) + '"></div>' +
+              '<p class="ask-cap">' + esc(p._images[0].legende) + "</p>" +
               '<div class="ask-thumbs">' + p._images.map(function (im, i) {
-                return '<button type="button" aria-label="Voir la photo ' + (i + 1) + '" aria-pressed="' + (i === 0) + '" data-src="' + src(im) + '"><img src="' + src(im) + '" alt="" loading="lazy"></button>';
+                return '<button type="button" aria-label="' + esc(im.legende || "Photo " + (i + 1)) + '" title="' + esc(im.legende) + '" aria-pressed="' + (i === 0) + '" data-i="' + i + '"><img src="' + src(im.src) + '" alt="" loading="lazy"></button>';
               }).join("") + "</div></div>"
-            : '<div class="ask-thumb">' + (p.image ? '<img src="' + src(p.image) + '" alt="">' : '<div class="placeholder grain" style="background:' + (COLORS[p.couleur] || COLORS.terra) + '">' + cig() + "</div>") + "</div>") +
+            : '<div class="ask-thumb">' + (p._image ? '<img src="' + src(p._image) + '" alt="">' : '<div class="placeholder grain" style="background:' + (COLORS[p.couleur] || COLORS.terra) + '">' + cig() + "</div>") + "</div>") +
           '<div><p class="eyebrow">' + esc(p._univ.map(univName).filter(Boolean).join(" · ")) + '</p><h2 id="ask-titre">' + esc(p.nom) + '</h2><p class="by">' + esc(p.par) + "</p></div>"
         : '<div><p class="eyebrow">Une question, un envoi ?</p><h2 id="ask-titre">Faire une <em>demande</em></h2></div>';
       /* Petit bloc de détails : seulement les champs renseignés */
@@ -243,7 +251,10 @@
         var plural = function (v) { return v.indexOf("·") > -1; };
         if (p.formatsTarifs) rows.push(["Formats & tarifs", p.formatsTarifs]);
         else if (p.formats) rows.push([plural(p.formats) ? "Formats" : "Format", p.formats]);
+        if (p.modeles) rows.push([plural(p.modeles) ? "Modèles" : "Modèle", p.modeles]);
         if (p.coloris) rows.push(["Coloris", p.coloris]);
+        if (p.motifs) rows.push([plural(p.motifs) ? "Motifs" : "Motif", p.motifs]);
+        if (p.senteurs) rows.push([plural(p.senteurs) ? "Senteurs" : "Senteur", p.senteurs]);
         if (p.tarif && !p.formatsTarifs) rows.push(["Tarif", p.tarif]);
       }
       details.innerHTML = (p && p.description ? '<p class="ask-desc">' + esc(p.description) + "</p>" : "") +
@@ -264,11 +275,19 @@
     head.addEventListener("click", function (e) {
       var t = e.target.closest(".ask-thumbs button");
       if (!t) return;
+      var im = current && current._images[+t.getAttribute("data-i")];
+      if (!im) return;
       var main = head.querySelector(".ask-main img");
-      var i = Array.prototype.indexOf.call(t.parentNode.children, t);
-      main.src = t.getAttribute("data-src");
-      main.alt = main.alt.replace(/photo \d+$/, "photo " + (i + 1));
+      main.src = src(im.src).replace(/&amp;/g, "&");
+      main.alt = current.nom + (im.legende ? ", " + im.legende : "");
+      head.querySelector(".ask-cap").textContent = im.legende;
       head.querySelectorAll(".ask-thumbs button").forEach(function (b) { b.setAttribute("aria-pressed", b === t); });
+      /* Pré-remplit la variante dans le message (sans écraser ce que la personne a écrit) */
+      if (im.variante) {
+        var msg = askForm.elements.message, line = "Modèle souhaité : " + im.variante;
+        if (!msg.value.trim() || msg.value === prefill) { msg.value = line; prefill = line; }
+        else if (prefill && msg.value.indexOf(prefill) === 0) { msg.value = line + msg.value.slice(prefill.length); prefill = line; }
+      }
     });
     panel.addEventListener("click", function (e) { if (e.target === panel || e.target.closest(".ask-close, .ask-back")) closePanel(); });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !panel.hidden) closePanel(); });
