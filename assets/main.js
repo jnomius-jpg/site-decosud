@@ -309,41 +309,29 @@
     if (wanted && byId(wanted)) openPanel(byId(wanted));
   })();
 
-  /* ---------- Pop-up d'accueil « Noël » ----------
-     Réglage : SAISON_NOEL_ACTIVE en haut de donnees.js (true / false). */
+  /* ---------- Bande « Noël » en haut de page (remplace l'ancienne pop-up) ----------
+     Réglage : SAISON_NOEL_ACTIVE en haut de donnees.js (true / false).
+     Fermée par le visiteur, elle ne revient pas pendant la visite. */
   var noelOn = typeof SAISON_NOEL_ACTIVE !== "undefined" && SAISON_NOEL_ACTIVE;
-  if (noelOn && document.body.classList.contains("home")) {
-    var seen = false;
-    try { seen = sessionStorage.getItem("decosud-noel") === "1"; } catch (e) {}
-    if (!seen) setTimeout(function () {
-      var lastFocus = document.activeElement;
-      var pop = document.createElement("div");
-      pop.className = "saison";
-      pop.innerHTML =
-        '<div class="saison-card" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="saison-titre">' +
-          '<button type="button" class="saison-close" aria-label="Fermer">×</button>' +
-          '<figure class="saison-img"><img src="assets/img/noel-popup.jpg" alt="Décorations de Noël brodées de perles, photophores rayés rouge et blanc et petit sapin doré à nœud de velours"><figcaption aria-hidden="true">Noël</figcaption></figure>' +
-          '<div class="saison-txt">' + cig() +
-            '<h2 id="saison-titre">Noël chez <em>Déco Sud</em></h2>' +
-            '<p>Découvrez notre sélection de décorations, de lumières d\u2019hiver et d\u2019idées cadeaux pour les fêtes.</p>' +
-            '<a class="pill ink" href="selection.html#noel">Découvrir l\u2019univers Noël <span aria-hidden="true">→</span></a>' +
-          '</div>' +
-        '</div>';
-      document.body.appendChild(pop);
-      try { sessionStorage.setItem("decosud-noel", "1"); } catch (e) {}
-      var close = function () {
-        pop.classList.remove("in");
-        document.removeEventListener("keydown", onKey);
-        setTimeout(function () { pop.remove(); }, 700);
-        if (lastFocus && lastFocus.focus) lastFocus.focus();
-      };
-      var onKey = function (e) { if (e.key === "Escape") close(); };
-      pop.addEventListener("click", function (e) { if (e.target === pop || e.target.closest(".saison-close")) close(); });
-      pop.querySelector(".pill").addEventListener("click", function () { pop.remove(); });
-      document.addEventListener("keydown", onKey);
-      requestAnimationFrame(function () { requestAnimationFrame(function () { pop.classList.add("in"); }); });
-      pop.querySelector(".saison-card").focus({ preventScroll: true });
-    }, 1200);
+  var head = document.querySelector(".header");
+  if (noelOn && head) {
+    var closed = false;
+    try { closed = sessionStorage.getItem("decosud-ruban") === "1"; } catch (e) {}
+    if (!closed) {
+      var ruban = document.createElement("div");
+      ruban.className = "ruban";
+      ruban.innerHTML = cig() +
+        '<span>Noël chez <em>Déco Sud</em><span class="long"> · décorations, lumières d\u2019hiver et idées cadeaux</span></span>' +
+        '<a href="selection.html#noel">Découvrir</a>' +
+        '<button type="button" class="ruban-close" aria-label="Fermer le bandeau">×</button>';
+      head.insertBefore(ruban, head.firstChild);
+      document.body.classList.add("has-ruban");
+      ruban.querySelector(".ruban-close").addEventListener("click", function () {
+        ruban.remove();
+        document.body.classList.remove("has-ruban");
+        try { sessionStorage.setItem("decosud-ruban", "1"); } catch (e) {}
+      });
+    }
   }
 
   /* Lien e-mail affiché dans le pied de page */

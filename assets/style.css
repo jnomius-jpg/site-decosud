@@ -543,3 +543,54 @@ html.no-scroll { overflow: hidden; }
 .ask-intro { font-family: var(--serif); font-style: italic; font-size: 1.02rem; line-height: 1.55; color: var(--pierre); margin: -8px 0 28px; }
 .request-en { align-self: end; }
 .request-en .en { margin-top: 0; }
+
+/* ==========================================================
+   ESSAI DA (26/11) : un seul aplat de couleur (le manifeste).
+   Ambiances et Univers passent sur le fond papier ;
+   la couleur ne reste que sur la cigale et la petite ligne au-dessus du titre.
+   Pour revenir en arrière : supprimer ce bloc.
+   ========================================================== */
+.sz-band, .b-ocre, .b-cobalt, .b-terra, .b-sapin { background: transparent; }
+.sz-band.grain::after { display: none; }
+.b-ocre { color: var(--ocre); }
+.b-cobalt { color: var(--cobalt); }
+.b-terra { color: var(--terra); }
+.b-sapin { color: #1E4D36; }
+.sz-band .cig { font-size: clamp(22px, 2.2vw, 34px); }
+
+.amb .amb-txt,
+.amb.c-sapin .amb-txt, .amb.c-ocre .amb-txt, .amb.c-creme .amb-txt, .amb.c-vermillon .amb-txt {
+  background: transparent; color: var(--ink); padding-left: clamp(40px, 6vw, 110px); padding-right: clamp(40px, 6vw, 110px);
+}
+.amb .amb-txt.grain::after { display: none; }
+.amb .pill.ink, .amb.c-sapin .pill.ink, .amb.c-vermillon .pill.ink { border-color: var(--ink); color: var(--ink); }
+.amb .pill.ink:hover, .amb.c-sapin .pill.ink:hover, .amb.c-vermillon .pill.ink:hover { background: var(--ink); color: var(--lin); border-color: var(--ink); }
+.amb .eyebrow { opacity: 1; }
+.amb.c-sapin .cig, .amb.c-sapin .eyebrow { color: #1E4D36; }
+.amb.c-terra .cig, .amb.c-terra .eyebrow { color: var(--terra); }
+.amb.c-olive .cig, .amb.c-olive .eyebrow { color: var(--olive); }
+.amb.c-ocre .cig { color: var(--ocre); }
+.amb.c-ocre .eyebrow { color: #A67C00; }
+.amb.c-creme .cig, .amb.c-creme .eyebrow { color: var(--cobalt); }
+.amb.c-vermillon .cig, .amb.c-vermillon .eyebrow { color: var(--terra); }
+.amb-txt .cig { font-size: 15px; }
+@media (max-width: 900px) { .amb .amb-txt { padding: 36px 4px 8px; } }
+
+/* ---------- Bande de saison (remplace la pop-up de Noël) ---------- */
+.ruban { display: none; }
+body.has-ruban .ruban {
+  display: flex; align-items: center; justify-content: center; gap: 14px; position: relative;
+  height: 36px; padding: 0 48px; background: var(--sable); color: var(--ink);
+  border-bottom: 1px solid var(--line); font-family: var(--serif); font-size: 15px; line-height: 1;
+}
+body.has-ruban { padding-top: 36px; }
+.ruban .cig { font-size: 6px; color: var(--ocre); }
+.ruban em { font-style: italic; }
+.ruban a { font-family: var(--sans); font-size: 10px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase;
+  padding-bottom: 2px; border-bottom: 1px solid currentColor; transition: opacity .3s; }
+.ruban a:hover { opacity: .6; }
+.ruban .long { color: var(--pierre); }
+.ruban-close { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); width: 30px; height: 30px;
+  border: 0; background: none; font: 300 18px/1 var(--sans); color: var(--ink); opacity: .5; cursor: pointer; }
+.ruban-close:hover { opacity: 1; }
+@media (max-width: 700px) { .ruban .long { display: none; } body.has-ruban .ruban { padding: 0 40px 0 16px; gap: 10px; font-size: 14px; } }
