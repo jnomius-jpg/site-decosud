@@ -33,7 +33,21 @@
   }
 
   /* ---------- Objets ---------- */
+  /* Cartes « Nouvelles pièces en chemin » : fond qui alterne, cigale contrastée */
+  var WAIT = [
+    { bg: "#1E4D36", fg: "#F2B705" },   /* vert sapin, cigale mimosa */
+    { bg: "#D94826", fg: "#FCFAF6" },   /* terracotta, cigale papier */
+    { bg: "#F2B705", fg: "#1E4D36" },   /* jaune mimosa, cigale sapin */
+    { bg: "#E6D6BA", fg: "#D94826" }    /* beige sable, cigale terracotta */
+  ];
+  D.pieces.filter(function (p) { return p.attente; }).forEach(function (p, i) { p._wait = WAIT[i % WAIT.length]; });
+  function waitHTML(p) {
+    return '<div class="piece wait reveal" data-univers="' + esc(p.univers || "") + '">' +
+      '<div class="zoom"><div class="placeholder grain" style="background:' + p._wait.bg + ";color:" + p._wait.fg + '">' + cig() + "<span>Photo à venir</span></div></div>" +
+      '<p class="name">Nouvelles pièces en chemin</p></div>';
+  }
   function pieceHTML(p) {
+    if (p.attente) return waitHTML(p);
     var visual = p.image
       ? '<img src="' + esc(p.image) + '" alt="' + esc(p.nom + ", " + p.par) + '" loading="lazy">'
       : '<div class="placeholder grain" style="background:' + (COLORS[p.couleur] || COLORS.terra) + '">' + cig() + '<span>Photo à venir</span></div>';
@@ -44,7 +58,9 @@
       '<span class="ask">Se renseigner <span aria-hidden="true">→</span></span></a>';
   }
   document.querySelectorAll("[data-pieces]").forEach(function (el) {
-    var list = el.getAttribute("data-pieces") === "coups" ? D.pieces.filter(function (p) { return p.coupDeCoeur; }) : D.pieces;
+    var list = el.getAttribute("data-pieces") === "coups"
+      ? D.pieces.filter(function (p) { return p.coupDeCoeur && !p.attente; }).sort(function (a, b) { return (+a.coupDeCoeur || 99) - (+b.coupDeCoeur || 99); })
+      : D.pieces;
     el.innerHTML = list.map(pieceHTML).join("");
   });
 
@@ -53,7 +69,7 @@
   var filterBar = document.querySelector("[data-filters]");
   if (filterBar) {
     var univers = D.univers || [];
-    var countOf = function (id) { return D.pieces.filter(function (p) { return !id || p.univers === id; }).length; };
+    var countOf = function (id) { return D.pieces.filter(function (p) { return !p.attente && (!id || p.univers === id); }).length; };
     filterBar.innerHTML = [{ id: "", nom: "Tout" }].concat(univers).map(function (u) {
       return '<button type="button" data-u="' + esc(u.id) + '" aria-pressed="false">' + esc(u.nom) + '<span class="count">' + countOf(u.id) + "</span></button>";
     }).join("");
@@ -167,10 +183,11 @@
       '<div class="ask-sheet" role="dialog" aria-modal="true" aria-labelledby="ask-titre" tabindex="-1">' +
         '<button type="button" class="ask-close" aria-label="Fermer">×</button>' +
         '<div class="ask-head"></div>' +
+        '<div class="ask-details" hidden></div>' +
         '<p class="ask-intro">Ce petit formulaire vous permet d\u2019écrire directement à Lucie, qui tient la boutique. Elle vous répondra elle-même, avec la disponibilité de la pièce et, si vous habitez loin, les possibilités d\u2019envoi. Rien n\u2019est payé en ligne : tout se décide ensemble, simplement.</p>' +
         '<form class="ask-form" novalidate>' +
           '<input type="hidden" name="objet">' +
-          '<div class="field ask-free"><label for="ask-objet">Objet(s) qui vous intéressent</label><input id="ask-objet" name="objet_libre" placeholder="ex. le vase Day-Dream, les verres Abeille…"></div>' +
+          '<div class="field ask-free"><label for="ask-objet">Objet(s) qui vous intéressent</label><input id="ask-objet" name="objet_libre" placeholder="ex. la carafe en verre recyclé, les verres Piano…"></div>' +
           '<div class="field"><label for="ask-nom">Prénom et nom</label><input id="ask-nom" name="nom" autocomplete="name" required></div>' +
           '<div class="field"><label for="ask-email">E-mail</label><input id="ask-email" name="email" type="email" autocomplete="email" required></div>' +
           '<div class="field"><label for="ask-tel">Téléphone <span class="opt">(facultatif)</span></label><input id="ask-tel" name="tel" type="tel" autocomplete="tel"></div>' +
@@ -185,6 +202,7 @@
       '</div>';
     document.body.appendChild(panel);
     var sheet = panel.querySelector(".ask-sheet"), askForm = panel.querySelector(".ask-form"), head = panel.querySelector(".ask-head");
+    var details = panel.querySelector(".ask-details");
     var done = panel.querySelector(".ask-done"), intro = panel.querySelector(".ask-intro"), opener = null;
     var openPanel = function (p) {
       opener = document.activeElement;
@@ -196,6 +214,18 @@
         ? '<div class="ask-thumb">' + (p.image ? '<img src="' + esc(p.image) + '" alt="">' : '<div class="placeholder grain" style="background:' + (COLORS[p.couleur] || COLORS.terra) + '">' + cig() + "</div>") + "</div>" +
           '<div><p class="eyebrow">' + esc(univName(p.univers)) + '</p><h2 id="ask-titre">' + esc(p.nom) + '</h2><p class="by">' + esc(p.par) + "</p></div>"
         : '<div><p class="eyebrow">Une question, un envoi ?</p><h2 id="ask-titre">Faire une <em>demande</em></h2></div>';
+      /* Petit bloc de détails : seulement les champs renseignés */
+      var rows = [];
+      if (p) {
+        var plural = function (v) { return v.indexOf("·") > -1; };
+        if (p.formatsTarifs) rows.push(["Formats & tarifs", p.formatsTarifs]);
+        else if (p.formats) rows.push([plural(p.formats) ? "Formats" : "Format", p.formats]);
+        if (p.coloris) rows.push(["Coloris", p.coloris]);
+        if (p.tarif && !p.formatsTarifs) rows.push(["Tarif", p.tarif]);
+      }
+      details.innerHTML = (p && p.description ? '<p class="ask-desc">' + esc(p.description) + "</p>" : "") +
+        (rows.length ? "<dl>" + rows.map(function (r) { return "<div><dt>" + esc(r[0]) + "</dt><dd>" + r[1].split(" · ").map(function (v) { return "<span>" + esc(v).replace(/ €/g, "\u00a0€") + "</span>"; }).join("") + "</dd></div>"; }).join("") + "</dl>" : "");
+      details.hidden = !details.innerHTML;
       panel.hidden = false;
       document.documentElement.classList.add("no-scroll");
       requestAnimationFrame(function () { requestAnimationFrame(function () { panel.classList.add("in"); }); });
@@ -217,7 +247,7 @@
     });
     var byId = function (id) { return D.pieces.filter(function (p) { return p.id === id; })[0]; };
     document.addEventListener("click", function (e) {
-      var a = e.target.closest(".piece, [data-ask]");
+      var a = e.target.closest("a.piece, [data-ask]");
       if (!a) return;
       e.preventDefault();
       openPanel(a.classList.contains("piece") ? byId(a.getAttribute("data-id")) : null);
