@@ -4,8 +4,8 @@
   var D = window.DECOSUD || { contact: {}, pieces: [] };
   var C = D.contact;
   var SPRITE = "assets/cigales.svg#c";
-  /* Essai (brouillon) : présentation des photos, ?photo=aura (défaut) ou ?photo=voile */
-  var PHOTO = (location.search.match(/[?&]photo=(aura|voile)/) || [])[1] || "aura";
+  /* Essai (brouillon) : présentation des photos, ?photo=decoupe (défaut) ou ?photo=arcade */
+  var PHOTO = (location.search.match(/[?&]photo=(decoupe|arcade)/) || [])[1] || "decoupe";
   document.documentElement.classList.add("photo-" + PHOTO);
 
   function cig(cls) {
@@ -133,7 +133,7 @@
     var price = priceOf(p);
     var views = p._images.length > 1 && !p.nuancier ? '<span class="views" aria-label="' + p._images.length + ' photos">' + p._images.length + " vues</span>" : "";
     var visual = p._image
-      ? '<span class="aura" aria-hidden="true" style="background-image:url(&quot;' + src(p._image) + '&quot;)"></span><img src="' + src(p._image) + '" alt="' + esc(p.nom + ", " + p.par) + '" loading="lazy">'
+      ? '<img src="' + src(p._image) + '" alt="' + esc(p.nom + ", " + p.par) + '" loading="lazy">'
       : '<div class="placeholder grain" style="background:' + (COLORS[p.couleur] || COLORS.terra) + '">' + cig() + '<span>Photo à venir</span></div>';
     /* Légende : nom, matière, tarif, « Idée cadeau » et nombre de vues, puis « Se renseigner ».
        La photo reste nue ; la mise en forme dépend de la piste (style.css, fin du fichier). */

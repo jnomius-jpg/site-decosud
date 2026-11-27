@@ -593,21 +593,17 @@ html.no-scroll { overflow: hidden; }
 .teinte-clear[hidden] { display: none; }
 
 /* ==========================================================
-   ESSAI (brouillon) : « Atelier » — Coups de cœur et Sélection
-   Fond papier en léger dégradé avec grain, photos étalonnées
-   présentées sur un « mur » (aura de leurs propres couleurs,
-   ou voile papier avec ?photo=voile), beaucoup d'air.
+   ESSAI (brouillon) : Coups de cœur et Sélection, légers et colorés
+   Fond papier réchauffé avec grain, photos nues, formes de papier
+   découpé en couleur (?photo=decoupe, défaut) ou arcades (?photo=arcade).
    ========================================================== */
-:root {
-  --mur-haut: #FCFAF6;
-  --mur-bas: #F1EADF;      /* papier un peu plus chaud vers le bas */
-}
-/* Fond : dégradé très léger + grain, comme une feuille photographiée */
+/* Fond : papier réchauffé par deux lueurs très légères (mimosa en haut, terracotta en bas) + grain */
 .atelier { position: relative; isolation: isolate;
-  background: radial-gradient(120% 70% at 50% 0%, var(--mur-haut) 0%, rgba(252, 250, 246, 0) 70%),
-              linear-gradient(180deg, var(--mur-haut) 0%, #F7F2EA 45%, var(--mur-bas) 100%); }
+  background: radial-gradient(70% 45% at 12% 0%, rgba(242, 183, 5, .10), rgba(242, 183, 5, 0) 70%),
+              radial-gradient(60% 40% at 92% 100%, rgba(217, 72, 38, .07), rgba(217, 72, 38, 0) 70%),
+              var(--lin); }
 .atelier::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  background-image: var(--grain); background-size: 220px; opacity: .07; mix-blend-mode: multiply; }
+  background-image: var(--grain); background-size: 220px; opacity: .06; mix-blend-mode: multiply; }
 
 /* En-tête des coups de cœur : petit, centré, calme */
 .coups-head { text-align: center; }
@@ -617,26 +613,40 @@ html.no-scroll { overflow: hidden; }
 .coups-sub { margin: 18px auto 0; max-width: 34ch; font-family: var(--serif); font-style: italic; font-size: clamp(1.02rem, 1.25vw, 1.15rem); line-height: 1.5; color: var(--pierre); }
 .coups.section { padding-top: clamp(80px, 9vw, 140px); padding-bottom: clamp(90px, 10vw, 160px); }
 
-/* La tuile : la photo posée au centre d'un mur, avec de l'air autour */
-.piece .tile { position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: #F3EDE3; isolation: isolate; }
-.piece .tile .aura { position: absolute; inset: -18%; z-index: 0; background-size: cover; background-position: center;
-  filter: blur(42px) saturate(.75) brightness(1.12); opacity: .42; transform: scale(1.1); }
-.piece .tile::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
-  background-image: var(--grain); background-size: 200px; opacity: .08; mix-blend-mode: multiply; }
-.piece .tile img { position: absolute; z-index: 1; inset: 13% 15% 15%; width: 70%; height: 72%; object-fit: cover;
-  filter: saturate(.9) contrast(.96) sepia(.05) brightness(1.01);
-  box-shadow: 0 18px 40px -22px rgba(60, 40, 20, .35); transition: transform 1.2s cubic-bezier(.22, .61, .36, 1); }
-a.piece:hover .tile img { transform: scale(1.025); }
-.piece .tile .placeholder { position: absolute; inset: 13% 15% 15%; width: 70%; height: 72%; z-index: 1; }
-.photo-voile .piece .tile { background: linear-gradient(180deg, #F6F1E8 0%, #EDE5D8 100%); }
-.photo-voile .piece .tile .aura { display: none; }
+/* La photo : nue, pleine, légèrement réchauffée. Derrière, une forme de papier découpé de couleur
+   (réf. Matisse) qui dépasse d'un coin, change de couleur d'une pièce à l'autre et bouge au survol. */
+.piece { --tint: var(--ocre); }
+.pieces > .piece:nth-child(5n+2), .scroller > .piece:nth-child(5n+2) { --tint: var(--terra); }
+.pieces > .piece:nth-child(5n+3), .scroller > .piece:nth-child(5n+3) { --tint: #9CC0E8; }
+.pieces > .piece:nth-child(5n+4), .scroller > .piece:nth-child(5n+4) { --tint: #F4B9A6; }
+.pieces > .piece:nth-child(5n+5), .scroller > .piece:nth-child(5n+5) { --tint: #1E7F43; }
+.piece .tile { position: relative; aspect-ratio: 4 / 5; overflow: visible; background: none; isolation: isolate; }
+.piece .tile .aura { display: none; }
+.piece .tile img, .piece .tile .placeholder { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; object-fit: cover;
+  filter: saturate(1.04) sepia(.04); transition: transform 1s cubic-bezier(.22, .61, .36, 1); }
+a.piece:hover .tile img { transform: translateY(-4px); }
+.piece .tile::before { content: ""; position: absolute; z-index: 0; pointer-events: none; background: var(--tint);
+  transition: transform 1s cubic-bezier(.22, .61, .36, 1); }
+.piece .tile::after { display: none; }
+
+/* Variante « découpé » (défaut) : une forme organique qui dépasse en haut à gauche */
+.photo-decoupe .piece .tile::before { width: 42%; aspect-ratio: 1; top: -5%; left: -5%;
+  border-radius: 58% 42% 61% 39% / 47% 58% 42% 53%; }
+.photo-decoupe .pieces > .piece:nth-child(2n) .tile::before, .photo-decoupe .scroller > .piece:nth-child(2n) .tile::before {
+  top: auto; left: auto; bottom: -5%; right: -5%; border-radius: 44% 56% 38% 62% / 60% 40% 60% 40%; }
+.photo-decoupe a.piece:hover .tile::before { transform: rotate(14deg) scale(1.06); }
+
+/* Variante « arcades » : la photo en arche, comme une fenêtre de village, une lune de couleur derrière */
+.photo-arcade .piece .tile img, .photo-arcade .piece .tile .placeholder { border-radius: 50% 50% 0 0 / 38% 38% 0 0; }
+.photo-arcade .piece .tile::before { width: 34%; aspect-ratio: 1; top: -4%; right: -3%; border-radius: 50%; }
+.photo-arcade a.piece:hover .tile::before { transform: translate(6px, -6px); }
 
 /* Légende : nue, centrée, trois lignes au plus */
-.piece .cap { text-align: center; margin-top: 22px; padding: 0 6%; }
+.piece .cap { text-align: center; margin-top: 26px; padding: 0 4%; }
 .piece .num { display: none; }
 .piece .name { margin: 0; font-family: var(--serif); font-weight: 400; font-size: clamp(1.08rem, 1.2vw, 1.22rem); line-height: 1.3; letter-spacing: 0; }
 .piece .by { margin: 4px 0 0; font-size: 12.5px; color: var(--pierre); }
-.piece .price { margin: 8px 0 0; font-family: var(--serif); font-size: 1rem; }
+.piece .price { margin: 6px 0 0; font-family: var(--serif); font-style: italic; font-size: 1.02rem; }
 .piece .tags { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px 12px; margin: 8px 0 0; }
 .piece .tags .gift { position: static; padding: 0; border: 0; background: none; -webkit-backdrop-filter: none; backdrop-filter: none; font-size: 13.5px; gap: 5px; }
 .piece .tags .views { position: static; padding: 0; border-radius: 0; background: none; font-size: 10px; letter-spacing: .18em; color: var(--pierre); }
@@ -647,6 +657,7 @@ a.piece:hover .tile img { transform: scale(1.025); }
 
 /* Carrousel : trois pièces, de grands blancs */
 .coups .scroller { --g: clamp(28px, 5vw, 96px); gap: var(--g); grid-auto-columns: calc((100% - 2 * var(--g)) / 3); margin-top: clamp(64px, 7vw, 110px); }
+.coups .scroller { --m: min(30px, var(--gutter)); padding: var(--m); margin-left: calc(-1 * var(--m)); margin-right: calc(-1 * var(--m)); scroll-padding-left: var(--m); }
 .coups .scroll-ctrl { margin-top: clamp(40px, 5vw, 70px); }
 .coups .arrow { border: 0; width: 40px; font-size: 20px; color: var(--pierre); transition: color .3s; }
 .coups .arrow:hover { color: var(--ink); }
@@ -672,10 +683,8 @@ a.piece:hover .tile img { transform: scale(1.025); }
 }
 @media (max-width: 560px) {
   .coups .scroller { --g: 20px; grid-auto-columns: 78%; }
-  .piece .tile img, .piece .tile .placeholder { inset: 11% 12% 12%; width: 76%; height: 77%; }
   .pieces.three { row-gap: 52px; }
   .pieces.three .piece .cap { padding: 0; margin-top: 16px; }
   .pieces.three .piece .name { font-size: 1rem; }
 }
-@media (max-width: 560px) { .pieces.three .piece .tile img, .pieces.three .piece .tile .placeholder { inset: 8% 9% 9%; width: 82%; height: 83%; } }
 @media (hover: none) { .piece .ask { color: var(--ink); opacity: .75; } }
