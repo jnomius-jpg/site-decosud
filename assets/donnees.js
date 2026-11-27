@@ -457,6 +457,26 @@ window.DECOSUD = {
       description: "Trousse en velours doux à imprimé oiseaux et fleurs, finition zip doré. Quatre coloris lumineux à collectionner ou à offrir." },
     { id: "panier-invites", univers: "linge-et-etoffes", nom: "Panier invités", par: "6 serviettes 30 × 30 cm · 4 coloris", image: "assets/img/Panier invités.jpeg",
       coloris: "Blanc · Beige · Ocre · Taupe", tarif: "14 € l'unité",
-      description: "Panier souple en éponge et rebord nid d'abeille blanc, garni de six serviettes d'invités individuelles (30 × 30 cm). Une attention simple et soignée pour recevoir dans la salle de bain." }
+      description: "Panier souple en éponge et rebord nid d'abeille blanc, garni de six serviettes d'invités individuelles (30 × 30 cm). Une attention simple et soignée pour recevoir dans la salle de bain." },
+    /* Lot du 27/11 : n° 65 à 68 */
+    { id: "allumettes-illustrees", univers: ["noel", "objets-de-decoration"], cadeau: true, nom: "Boîte de 120 allumettes illustrées", par: "120 allumettes longues (9,4 cm) · 7 décors illustrés · La boîte",
+      image: "assets/img/Allumettes illustrees.jpeg",
+      modeles: "Ange de Noël · Teckels « It's a long story » · Poinsettia & houx · Merry Christmas doré · Paon & feuillage · La Grande Vague · Botanique ocre & mauve",
+      tarif: "10 € la boîte",
+      description: "Coffret carré renfermant 120 allumettes longues (9,4 cm), habillé de délicates illustrations inspirées de l'esprit des fêtes, de l'estampe japonaise ou du bestiaire poétique. Un objet du quotidien aussi pratique que décoratif à poser près d'une cheminée ou d'un bougeoir, ou à glisser en attention de fin d'année." },
+    { id: "vase-ananas", univers: "objets-de-decoration", nom: "Vase ananas en verre teinté", par: "Verre épais moulé · Dégradé vert mousse & fumé · H. 20 cm ou 24 cm",
+      image: { src: "assets/img/Vase ananas duo.jpeg", legende: "Duo grand et petit modèle", variante: false },
+      images: [
+        { src: "assets/img/ananas PM.jpeg", legende: "Petit modèle, H. 20 cm", variante: "Petit modèle — PM, H. 20 cm (29 €)" },
+        { src: "assets/img/ananas GM.jpeg", legende: "Grand modèle, H. 24 cm", variante: "Grand modèle — GM, H. 24 cm (39 €)" }
+      ],
+      formatsTarifs: "Petit modèle — PM, H. 20 cm (29 €) · Grand modèle — GM, H. 24 cm (39 €)", tarif: "À partir de 29 €",
+      description: "Vase sculptural en verre épais moulé façonné en silhouette d'ananas, avec un travail d'écailles facettées qui accrochent la lumière et un col découpé en couronne. Sa teinte nuancée mêle le vert mousse profond à des reflets fumés et ambrés. Décliné en deux hauteurs (20 cm et 24 cm) à exposer seul, garni de quelques tiges séchées ou en duo." },
+    { id: "vase-lotus", univers: "objets-de-decoration", nom: "Vase sculptural « Lotus » en céramique", par: "Céramique émaillée ivoire nacré · Reliefs floraux · H. 34 × Ø 27 cm",
+      image: "assets/img/Vase lotus.jpeg", tarif: "159 €",
+      description: "Vase sculptural en céramique habillé d'un émail blanc ivoire aux reflets subtilement nacrés, animé sur tout son pourtour de tiges organiques et de capsules de lotus modelées en haut-relief. Avec son col ondulant et ses proportions généreuses (34 cm de hauteur pour 27 cm de diamètre extérieur), cette pièce maîtresse habille une console, un bout de canapé ou un centre de table, seule comme accompagnée de branchages séchés." },
+    { id: "photophore-givre-dore", univers: ["matieres-et-lumieres", "noel"], cadeau: true, nom: "Photophore en verre givré & feuillage doré", par: "Verre texturé céladon · Nervures dorées en relief",
+      image: "assets/img/Photophore givre dore.jpeg", tarif: "12 €",
+      description: "Photophore cylindrique en verre texturé subtilement givré aux nuances vert céladon, parcouru de nervures végétales dorées en relief et souligné d'un fin liseré or sur le buvant. Une fois éclairé d'une bougie chauffe-plat, son grain sablé filtre la flamme pour diffuser une lueur douce et chaleureuse sur une table de fête comme sur une console." }
   ]
 };
