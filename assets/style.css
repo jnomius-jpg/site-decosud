@@ -744,3 +744,31 @@ a.guide:hover .soon.lire { border-color: var(--encre); }
 .guides:has(> :nth-child(3)) { grid-template-columns: repeat(3, 1fr); }
 @media (max-width: 1000px) { .guides:has(> :nth-child(3)) { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 700px) { .guides:has(> :nth-child(3)) { grid-template-columns: 1fr; } }
+
+/* Guide Noël v2 : sous-titre, signature, deux nappes, mise en place, attentions */
+.cover-title .cover-sub { display: block; margin-top: 18px; font-style: italic; text-transform: none; letter-spacing: .01em; font-size: .36em; color: var(--taupe); }
+.guide-intro .signature { margin: 18px 0 0; font-family: var(--serif); font-style: italic; font-size: 1.15rem; color: var(--taupe); }
+.guide-intro .signature::before { content: "- "; }
+.nappes { max-width: 1200px; padding-top: clamp(80px, 9vw, 140px); }
+.nappes-txt { max-width: 640px; margin: 0 auto clamp(36px, 4vw, 56px); text-align: center; }
+.nappes-txt p { margin: 0 0 14px; }
+.nappes-txt .h3, .mise-en-place .h3, .attentions .h3 { margin: 0 0 18px; }
+.duo { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(12px, 2vw, 28px); }
+.duo figure, .trio figure { margin: 0; }
+.duo img, .trio img { width: 100%; display: block; object-fit: cover; background: var(--sable); }
+.duo img { aspect-ratio: 4 / 3; }
+.duo figcaption { margin-top: 12px; text-align: center; font-family: var(--serif); font-style: italic; font-size: 1rem; color: var(--taupe); }
+.mise-en-place { display: grid; grid-template-columns: .8fr 1fr; gap: clamp(32px, 6vw, 110px); align-items: center; max-width: 1000px; padding-top: clamp(80px, 9vw, 140px); }
+.mise-en-place .etape-photo { aspect-ratio: 4 / 5; }
+.attentions { max-width: 1200px; padding-top: clamp(90px, 11vw, 170px); scroll-margin-top: 60px; }
+.attentions-txt { max-width: 640px; margin: 0 auto clamp(36px, 4vw, 56px); }
+.attentions-txt p { margin: 0 0 14px; }
+.attentions-txt .num { font-family: var(--serif); font-size: .85rem; letter-spacing: .3em; color: var(--taupe); margin-bottom: 14px; }
+.trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(8px, 1.4vw, 20px); }
+.trio img { aspect-ratio: 3 / 4; }
+.attentions .mise-en-place { padding-left: 0; padding-right: 0; margin: 0 auto; }
+@media (max-width: 800px) {
+  .duo { grid-template-columns: 1fr; }
+  .mise-en-place { grid-template-columns: 1fr; }
+  .trio { gap: 6px; }
+}
