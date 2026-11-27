@@ -31,6 +31,19 @@ window.DECOSUD = {
     { id: "linge-et-etoffes",     nom: "Linge & étoffes" }
   ],
 
+  /* ---------- Nuancier « La Sardine » (25 émaux, fait main à Cassis) ----------
+     Les pastilles du volet « Se renseigner » des objets qui ont un champ nuancier.
+     Dans chaque objet : nuancier: { "Teinte": "assets/img/photo.jpeg" } relie une teinte à sa photo,
+     "Teinte": true = la teinte se voit sur la photo principale. Les autres teintes restent au choix. */
+  nuancier: [
+    ["Chambray", "#7C8FA6"], ["Bleu canard", "#1B4B72"], ["Lagon", "#5BB5B0"], ["Ciel", "#7998B5"], ["Pomme", "#A3C454"],
+    ["Herbe", "#3F7035"], ["Hollywood", "#2E7368"], ["Réglisse", "#1E1918"], ["Ficelle", "#B4A48E"], ["Bronze", "#745A32"],
+    ["Absinthe", "#C7AD36"], ["Daim", "#C98744"], ["Ocre doré", "#9E6234"], ["Corail", "#D63F26"], ["Pêche", "#EDA892"],
+    ["Framboise", "#D94354"], ["Rouge", "#D41C1C"], ["Orange", "#E65117"], ["Jaune", "#ECC01B"], ["Griotte", "#781E1E"],
+    ["Goyave", "#E8742B"], ["Terracotta", "#C34A2C"], ["Blanc", "#EAE2D3"], ["Green curry", "#8B8C3B"], ["Indigo", "#232963"]
+  ],
+  atelierNuancier: "Chaque pièce est façonnée à la main à Cassis par l'atelier La Sardine, puis cuite deux fois : d'abord la terre, ensuite l'émail coloré. Toute la gamme existe dans les 25 coloris du nuancier, en boutique selon stock ou sur commande. Travail artisanal oblige, les dimensions sont données à titre indicatif.",
+
   /* ---------- Les objets ----------
      Pour ajouter un objet : copier un bloc { ... }, changer les textes.
      - univers : l'id d'un univers ci-dessus, ou son nom tel qu'écrit ci-dessus.
@@ -55,7 +68,8 @@ window.DECOSUD = {
      - description : 1 ou 2 phrases.
      - formats : tailles ou modèles, séparés par « · ».
      - modeles / coloris / motifs / senteurs : variantes, séparées par « · ».
-     - tarif : prix TTC.
+     - camaieux : camaïeux de couleurs, séparés par « · ».
+     - tarif : prix TTC, affiché aussi sous la carte dans la grille (ex. "À partir de 30 €").
      - formatsTarifs : à la place de formats + tarif, quand chaque format a son prix.
      Carte « Nouvelles pièces en chemin » (photo à venir, sans lien) :
        { attente: true, univers: "id-de-l-univers" }
@@ -190,6 +204,94 @@ window.DECOSUD = {
     { id: "couverts-service-vitoria", univers: "arts-de-la-table", nom: "Couverts de service « Vitoria Transparente »", par: "Acier inoxydable, virole ciselée & manche transparent · 5 pièces", image: "assets/img/Couverts à service VITORIA TRANSPARENTE.jpeg",
       formatsTarifs: "Couteau à beurre (14 €) · Couteau à fromage (18 €) · Couteau à gâteaux (30 €) · Cuillère à salade (28 €) · Pelle à tarte (39 €)",
       description: "Couverts de service assortis de la gamme Vitoria Transparente, dotés du même manche facetté transparent et d'une bague ciselée. Cinq pièces vendues à l'unité pour le service du beurre, des fromages, des salades ou des desserts (compatibles lave-vaisselle)." },
+    { id: "serviette-monza", univers: "arts-de-la-table", nom: "Serviette / set de table « Monza »", par: "Lin et coton · Double usage · 36 × 48 cm", image: "assets/img/MONZA Serviette set de table.jpeg",
+      coloris: "Blanc · Gold", tarif: "8 € pièce",
+      description: "Pièce polyvalente de la gamme Monza tissée en lin et coton (36 × 48 cm), pensée pour se glisser aussi bien en serviette de table généreuse qu'en set individuel. Sa bordure contrastée tissée souligne la finesse du grain, en version blanc lumineux ou gold naturel." },
+    { id: "nappe-monza", univers: "arts-de-la-table", nom: "Nappe « Monza »", par: "Lin et coton · 160 × 250 cm · 2 coloris", image: "assets/img/Nappe MONZA.jpeg",
+      coloris: "Blanc · Gold", tarif: "105 €",
+      description: "Grande nappe assortie de la gamme Monza en lin et coton (160 × 250 cm), encadrée sur tout son pourtour d'un large galon tissé. Son tombé souple et texturé habille les grandes tablées d'une élégance naturelle et sans apprêt, déclinée en blanc ou en gold." },
+    { id: "tablier-japonais", univers: "arts-de-la-table", nom: "Tablier japonais en toile texturée", par: "Toile épaisse texturée · Bretelles croisées · 6 coloris",
+      image: { src: "assets/img/Tablier japonais naturel.jpeg", legende: "Coloris Naturel", variante: "Naturel" },
+      images: [
+        { src: "assets/img/Tablier japonais Encre kaki.jpeg",        legende: "Coloris Kaki & Encre",            variante: false },
+        { src: "assets/img/Tablier japonais ganache.jpeg",           legende: "Coloris Terre brûlée, Encre & Kaki", variante: false },
+        { src: "assets/img/Tablier japonais terre brulee gold.jpeg", legende: "Coloris Ganache & Gold",          variante: false }
+      ],
+      coloris: "Naturel · Encre · Kaki · Terre brûlée · Gold · Ganache", tarif: "42 €",
+      description: "Tablier japonais en toile épaisse et souple à larges bretelles croisées dans le dos, qui s'enfile d'un geste sans lien à nouer. Doté d'une poche plaquée profonde sur le devant, il accompagne la cuisine, le jardin ou l'atelier dans six teintes sourdes et intemporelles." },
+    { id: "serviettes-papier", univers: ["arts-de-la-table", "noel"], nom: "Serviettes en papier illustrées", par: "Papier imprimé · 10 motifs au choix · Le paquet",
+      image: { src: "assets/img/WhatsApp Image 2026-11-27 at 10.17.34.jpeg", legende: "Sélection de motifs, baies d'églantier au premier plan", variante: false },
+      images: [
+        { src: "assets/img/WhatsApp Image 2026-11-27 at 10.17.35.jpeg",     legende: "Baies d'églantier" },
+        { src: "assets/img/WhatsApp Image 2026-11-27 at 10.17.34 (2).jpeg", legende: "Champagne & feux d'artifice" },
+        { src: "assets/img/WhatsApp Image 2026-11-27 at 10.17.34 (1).jpeg", legende: "Happy New Year" },
+        { src: "assets/img/WhatsApp Image 2026-11-27 at 10.17.35 (1).jpeg", legende: "Couronne de Noël" },
+        { src: "assets/img/WhatsApp Image 2026-11-27 at 10.17.35 (2).jpeg", legende: "Sapin étoilé doré" },
+        { src: "assets/img/WhatsApp Image 2026-11-27 at 10.17.35 (7).jpeg", legende: "Feuillage taupe" },
+        { src: "assets/img/WhatsApp Image 2026-11-27 at 10.17.35 (6).jpeg", legende: "Jardin fleuri & oiseau" },
+        { src: "assets/img/WhatsApp Image 2026-11-27 at 10.17.35 (5).jpeg", legende: "Grandes feuilles vert sauge" },
+        { src: "assets/img/WhatsApp Image 2026-11-27 at 10.17.35 (4).jpeg", legende: "Poisson bleu" },
+        { src: "assets/img/WhatsApp Image 2026-11-27 at 10.17.35 (3).jpeg", legende: "Homard rouge" }
+      ],
+      modeles: "Baies d'églantier · Champagne & feux d'artifice · Happy New Year · Couronne de Noël · Sapin étoilé doré · Feuillage taupe · Jardin fleuri & oiseau · Grandes feuilles vert sauge · Poisson bleu · Homard rouge", tarif: "5 € le paquet",
+      description: "Collection de serviettes en papier illustrées aux motifs festifs, botaniques ou marins : couronne de houx, sapin étoilé doré, réveillon, feuillages délicats, fleurs sauvages, poisson ou homard. Une touche graphique et soignée pour dresser une table de fête comme un déjeuner d'été." },
+
+    /* Collection « La Sardine » (fait main à Cassis) : nuancier des 25 coloris.
+       nuancier : la teinte et sa photo ; les autres teintes restent sélectionnables (en boutique selon stock ou sur commande). */
+    { id: "sardine-tasse-cafe", univers: "arts-de-la-table", nom: "Tasse à café « La Sardine »", par: "Céramique faite main à Cassis · Double cuisson · 25 coloris",
+      image: { src: "assets/img/Couverture TC la sardine.jpeg", legende: "Teintes chaudes et naturelles", variante: false },
+      images: [ { src: "assets/img/WhatsApp Image 2026-11-27 at 10.26.50.jpeg", legende: "Teintes bleues et vertes", variante: false } ],
+      nuancier: {
+        "Chambray": "assets/img/TC Couleur chambray.jpeg", "Bleu canard": "assets/img/TC Couleur Bleu canard.jpeg", "Lagon": "assets/img/Lagon.jpeg",
+        "Ciel": "assets/img/TC couleur ciel.jpeg", "Pomme": "assets/img/TC couleur Pomme.jpeg", "Herbe": "assets/img/TC couleur herbe.jpeg",
+        "Hollywood": "assets/img/TC couleur Hollywood.jpeg", "Réglisse": "assets/img/TC couleur Réglisse.jpeg", "Ficelle": "assets/img/TC couleur Ficelle.jpeg",
+        "Bronze": "assets/img/TC couleur Bronze.jpeg", "Absinthe": "assets/img/TC couleur Absinthe.jpeg", "Daim": "assets/img/TC couleur Daim.jpeg",
+        "Ocre doré": "assets/img/TC couleur Ocre doré.jpeg", "Corail": "assets/img/TC couleur Corail.jpeg", "Pêche": "assets/img/TC couleur Pêche.jpeg",
+        "Framboise": "assets/img/TC couleur Framboise.jpeg", "Rouge": "assets/img/TC couleur Rouge.jpeg", "Orange": "assets/img/TC couleur Orange.jpeg",
+        "Jaune": "assets/img/TC couleur Jaune.jpeg"
+      },
+      tarif: "12 € pièce",
+      description: "Tasse à café sans anse façonnée à la main à Cassis par l'atelier La Sardine. Sa ligne pure, soulignée d'un fin liseré de terre brute sur le buvant, se décline dans une palette vibrante de 25 émaux pour twister l'heure du café." },
+    { id: "sardine-ramequin", univers: "arts-de-la-table", nom: "Ramequin « La Sardine »", par: "Céramique faite main à Cassis · Double cuisson · 25 coloris",
+      image: { src: "assets/img/Couverture Ramequins la Sardine.jpeg", legende: "Trio Griotte, Goyave & Terracotta", variante: false },
+      nuancier: { "Griotte": "assets/img/Ramequin couleur Griotte.jpeg", "Goyave": "assets/img/Ramequin couleur Goyave.jpeg", "Terracotta": "assets/img/Ramequin couleur Terracotta.jpeg" },
+      tarif: "18 € l'unité",
+      description: "Ramequin évasé façonné à la main à Cassis par La Sardine. Sa silhouette nette et lumineuse accompagne aussi bien les mises en bouche de l'apéritif que les sauces, condiments ou desserts individuels." },
+    { id: "sardine-bol-the", univers: "arts-de-la-table", nom: "Bol à thé « La Sardine »", par: "Céramique faite main à Cassis · Double cuisson · 25 coloris",
+      image: { src: "assets/img/Couverture Bol à thé.jpeg", legende: "Duo Blanc & Green curry", variante: false },
+      nuancier: { "Blanc": "assets/img/Bol à thé blanc.jpeg", "Green curry": "assets/img/Bol à thé green curry.jpeg" },
+      tarif: "18 € l'unité",
+      description: "Bol à thé monté sur un délicat petit pied, façonné à la main à Cassis par La Sardine. Agréable au creux des mains et rehaussé d'un fin filet de terre brute sur le bord, il accueille thés, infusions, bouillons ou desserts." },
+    { id: "sardine-assiette-creuse", univers: "arts-de-la-table", nom: "Assiette creuse « La Sardine »", par: "Céramique faite main à Cassis · Double cuisson · 25 coloris",
+      image: { src: "assets/img/Assiette creuse 28€. Couleur indigo.jpeg", legende: "Duo Lagon & Indigo", variante: false },
+      nuancier: { "Indigo": true, "Lagon": true },
+      tarif: "28 € l'unité",
+      description: "Assiette creuse façonnée à la main à Cassis par La Sardine. Son galbe généreux et intemporel, souligné d'un léger trait de terre brute sur le marli, met en valeur pâtes, plats mijotés ou salades composées." },
+    { id: "sardine-huilier", univers: "arts-de-la-table", nom: "Huilier en céramique « La Sardine »", par: "Céramique faite main à Cassis · Bec verseur inox · 3 tailles & 25 coloris",
+      image: { src: "assets/img/WhatsApp Image 2026-11-27 at 10.56.04.jpeg", legende: "GM en Herbe, PM en Chambray, BB en Pêche", variante: false },
+      nuancier: { "Herbe": true, "Chambray": true, "Pêche": true },
+      formatsTarifs: "Format BB (25 €) · Petit modèle PM (29 €) · Grand modèle GM (35 €)", tarif: "À partir de 25 €",
+      description: "Huilier conique façonné à la main à Cassis par La Sardine, équipé d'un bouchon en liège et d'un bec verseur en acier inoxydable. Décliné en trois tailles (BB, PM et GM) pour apporter une note méditerranéenne de la cuisine jusqu'à la table." },
+    { id: "sardine-saladier", univers: "arts-de-la-table", nom: "Saladier en céramique « La Sardine »", par: "Céramique faite main à Cassis · Double cuisson · 2 tailles & 25 coloris",
+      image: { src: "assets/img/WhatsApp Image 2026-11-27 at 10.58.43.jpeg", legende: "GM en Blanc, PM en Absinthe", variante: false },
+      nuancier: { "Blanc": true, "Absinthe": true },
+      formatsTarifs: "Petit modèle PM, Ø 19 × H. 11 cm (45 €) · Grand modèle GM, Ø 24 × H. 14 cm (60 €)", tarif: "À partir de 45 €",
+      description: "Saladier généreux sur petit pied façonné à la main à Cassis par La Sardine, rythmé de fines stries de tournage intérieures et bordé d'un liseré de terre brute. Proposé en deux formats (PM et GM)." },
+    { id: "sardine-bol-dejeuner", univers: "arts-de-la-table", nom: "Grand bol déjeuner « La Sardine »", par: "Céramique faite main à Cassis · Ø 14 × H. 8,5 cm · 25 coloris",
+      image: { src: "assets/img/WhatsApp Image 2026-11-27 at 11.01.06.jpeg", legende: "Duo Ficelle & Herbe", variante: false },
+      nuancier: { "Ficelle": true, "Herbe": true },
+      tarif: "19 € l'unité",
+      description: "Grand bol déjeuner (environ Ø 14 × H. 8,5 cm) façonné à la main à Cassis par La Sardine. Sa contenance généreuse et ses lignes pures en font le compagnon idéal du petit-déjeuner comme d'un velouté du soir." },
+    { id: "sardine-saladier-conique", univers: "arts-de-la-table", nom: "Saladier conique « La Sardine »", par: "Céramique faite main à Cassis · Ø 22 × H. 9 cm · 25 coloris",
+      image: { src: "assets/img/WhatsApp Image 2026-11-27 at 11.03.01 (1).jpeg", legende: "Duo Ficelle & Lagon, de profil", variante: false },
+      nuancier: { "Ficelle": true, "Lagon": "assets/img/WhatsApp Image 2026-11-27 at 11.03.01.jpeg" },
+      tarif: "46 € l'unité",
+      description: "Saladier à la silhouette conique évasée (environ Ø 22 × H. 9 cm) façonné à la main à Cassis par La Sardine. Ses stries de tournage intérieures captent la lumière et subliment les salades et plats à partager." },
+    { id: "sardine-plat-gratin", univers: "arts-de-la-table", nom: "Plat à gratin / saladier « La Sardine »", par: "Céramique faite main à Cassis · Passe au four · 2 tailles & 25 coloris",
+      image: { src: "assets/img/WhatsApp Image 2026-11-27 at 11.05.38 (1).jpeg", legende: "PM en Bleu canard, GM en Orange, de profil", variante: false },
+      nuancier: { "Bleu canard": true, "Orange": "assets/img/WhatsApp Image 2026-11-27 at 11.05.38.jpeg" },
+      formatsTarifs: "Petit modèle PM, Ø 22 × H. 7 cm (50 €) · Grand modèle GM, Ø 26 × H. 8 cm (60 €)", tarif: "À partir de 50 €",
+      description: "Pièce polyvalente façonnée à la main à Cassis par La Sardine, conçue pour passer directement du four à la table, aussi bien comme plat à gratin que comme saladier de service. Disponible en deux formats (PM et GM)." },
     { attente: true, univers: "arts-de-la-table" },
     { attente: true, univers: "arts-de-la-table" },
 
@@ -216,6 +318,20 @@ window.DECOSUD = {
     { id: "bougie-parfumee", univers: ["matieres-et-lumieres", "noel"], cadeau: true, nom: "Bougie parfumée", par: "La Bastide des Senteurs · Cire végétale & parfums de Grasse", image: "assets/img/Bougie parfumée.jpeg",
       senteurs: "Basilic menthe · Figue de Provence · Velours musqué · Feuille de tomate · Oud d'Orient · Nuage de coton · Cachemire & Soie · Escale marine · Fleur d'oranger · Massif des Alpilles", tarif: "39 €",
       description: "Bougie parfumée coulée en cire végétale avec mèche en coton et parfums de Grasse (La Bastide des Senteurs, Saint-Rémy-de-Provence). Présentée dans un verre noir orné d'un médaillon doré et livrée dans son coffret, déclinée en dix senteurs." },
+    { id: "bougies-chandelles-colorees", univers: "matieres-et-lumieres", nom: "Bougies chandelles colorées", par: "Cire légèrement givrée · Mèche coton · Palette de teintes",
+      image: { src: "assets/img/WhatsApp Image 2026-11-27 at 10.20.41 (1).jpeg", legende: "Camaïeu naturel, sable & camel", variante: "Tons naturels & camel" },
+      images: [
+        { src: "assets/img/WhatsApp Image 2026-11-27 at 10.20.41 (2).jpeg", legende: "Camaïeu anthracite, gris & ardoise",   variante: "Anthracite & ardoise" },
+        { src: "assets/img/WhatsApp Image 2026-11-27 at 10.20.41 (3).jpeg", legende: "Camaïeu bordeaux & ocre",              variante: "Bordeaux & ocre" },
+        { src: "assets/img/WhatsApp Image 2026-11-27 at 10.20.41 (4).jpeg", legende: "Camaïeu rose poudré, mauve & orange", variante: "Rose & orange" },
+        { src: "assets/img/WhatsApp Image 2026-11-27 at 10.20.41 (5).jpeg", legende: "Camaïeu bleu cobalt & bleu grisé",    variante: "Bleu cobalt & grisé" },
+        { src: "assets/img/WhatsApp Image 2026-11-27 at 10.20.41.jpeg",     legende: "Camaïeu vert sauge, forêt & anis",     variante: "Vert sauge & forêt" }
+      ],
+      camaieux: "Tons naturels & camel · Anthracite & ardoise · Bordeaux & ocre · Rose & orange · Bleu cobalt & grisé · Vert sauge & forêt", tarif: "2,90 € pièce",
+      description: "Bougies chandelles effilées à la cire légèrement givrée et aux longues mèches en coton tressé, déclinées dans une riche palette de teintes sourdes ou solaires. Vendues à l'unité pour composer des harmonies de couleurs sur mesure au fil des saisons." },
+    { id: "bougies-chandelles-nacrees", univers: ["matieres-et-lumieres", "noel"], nom: "Bougies chandelles nacrées", par: "Cire scintillante nacrée · Mèche coton · 5 coloris", image: "assets/img/WhatsApp Image 2026-11-27 at 10.20.57.jpeg",
+      coloris: "Champagne · Or bronze · Argent · Rouge carmin · Vert sapin", tarif: "3,80 € pièce",
+      description: "Bougies chandelles effilées habillées d'un fini nacré subtilement scintillant et dotées d'une mèche en coton tressé. Déclinées en cinq nuances festives, champagne, or bronze, argent, rouge carmin et vert sapin, pour réchauffer une table de réveillon ou illuminer un bougeoir. Vendues à l'unité." },
     { attente: true, univers: "matieres-et-lumieres" },
 
     /* Couleurs du Sud */
@@ -287,6 +403,17 @@ window.DECOSUD = {
     { id: "pot-kalaari", univers: "objets-de-decoration", nom: "Pot en terre avec couvercle « Kalaari »", par: "Terre cuite peinte à la main · Motifs graphiques", image: "assets/img/Pot en terre avec couvercle.jpeg",
       tarif: "59 €",
       description: "Pot ventru en terre cuite patinée et son couvercle assorti, décorés à la main de motifs géométriques ocre rouge, écru et noir. Une pièce artisanale de caractère à poser sur un buffet, une console ou une étagère." },
+    { id: "bougeoir-altesse", univers: "objets-de-decoration", nom: "Bougeoir « Altesse » en verre", par: "Verre transparent moulé · H. 30 cm ou 35 cm", image: "assets/img/Bougeoir ALTESSE.jpeg",
+      formatsTarifs: "Petit modèle, H. 30 cm (30 €) · Grand modèle, H. 35 cm (35 €)", tarif: "À partir de 30 €",
+      description: "Bougeoir élancé en verre transparent moulé de la ligne Altesse, au fût finement côtelé ponctué de bagues et d'une sphère travaillée. Ses deux hauteurs permettent de composer des jeux de rythme et de capter la lumière de la flamme sur une table de fête ou une console." },
+    { id: "bougeoir-coins", univers: "objets-de-decoration", nom: "Bougeoir « Coins » en verre soufflé", par: "Verre soufflé & pastilles fumées · H. 22 cm ou 27 cm",
+      image: { src: "assets/img/Bougeoir coins.jpeg", legende: "Duo grand et petit modèle", variante: false },
+      images: [
+        { src: "assets/img/Bougeoir coins GM.jpeg", legende: "Grand modèle, H. 27 cm", variante: "Grand modèle, H. 27 cm (68 €)" },
+        { src: "assets/img/Bougeoir coins PM.jpeg", legende: "Petit modèle, H. 22 cm", variante: "Petit modèle, H. 22 cm (56 €)" }
+      ],
+      formatsTarifs: "Petit modèle, H. 22 cm (56 €) · Grand modèle, H. 27 cm (68 €)", tarif: "À partir de 56 €",
+      description: "Bougeoir sculptural en verre soufflé composé d'une grappe de disques organiques translucides et fumés aux reflets gris anthracite et céladon, surmontée d'une large coupelle pour bougie pilier. Décliné en deux hauteurs, à exposer seul ou en duo architectural." },
     { attente: true, univers: "objets-de-decoration" },
 
     /* Linge & étoffes */

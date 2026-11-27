@@ -11,6 +11,19 @@
   function esc(s) {
     return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; });
   }
+  /* Typographie française : espace insécable avant € et :, autour de × et dans les guillemets */
+  function fr(t) {
+    return String(t == null ? "" : t).replace(/ (€|:)/g, "\u00a0$1").replace(/ × /g, "\u00a0×\u00a0").replace(/« /g, "«\u00a0").replace(/ »/g, "\u00a0»");
+  }
+  /* Tarif de la grille : le tarif, ou « À partir de » le plus petit prix des formats */
+  function priceOf(p) {
+    if (p.tarif) return p.tarif;
+    var m = String(p.formatsTarifs || "").match(/\d+(?:,\d+)? €/g);
+    if (!m) return "";
+    var n = m.map(function (x) { return parseFloat(x.replace(",", ".")); });
+    var min = Math.min.apply(null, n);
+    return (n.length > 1 && n.some(function (x) { return x !== min; }) ? "À partir de " : "") + m[n.indexOf(min)];
+  }
   var COLORS = { terra: "#D94826", cobalt: "#004A99", ocre: "#F2B705", olive: "#1E7F43" };
 
   /* Chemin d'image : on garde le nom exact (majuscules, espaces, accents) et on l'encode pour l'adresse */
@@ -73,16 +86,26 @@
     if (!p.cadeau) return "";
     return '<span class="gift">' + BOW + esc(typeof p.cadeau === "string" ? p.cadeau : "Idée cadeau") + "</span>";
   }
+  /* Nuancier d'émaux : 25 pastilles, une ligne « Teinte : … » au-dessus */
+  function nuancierHTML(p) {
+    var list = D.nuancier || [];
+    return '<div class="nuancier"><p class="teinte"><span>Teinte\u00a0: <span class="teinte-name">à choisir</span></span><span class="teinte-mark">' + list.length + ' coloris</span></p>' +
+      '<div class="swatches" role="radiogroup" aria-label="Nuancier des ' + list.length + ' coloris">' + list.map(function (c) {
+        return '<button type="button" class="swatch" role="radio" aria-checked="false" data-teinte="' + esc(c[0]) + '" title="' + esc(c[0]) + '" aria-label="' + esc(c[0]) + (p.nuancier[c[0]] ? ", en photo" : "") + '" style="--c:' + esc(c[1]) + '"></button>';
+      }).join("") + "</div></div>";
+  }
   function pieceHTML(p) {
     if (p.attente) return waitHTML(p);
-    var views = p._images.length > 1 ? '<span class="views" aria-label="' + p._images.length + ' photos">' + p._images.length + " vues</span>" : "";
+    var price = priceOf(p);
+    var views = p._images.length > 1 && !p.nuancier ? '<span class="views" aria-label="' + p._images.length + ' photos">' + p._images.length + " vues</span>" : "";
     var visual = p._image
       ? '<img src="' + src(p._image) + '" alt="' + esc(p.nom + ", " + p.par) + '" loading="lazy">'
       : '<div class="placeholder grain" style="background:' + (COLORS[p.couleur] || COLORS.terra) + '">' + cig() + '<span>Photo à venir</span></div>';
     return '<a class="piece reveal" data-id="' + esc(p.id) + '" data-univers="' + esc(p._univ.join(" ")) + '" href="visite.html?objet=' + encodeURIComponent(p.id) + '#demande">' +
       '<div class="zoom">' + visual + giftHTML(p) + views + '</div>' +
-      '<p class="name">' + esc(p.nom) + '</p>' +
-      '<p class="by">' + esc(p.par) + '</p>' +
+      '<p class="name">' + esc(fr(p.nom)) + '</p>' +
+      '<p class="by">' + esc(fr(p.par)) + '</p>' +
+      (price ? '<p class="price">' + esc(fr(price)) + "</p>" : "") +
       '<span class="ask">Se renseigner <span aria-hidden="true">→</span></span></a>';
   }
   document.querySelectorAll("[data-pieces]").forEach(function (el) {
@@ -235,38 +258,48 @@
     var done = panel.querySelector(".ask-done"), intro = panel.querySelector(".ask-intro"), opener = null;
     var openPanel = function (p) {
       opener = document.activeElement;
-      current = p; prefill = ""; shown = 0;
+      current = p; prefill = ""; shown = 0; sel = {}; teinte = "";
       askForm.reset(); askForm.classList.remove("sent"); askForm.hidden = false; intro.hidden = false; done.hidden = true;
       askForm.querySelector(".err").hidden = true;
       askForm.elements.objet.value = p ? p.nom + (p.par ? " (" + p.par + ")" : "") : "";
       panel.querySelector(".ask-free").hidden = !!p;
-      var gallery = p && p._images.length > 1;
+      var gallery = p && (p._images.length > 1 || p.nuancier);
+      var many = p && p._images.length > 1;
       head.classList.toggle("has-gallery", !!gallery);
       head.innerHTML = p
         ? (gallery
             ? '<div class="ask-gallery"><div class="ask-main"><img src="' + src(p._images[0].src) + '" alt="' + esc(p.nom + (p._images[0].legende ? ", " + p._images[0].legende : "")) + '">' +
-              '<button type="button" class="ask-nav prev" data-step="-1" aria-label="Photo précédente">‹</button><button type="button" class="ask-nav next" data-step="1" aria-label="Photo suivante">›</button></div>' +
-              '<p class="ask-cap">' + esc(p._images[0].legende) + "</p>" +
-              '<div class="ask-thumbs">' + p._images.map(function (im, i) {
+              (many ? '<button type="button" class="ask-nav prev" data-step="-1" aria-label="Photo précédente">‹</button><button type="button" class="ask-nav next" data-step="1" aria-label="Photo suivante">›</button>' : "") + "</div>" +
+              '<p class="ask-cap"><span>' + esc(fr(p._images[0].legende)) + '</span>' + (p.nuancier ? '<button type="button" class="ask-overview" hidden>Vue d’ensemble</button>' : "") + "</p>" +
+              (many && !p.nuancier ? '<div class="ask-thumbs">' + p._images.map(function (im, i) {
                 return '<button type="button" aria-label="' + esc(im.legende || "Photo " + (i + 1)) + '" title="' + esc(im.legende) + '" aria-pressed="' + (i === 0) + '" data-i="' + i + '"><img src="' + src(im.src) + '" alt="" loading="lazy"></button>';
-              }).join("") + "</div></div>"
+              }).join("") + "</div>" : "") + "</div>"
             : '<div class="ask-thumb">' + (p._image ? '<img src="' + src(p._image) + '" alt="">' : '<div class="placeholder grain" style="background:' + (COLORS[p.couleur] || COLORS.terra) + '">' + cig() + "</div>") + "</div>") +
-          '<div><p class="eyebrow">' + esc(p._univ.map(univName).filter(Boolean).join(" · ")) + '</p><h2 id="ask-titre">' + esc(p.nom) + '</h2><p class="by">' + esc(p.par) + "</p>" + giftHTML(p) + "</div>"
+          '<div><p class="eyebrow">' + esc(p._univ.map(univName).filter(Boolean).join(" · ")) + '</p><h2 id="ask-titre">' + esc(fr(p.nom)) + '</h2><p class="by">' + esc(fr(p.par)) + "</p>" + giftHTML(p) +
+          (p.nuancier ? nuancierHTML(p) : "") + "</div>"
         : '<div><p class="eyebrow">Une question, un envoi ?</p><h2 id="ask-titre">Faire une <em>demande</em></h2></div>';
-      /* Petit bloc de détails : seulement les champs renseignés */
+      /* Petit bloc de détails : seulement les champs renseignés.
+         Les lignes à plusieurs choix deviennent des sélecteurs qui pré-remplissent la demande. */
       var rows = [];
       if (p) {
         var plural = function (v) { return v.indexOf("·") > -1; };
-        if (p.formatsTarifs) rows.push(["Formats & tarifs", p.formatsTarifs]);
-        else if (p.formats) rows.push([plural(p.formats) ? "Formats" : "Format", p.formats]);
-        if (p.modeles) rows.push([plural(p.modeles) ? "Modèles" : "Modèle", p.modeles]);
-        if (p.coloris) rows.push(["Coloris", p.coloris]);
-        if (p.motifs) rows.push([plural(p.motifs) ? "Motifs" : "Motif", p.motifs]);
-        if (p.senteurs) rows.push([plural(p.senteurs) ? "Senteurs" : "Senteur", p.senteurs]);
+        if (p.formatsTarifs) rows.push(["Formats & tarifs", p.formatsTarifs, "Format"]);
+        else if (p.formats) rows.push([plural(p.formats) ? "Formats" : "Format", p.formats, "Format"]);
+        if (p.modeles) rows.push([plural(p.modeles) ? "Modèles" : "Modèle", p.modeles, "Modèle"]);
+        if (p.coloris) rows.push(["Coloris", p.coloris, "Coloris"]);
+        if (p.camaieux) rows.push([plural(p.camaieux) ? "Camaïeux" : "Camaïeu", p.camaieux, "Camaïeu"]);
+        if (p.motifs) rows.push([plural(p.motifs) ? "Motifs" : "Motif", p.motifs, "Motif"]);
+        if (p.senteurs) rows.push([plural(p.senteurs) ? "Senteurs" : "Senteur", p.senteurs, "Senteur"]);
         if (p.tarif && !p.formatsTarifs) rows.push(["Tarif", p.tarif]);
       }
-      details.innerHTML = (p && p.description ? '<p class="ask-desc">' + esc(p.description) + "</p>" : "") +
-        (rows.length ? "<dl>" + rows.map(function (r) { return "<div><dt>" + esc(r[0]) + "</dt><dd>" + r[1].split(" · ").map(function (v) { return "<span>" + esc(v).replace(/ €/g, "\u00a0€") + "</span>"; }).join("") + "</dd></div>"; }).join("") + "</dl>" : "");
+      details.innerHTML = (p && p.description ? '<p class="ask-desc">' + esc(fr(p.description)) + "</p>" : "") +
+        (rows.length ? "<dl>" + rows.map(function (r) {
+          var vals = r[1].split(" · "), pick = r[2] && vals.length > 1;
+          return "<div><dt>" + esc(r[0]) + "</dt><dd" + (pick ? ' class="opts" role="group" aria-label="' + esc(r[0]) + '"' : "") + ">" + vals.map(function (v) {
+            return pick ? '<button type="button" class="opt" aria-pressed="false" data-key="' + esc(r[2]) + '" data-val="' + esc(v) + '">' + esc(fr(v)) + "</button>" : "<span>" + esc(fr(v)) + "</span>";
+          }).join("") + "</dd></div>";
+        }).join("") + "</dl>" : "") +
+        (p && p.nuancier && D.atelierNuancier ? '<p class="ask-atelier">' + esc(fr(D.atelierNuancier)) + "</p>" : "");
       details.hidden = !details.innerHTML;
       panel.hidden = false;
       document.documentElement.classList.add("no-scroll");
@@ -279,30 +312,98 @@
       setTimeout(function () { panel.hidden = true; }, 450);
       if (opener && opener.focus) opener.focus({ preventScroll: true });
     };
-    /* Mini-galerie : une vignette remplace la photo principale */
-    var shown = 0;
-    head.addEventListener("click", function (e) {
-      var nav = e.target.closest(".ask-nav");
-      var t = e.target.closest(".ask-thumbs button");
-      if (!current || (!t && !nav)) return;
-      var n = current._images.length;
-      var i = nav ? (shown + +nav.getAttribute("data-step") + n) % n : +t.getAttribute("data-i");
-      t = head.querySelectorAll(".ask-thumbs button")[i];
+    /* ---------- Choix (variantes, teinte) → objet et message de la demande ---------- */
+    var shown = 0, sel = {}, teinte = "";
+    var ORDER = ["Format", "Modèle", "Coloris", "Camaïeu", "Motif", "Senteur", "Modèle souhaité"];
+    var vkey = function (v) { return norm(String(v || "").replace(/\s*\([^)]*€\)\s*$/, "")); };
+    var compose = function () {
+      if (!current) return;
+      var lines = [], vals = [];
+      if (teinte) { lines.push("Teinte souhaitée : " + teinte); vals.push(teinte); }
+      ORDER.forEach(function (k) { if (sel[k]) { lines.push(k + " : " + sel[k]); vals.push(sel[k]); } });
+      if (lines.length && current.tarif && !current.formatsTarifs) lines[0] += " (" + current.tarif + ")";
+      askForm.elements.objet.value = current.nom + (current.par ? " (" + current.par + ")" : "") + (vals.length ? " · " + vals.join(", ") : "");
+      var msg = askForm.elements.message, text = lines.join("\n");
+      /* sans écraser ce que la personne a écrit */
+      if (!msg.value.trim() || msg.value === prefill) msg.value = text;
+      else if (prefill && msg.value.indexOf(prefill) === 0) msg.value = text + msg.value.slice(prefill.length);
+      else return;
+      prefill = text;
+    };
+    /* Photo principale : fondu doux (250 ms) */
+    var setMain = function (path, legende) {
+      var main = head.querySelector(".ask-main img"), cap = head.querySelector(".ask-cap span");
+      if (!main) return;
+      var url = src(path).replace(/&amp;/g, "&");
+      if (cap) cap.textContent = fr(legende);
+      main.alt = current.nom + (legende ? ", " + legende : "");
+      if (main.getAttribute("src") === url) return;
+      main.classList.add("fading");
+      setTimeout(function () {
+        var done = function () { main.classList.remove("fading"); };
+        main.onload = done; main.onerror = done;
+        main.src = url;
+        if (main.complete) done();
+      }, 250);
+    };
+    var showImage = function (i) {
       var im = current._images[i];
       if (!im) return;
       shown = i;
-      var main = head.querySelector(".ask-main img");
-      main.src = src(im.src).replace(/&amp;/g, "&");
-      main.alt = current.nom + (im.legende ? ", " + im.legende : "");
-      head.querySelector(".ask-cap").textContent = im.legende;
-      head.querySelectorAll(".ask-thumbs button").forEach(function (b) { b.setAttribute("aria-pressed", b === t); });
-      /* Pré-remplit la variante dans le message (sans écraser ce que la personne a écrit) */
-      if (im.variante) {
-        var msg = askForm.elements.message, line = "Modèle souhaité : " + im.variante + (current.tarif ? " (" + current.tarif + ")" : "");
-        if (!msg.value.trim() || msg.value === prefill) { msg.value = line; prefill = line; }
-        else if (prefill && msg.value.indexOf(prefill) === 0) { msg.value = line + msg.value.slice(prefill.length); prefill = line; }
+      setMain(im.src, im.legende);
+      head.querySelectorAll(".ask-thumbs button").forEach(function (b, j) { b.setAttribute("aria-pressed", j === i); });
+      var ov = head.querySelector(".ask-overview");
+      if (ov) ov.hidden = true;
+    };
+    var pressOpt = function (key, val) {
+      details.querySelectorAll('.opt[data-key="' + key + '"]').forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-val") === val); });
+    };
+    /* Mini-galerie : une vignette (ou une flèche) remplace la photo principale */
+    head.addEventListener("click", function (e) {
+      if (!current) return;
+      var sw = e.target.closest(".swatch");
+      if (sw) { pickTeinte(sw.getAttribute("data-teinte")); return; }
+      if (e.target.closest(".ask-overview")) { showImage(0); return; }
+      var nav = e.target.closest(".ask-nav");
+      var t = e.target.closest(".ask-thumbs button");
+      if (!t && !nav) return;
+      var n = current._images.length;
+      var i = nav ? (shown + +nav.getAttribute("data-step") + n) % n : +t.getAttribute("data-i");
+      showImage(i);
+      var im = current._images[i];
+      if (im && im.variante) {
+        var opt = [].filter.call(details.querySelectorAll(".opt"), function (b) { return vkey(b.getAttribute("data-val")) === vkey(im.variante); })[0];
+        if (opt) { sel[opt.getAttribute("data-key")] = opt.getAttribute("data-val"); pressOpt(opt.getAttribute("data-key"), opt.getAttribute("data-val")); }
+        else sel["Modèle souhaité"] = im.variante;
+        compose();
       }
     });
+    /* Sélecteurs de variantes (format, coloris…) : un second clic désélectionne */
+    details.addEventListener("click", function (e) {
+      var b = e.target.closest(".opt");
+      if (!b || !current) return;
+      var key = b.getAttribute("data-key"), val = b.getAttribute("data-val");
+      if (sel[key] === val) { delete sel[key]; pressOpt(key, ""); }
+      else {
+        sel[key] = val; pressOpt(key, val);
+        delete sel["Modèle souhaité"];
+        current._images.some(function (im, i) { if (im.variante && vkey(im.variante) === vkey(val)) { showImage(i); return true; } });
+      }
+      compose();
+    });
+    /* Nuancier « La Sardine » */
+    var pickTeinte = function (name) {
+      teinte = name;
+      var ph = current.nuancier[name];
+      head.querySelectorAll(".swatch").forEach(function (b) { b.setAttribute("aria-checked", b.getAttribute("data-teinte") === name); });
+      var line = head.querySelector(".teinte-name"), mark = head.querySelector(".teinte-mark");
+      line.textContent = name;
+      mark.textContent = ph ? "En photo" : "En boutique selon stock · Sur commande";
+      var ov = head.querySelector(".ask-overview");
+      if (typeof ph === "string") { setMain(ph, "Teinte " + name); if (ov) ov.hidden = false; }
+      else if (ph) { showImage(0); }
+      compose();
+    };
     panel.addEventListener("click", function (e) { if (e.target === panel || e.target.closest(".ask-close, .ask-back")) closePanel(); });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !panel.hidden) closePanel(); });
     askForm.addEventListener("submit", function (e) {
