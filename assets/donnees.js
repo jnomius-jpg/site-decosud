@@ -42,6 +42,22 @@ window.DECOSUD = {
     ["Framboise", "#D94354"], ["Rouge", "#D41C1C"], ["Orange", "#E65117"], ["Jaune", "#ECC01B"], ["Griotte", "#781E1E"],
     ["Goyave", "#E8742B"], ["Terracotta", "#C34A2C"], ["Blanc", "#EAE2D3"], ["Green curry", "#8B8C3B"], ["Indigo", "#232963"]
   ],
+  /* ---------- Couleurs des pastilles « coloris » ----------
+     Chaque objet qui a des coloris (ou des camaïeux) les affiche en pastilles dans le volet « Se renseigner ».
+     Ici, la couleur de chaque nom (en hexadécimal). Un nom en deux parties (« Pêche & bordeaux »)
+     donne une pastille partagée en deux. Un nom absent de la liste donne une pastille sable. */
+  teintes: {
+    "Vert sapin": "#1E4D36", "Rouge": "#B3261E", "Blanc": "#F1ECE2", "Doré": "#C9A44C", "Camel": "#B5814A",
+    "Aubergine": "#4A2335", "Curry": "#C9A13A", "Rhubarbe": "#B8475A", "Vert": "#6E8B4E", "Gold": "#C8A464",
+    "Naturel": "#D9CBB2", "Encre": "#2E3B5C", "Kaki": "#7A7A4E", "Terre brûlée": "#8A4A3A", "Ganache": "#5A3A2E",
+    "Champagne": "#E6D3A8", "Or bronze": "#A67C3D", "Argent": "#C3C4C8", "Rouge carmin": "#9E1B2C",
+    "Pêche": "#EDA892", "Bordeaux": "#6D1F2A", "Bleu paon": "#1F5E6E", "Ocre": "#C98A2E", "Chocolat": "#4E3328",
+    "Vert sauge": "#9AAA8A", "Écru": "#EDE5D3", "Vieux rose": "#C98C8C", "Taupe": "#8B7D70", "Gris": "#A3A29C",
+    "Bleu": "#8FB2BF", "Brun": "#6B4A36", "Tartan kaki": "#6F6B45", "Terracotta": "#C34A2C", "Sable": "#D8C3A0",
+    "Jaune moutarde": "#C99A1F", "Beige": "#D8C8AE",
+    "Tons naturels": "#D9CBB2", "Anthracite": "#3A3B3D", "Ardoise": "#5E6B73", "Rose": "#D99A9E",
+    "Orange": "#E07A3A", "Bleu cobalt": "#1F4FA0", "Grisé": "#7F92A8", "Forêt": "#2F4A32"
+  },
   atelierNuancier: "Chaque pièce est façonnée à la main à Cassis par l'atelier La Sardine, puis cuite deux fois : d'abord la terre, ensuite l'émail coloré. Toute la gamme existe dans les 25 coloris du nuancier, en boutique selon stock ou sur commande. Travail artisanal oblige, les dimensions sont données à titre indicatif.",
 
   /* ---------- Les objets ----------
