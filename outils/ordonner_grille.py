@@ -2,7 +2,7 @@
 
 Usage : node outils/exporter-pieces.js > /tmp/pieces.json
         python3 outils/ordonner_grille.py /tmp/pieces.json
-Lit les vues grille étalonnées (assets/img/grille/<id>.webp), les mesure avec decosud_grille.py,
+Lit les photos d'origine (non étalonnées, choix de Jules du 27/11), les mesure avec decosud_grille.py,
 cherche l'ordre qui enfreint le moins de règles de placement (3 colonnes), choisit les tuiles
 d'ambiance (une toutes les 3 rangées, dans la famille de la rangée suivante), puis écrit assets/grille.js.
 """
@@ -14,12 +14,12 @@ import numpy as np
 COLS = 3
 RACINE = os.path.join(os.path.dirname(__file__), "..")
 AMBIANCES = [  # tuiles d'ambiance étalonnées : image de situation + univers qu'elle annonce (lien vers ses produits)
-    ("assets/img/grille/ambiance-noel.webp", "noel", "L'esprit de Noël"),
-    ("assets/img/grille/ambiance-table.webp", "arts-de-la-table", "Arts de la table"),
-    ("assets/img/grille/ambiance-lumiere.webp", "matieres-et-lumieres", "Matières & lumières"),
-    ("assets/img/grille/ambiance-couleurs.webp", "couleurs-du-sud", "Couleurs du Sud"),
-    ("assets/img/grille/ambiance-objets.webp", "objets-de-decoration", "Objets de décoration"),
-    ("assets/img/grille/ambiance-linge.webp", "linge-et-etoffes", "Linge & étoffes"),
+    ("assets/img/univers-noel.jpg", "noel", "L'esprit de Noël"),
+    ("assets/img/univers-table.jpg", "arts-de-la-table", "Arts de la table"),
+    ("assets/img/univers-lumiere.jpg", "matieres-et-lumieres", "Matières & lumières"),
+    ("assets/img/univers-couleurs.jpg", "couleurs-du-sud", "Couleurs du Sud"),
+    ("assets/img/univers-objets.jpg", "objets-de-decoration", "Objets de décoration"),
+    ("assets/img/univers-linge.jpg", "linge-et-etoffes", "Linge & étoffes"),
 ]
 
 def penalite(items, cc):
@@ -50,8 +50,8 @@ def main():
     pieces = json.load(open(sys.argv[1]))
     items, sans = [], []
     for p in pieces:
-        f = os.path.join(RACINE, "assets/img/grille", p["id"] + ".webp")
-        if not os.path.exists(f): sans.append(p["id"]); continue
+        f = os.path.join(RACINE, p["image"]) if p.get("image") else ""
+        if not f or not os.path.exists(f): sans.append(p["id"]); continue
         m = mesurer(f); fam = famille(m)
         items.append(dict(m, id=p["id"], nom=p["id"], fam=fam, acc=est_accent(m, fam)))
     cc = {p["id"] for p in pieces if p["coupDeCoeur"]}
@@ -72,6 +72,7 @@ def main():
     # chaque univers a son propre ordre (pas de mélange) et sa propre tuile d'ambiance
     par_univers, rapports = {}, {}
     univ_de = {p["id"]: p.get("univers", []) for p in pieces}
+    vues_de = {p["id"]: p.get("vues", []) for p in pieces}
     for src, u, nom in AMBIANCES:
         sous = [it for it in items if u in univ_de.get(it["id"], [])]
         if not sous: continue
@@ -83,7 +84,7 @@ def main():
         rapports[u] = len(penalite(o, cc)[1])
     out = dict(ordre=[it["id"] for it in best] + sans, colonnes=COLS, tuiles=tuiles, univers=par_univers,
                mesures={it["id"]: dict(fam=it["fam"], accent=bool(it["acc"]), L=round(it["L"], 1), M3=round(it["M3"], 1),
-                                    vue2=os.path.exists(os.path.join(RACINE, "assets/img/grille", it["id"] + "-2.webp"))) for it in best})
+                                    vue2=len(vues_de.get(it["id"], [])) > 1) for it in best})
     with open(os.path.join(RACINE, "assets/grille.js"), "w") as fh:
         fh.write("/* Généré par outils/ordonner_grille.py (charte couleurs Déco Sud). Ne pas modifier à la main. */\n")
         fh.write("window.DECOSUD_GRILLE = " + json.dumps(out, ensure_ascii=False) + ";\n")

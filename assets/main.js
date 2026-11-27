@@ -132,8 +132,8 @@
     var price = priceOf(p);
     var views = p._images.length > 1 && !p.nuancier ? '<span class="views" aria-label="' + p._images.length + ' photos">' + p._images.length + " vues</span>" : "";
     var M = grille && G && G.mesures[p.id];
-    var vue1 = M ? "assets/img/grille/" + p.id + ".webp" : p._image;
-    var vue2 = M && M.vue2 ? '<img class="vue2" src="assets/img/grille/' + esc(p.id) + '-2.webp" alt="" loading="lazy">' : "";
+    var vue1 = p._image; /* photos d'origine, sans étalonnage (choix de Jules, 27/11) */
+    var vue2 = M && p._images[1] ? '<img class="vue2" src="' + src(p._images[1].src) + '" alt="" loading="lazy">' : "";
     var points = M && p._images.length > 1 ? '<span class="points" aria-hidden="true">' + new Array(Math.min(p._images.length, 5) + 1).join("<i></i>") + "</span>" : "";
     var visual = p._image
       ? '<img src="' + src(vue1) + '" alt="' + esc(p.nom + ", " + p.par) + '" loading="lazy">' + vue2 + points

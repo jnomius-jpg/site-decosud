@@ -612,7 +612,6 @@ html.no-scroll { overflow: hidden; }
 .wrap-wide > .scroll-ctrl { padding: 0 calc(var(--gutter) - clamp(12px, 1.7vw, 26px)); }
 
 /* Étalonnage chaud des coups de cœur (les photos de la Sélection sont étalonnées en amont, voir outils/etalonner.py) */
-.coups .piece .zoom img { filter: sepia(.12) saturate(1.1) contrast(1.04); }
 
 /* Coups de cœur : les 5 pièces côte à côte, hautes, titre sur la photo */
 .coups .scroller { grid-auto-columns: calc((100% - 4 * 6px) / 5); gap: 6px; }
