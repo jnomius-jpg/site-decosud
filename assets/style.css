@@ -593,98 +593,52 @@ html.no-scroll { overflow: hidden; }
 .teinte-clear[hidden] { display: none; }
 
 /* ==========================================================
-   ESSAI (brouillon) : Coups de cœur et Sélection, légers et colorés
-   Fond papier réchauffé avec grain, photos nues, formes de papier
-   découpé en couleur (?photo=decoupe, défaut) ou arcades (?photo=arcade).
+   ESSAI (brouillon) : présentation façon « mosaïque » (réf. Sézane)
+   Photos bord à bord, joints fins, étalonnage chaud commun,
+   titres en capitales Garamond posés sur la photo (coups de cœur).
    ========================================================== */
-/* Fond : papier réchauffé par deux lueurs très légères (mimosa en haut, terracotta en bas) + grain */
-.atelier { position: relative; isolation: isolate;
-  background: radial-gradient(70% 45% at 12% 0%, rgba(242, 183, 5, .10), rgba(242, 183, 5, 0) 70%),
-              radial-gradient(60% 40% at 92% 100%, rgba(217, 72, 38, .07), rgba(217, 72, 38, 0) 70%),
-              var(--lin); }
-.atelier::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  background-image: var(--grain); background-size: 220px; opacity: .06; mix-blend-mode: multiply; }
+.wrap-wide { max-width: none; padding-left: clamp(12px, 1.7vw, 26px); padding-right: clamp(12px, 1.7vw, 26px); }
+.wrap-wide > .center, .wrap-wide > .filters, .wrap-wide > .scroll-ctrl { max-width: calc(var(--max) - 2 * var(--gutter)); margin-left: auto; margin-right: auto; }
+.wrap-wide > .scroll-ctrl { padding: 0 calc(var(--gutter) - clamp(12px, 1.7vw, 26px)); }
 
-/* En-tête des coups de cœur : petit, centré, calme */
-.coups-head { text-align: center; }
-.coups-seal { display: none; }
-.coups-kicker { margin-bottom: 18px; }
-.coups .coups-title { font-size: clamp(2.1rem, 3.4vw, 3.1rem); }
-.coups-sub { margin: 18px auto 0; max-width: 34ch; font-family: var(--serif); font-style: italic; font-size: clamp(1.02rem, 1.25vw, 1.15rem); line-height: 1.5; color: var(--pierre); }
-.coups.section { padding-top: clamp(80px, 9vw, 140px); padding-bottom: clamp(90px, 10vw, 160px); }
+/* Étalonnage chaud, le même pour toutes les photos */
+.piece .zoom img { filter: sepia(.16) saturate(1.1) contrast(1.04) brightness(.97); }
 
-/* La photo : nue, pleine, légèrement réchauffée. Derrière, une forme de papier découpé de couleur
-   (réf. Matisse) qui dépasse d'un coin, change de couleur d'une pièce à l'autre et bouge au survol. */
-.piece { --tint: var(--ocre); }
-.pieces > .piece:nth-child(5n+2), .scroller > .piece:nth-child(5n+2) { --tint: var(--terra); }
-.pieces > .piece:nth-child(5n+3), .scroller > .piece:nth-child(5n+3) { --tint: #9CC0E8; }
-.pieces > .piece:nth-child(5n+4), .scroller > .piece:nth-child(5n+4) { --tint: #F4B9A6; }
-.pieces > .piece:nth-child(5n+5), .scroller > .piece:nth-child(5n+5) { --tint: #1E7F43; }
-.piece .tile { position: relative; aspect-ratio: 4 / 5; overflow: visible; background: none; isolation: isolate; }
-.piece .tile .aura { display: none; }
-.piece .tile img, .piece .tile .placeholder { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; object-fit: cover;
-  filter: saturate(1.04) sepia(.04); transition: transform 1s cubic-bezier(.22, .61, .36, 1); }
-a.piece:hover .tile img { transform: translateY(-4px); }
-.piece .tile::before { content: ""; position: absolute; z-index: 0; pointer-events: none; background: var(--tint);
-  transition: transform 1s cubic-bezier(.22, .61, .36, 1); }
-.piece .tile::after { display: none; }
+/* Coups de cœur : les 5 pièces côte à côte, hautes, titre sur la photo */
+.coups .scroller { grid-auto-columns: calc((100% - 4 * 6px) / 5); gap: 6px; }
+.coups .piece { position: relative; display: grid; }
+.coups .piece > .zoom, .coups .piece > .cap { grid-area: 1 / 1; }
+.coups .piece .zoom { aspect-ratio: 2 / 3; }
+.coups .piece .zoom::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: radial-gradient(90% 55% at 50% 52%, rgba(35, 22, 12, .34), rgba(35, 22, 12, .08) 75%), linear-gradient(180deg, rgba(35, 22, 12, 0) 60%, rgba(35, 22, 12, .25)); }
+.coups .piece .cap { position: relative; z-index: 2; align-self: center; text-align: center; padding: 0 10%; color: var(--creme); pointer-events: none; }
+.coups .piece .name { margin: 0; font-family: var(--serif); font-weight: 400; font-size: clamp(.95rem, 1.22vw, 1.28rem); line-height: 1.25; letter-spacing: .1em; text-transform: uppercase; text-shadow: 0 1px 14px rgba(20, 12, 6, .35); }
+.coups .piece .by { display: none; }
+.coups .piece .price { margin: 10px 0 0; font-family: var(--serif); font-style: italic; font-size: 1rem; letter-spacing: .02em; opacity: .95; }
+.coups .piece .ask { position: absolute; left: 0; right: 0; bottom: -38%; margin: 0; border: 0; color: var(--creme); font-size: 10.5px; letter-spacing: .22em; opacity: 0; transition: opacity .4s; }
+.coups .piece:hover .ask { opacity: .95; }
+.coups .piece .gift { z-index: 3; }
+.coups-title { font-size: clamp(2.1rem, 3.6vw, 3.2rem); }
+.coups .scroller { margin-top: clamp(36px, 4vw, 56px); }
 
-/* Variante « découpé » (défaut) : une forme organique qui dépasse en haut à gauche */
-.photo-decoupe .piece .tile::before { width: 42%; aspect-ratio: 1; top: -5%; left: -5%;
-  border-radius: 58% 42% 61% 39% / 47% 58% 42% 53%; }
-.photo-decoupe .pieces > .piece:nth-child(2n) .tile::before, .photo-decoupe .scroller > .piece:nth-child(2n) .tile::before {
-  top: auto; left: auto; bottom: -5%; right: -5%; border-radius: 44% 56% 38% 62% / 60% 40% 60% 40%; }
-.photo-decoupe a.piece:hover .tile::before { transform: rotate(14deg) scale(1.06); }
-
-/* Variante « arcades » : la photo en arche, comme une fenêtre de village, une lune de couleur derrière */
-.photo-arcade .piece .tile img, .photo-arcade .piece .tile .placeholder { border-radius: 50% 50% 0 0 / 38% 38% 0 0; }
-.photo-arcade .piece .tile::before { width: 34%; aspect-ratio: 1; top: -4%; right: -3%; border-radius: 50%; }
-.photo-arcade a.piece:hover .tile::before { transform: translate(6px, -6px); }
-
-/* Légende : nue, centrée, trois lignes au plus */
-.piece .cap { text-align: center; margin-top: 26px; padding: 0 4%; }
-.piece .num { display: none; }
-.piece .name { margin: 0; font-family: var(--serif); font-weight: 400; font-size: clamp(1.08rem, 1.2vw, 1.22rem); line-height: 1.3; letter-spacing: 0; }
-.piece .by { margin: 4px 0 0; font-size: 12.5px; color: var(--pierre); }
-.piece .price { margin: 6px 0 0; font-family: var(--serif); font-style: italic; font-size: 1.02rem; }
-.piece .tags { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px 12px; margin: 8px 0 0; }
-.piece .tags .gift { position: static; padding: 0; border: 0; background: none; -webkit-backdrop-filter: none; backdrop-filter: none; font-size: 13.5px; gap: 5px; }
-.piece .tags .views { position: static; padding: 0; border-radius: 0; background: none; font-size: 10px; letter-spacing: .18em; color: var(--pierre); }
-.piece .tags .gift + .views::before { content: "·"; margin-right: 12px; letter-spacing: 0; }
-.piece .ask { margin-top: 12px; padding: 0 0 2px; border: 0; border-bottom: 1px solid transparent; font-size: 10.5px; letter-spacing: .2em; color: var(--pierre); transition: color .3s, border-color .3s, opacity .4s; }
-.piece:hover .ask { color: var(--ink); border-bottom-color: var(--ink); }
-@media (hover: hover) { .piece .ask { opacity: 0; } .piece:hover .ask, .piece:focus-visible .ask { opacity: 1; } }
-
-/* Carrousel : trois pièces, de grands blancs */
-.coups .scroller { --g: clamp(28px, 5vw, 96px); gap: var(--g); grid-auto-columns: calc((100% - 2 * var(--g)) / 3); margin-top: clamp(64px, 7vw, 110px); }
-.coups .scroller { --m: min(30px, var(--gutter)); padding: var(--m); margin-left: calc(-1 * var(--m)); margin-right: calc(-1 * var(--m)); scroll-padding-left: var(--m); }
-.coups .scroll-ctrl { margin-top: clamp(40px, 5vw, 70px); }
-.coups .arrow { border: 0; width: 40px; font-size: 20px; color: var(--pierre); transition: color .3s; }
-.coups .arrow:hover { color: var(--ink); }
-
-/* Sélection : trois colonnes, rangées très espacées */
-.filters { gap: 6px clamp(20px, 2.6vw, 40px); margin-bottom: clamp(64px, 8vw, 120px); }
-.filters button { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: clamp(1.02rem, 1.2vw, 1.14rem); letter-spacing: .005em; text-transform: none; padding: 2px 0; }
-.filters .count { font-family: var(--sans); font-style: normal; font-size: 9.5px; letter-spacing: .06em; vertical-align: super; margin-left: 3px; }
-.pieces.three { column-gap: clamp(28px, 5vw, 96px); row-gap: clamp(80px, 9vw, 150px); }
-
-/* Le seuil (réf. porte dans un mur) : une ruelle de La Cadière, étroite, au centre d'un grand mur */
-.seuil { padding: calc(76px + clamp(48px, 6vw, 90px)) var(--gutter) clamp(40px, 5vw, 70px); text-align: center; }
-.seuil-porte { position: relative; margin: 0 auto; width: min(340px, 62vw); aspect-ratio: 9 / 19; overflow: hidden; background: #E6DDCF;
-  box-shadow: inset 0 0 0 10px rgba(255, 255, 255, .25); }
-.seuil-porte img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.85) contrast(.95) sepia(.08); }
-.seuil-porte span { position: absolute; left: 0; right: 0; top: 46%; color: #FCFAF6; font-size: 12px; font-weight: 500; letter-spacing: .32em; text-transform: uppercase; text-shadow: 0 1px 12px rgba(0, 0, 0, .35); }
-.seuil-legende { margin: 22px 0 0; font-family: var(--serif); font-style: italic; font-size: .98rem; color: var(--pierre); }
-.seuil + .page-head { padding-top: clamp(40px, 5vw, 70px); }
+/* Sélection : quatre colonnes bord à bord, joints fins, légende courte dessous */
+.pieces.three { grid-template-columns: repeat(4, 1fr); column-gap: 6px; row-gap: clamp(36px, 3.4vw, 52px); }
+.pieces.three .piece .zoom { aspect-ratio: 2 / 3; }
+.pieces.three .piece .cap { padding: 0 4px; }
+.pieces.three .piece .name { margin-top: 14px; font-family: var(--serif); font-weight: 400; font-size: .86rem; letter-spacing: .1em; text-transform: uppercase; line-height: 1.35; }
+.pieces.three .piece .by { font-size: 12.5px; margin-top: 3px; }
+.pieces.three .piece .price { font-size: 14.5px; margin-top: 3px; }
+.pieces.three .piece .ask { margin-top: 8px; font-size: 10px; border-bottom-color: transparent; color: var(--pierre); }
+.pieces.three .piece:hover .ask { color: var(--ink); border-bottom-color: var(--ink); }
 
 @media (max-width: 1000px) {
-  .coups .scroller { grid-auto-columns: 46%; }
-  .pieces.three { grid-template-columns: repeat(2, 1fr); column-gap: 18px; row-gap: 64px; }
+  .coups .scroller { grid-auto-columns: 40%; }
+  .pieces.three { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 560px) {
-  .coups .scroller { --g: 20px; grid-auto-columns: 78%; }
-  .pieces.three { row-gap: 52px; }
-  .pieces.three .piece .cap { padding: 0; margin-top: 16px; }
-  .pieces.three .piece .name { font-size: 1rem; }
+  .coups .scroller { grid-auto-columns: 66%; gap: 6px; }
+  .coups .piece .name { font-size: 1.05rem; }
+  .pieces.three { row-gap: 32px; }
+  .pieces.three .piece .name { font-size: .78rem; letter-spacing: .08em; }
 }
-@media (hover: none) { .piece .ask { color: var(--ink); opacity: .75; } }
+@media (min-width: 1001px) { .coups .arrows { display: none; } .coups .scroll-ctrl { justify-content: center; } }

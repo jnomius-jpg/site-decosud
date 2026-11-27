@@ -4,9 +4,6 @@
   var D = window.DECOSUD || { contact: {}, pieces: [] };
   var C = D.contact;
   var SPRITE = "assets/cigales.svg#c";
-  /* Essai (brouillon) : présentation des photos, ?photo=decoupe (défaut) ou ?photo=arcade */
-  var PHOTO = (location.search.match(/[?&]photo=(decoupe|arcade)/) || [])[1] || "decoupe";
-  document.documentElement.classList.add("photo-" + PHOTO);
 
   function cig(cls) {
     return '<svg class="cig ' + (cls || "") + '" aria-hidden="true"><use href="' + SPRITE + '"/></svg>';
@@ -135,16 +132,11 @@
     var visual = p._image
       ? '<img src="' + src(p._image) + '" alt="' + esc(p.nom + ", " + p.par) + '" loading="lazy">'
       : '<div class="placeholder grain" style="background:' + (COLORS[p.couleur] || COLORS.terra) + '">' + cig() + '<span>Photo à venir</span></div>';
-    /* Légende : nom, matière, tarif, « Idée cadeau » et nombre de vues, puis « Se renseigner ».
-       La photo reste nue ; la mise en forme dépend de la piste (style.css, fin du fichier). */
-    var tags = giftHTML(p) + views;
     return '<a class="piece reveal" data-id="' + esc(p.id) + '" data-univers="' + esc(p._univ.join(" ")) + '" href="visite.html?objet=' + encodeURIComponent(p.id) + '#demande">' +
-      '<div class="zoom tile">' + visual + '</div>' +
-      '<div class="cap">' +
-      '<p class="name">' + esc(fr(p.nom)) + '</p>' +
+      '<div class="zoom">' + visual + giftHTML(p) + views + '</div>' +
+      '<div class="cap"><p class="name">' + esc(fr(p.nom)) + '</p>' +
       '<p class="by">' + esc(fr(p.par)) + '</p>' +
       (price ? '<p class="price">' + esc(fr(price)) + "</p>" : "") +
-      (tags ? '<p class="tags">' + tags + "</p>" : "") +
       '<span class="ask">Se renseigner <span aria-hidden="true">→</span></span></div></a>';
   }
   document.querySelectorAll("[data-pieces]").forEach(function (el) {
