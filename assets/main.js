@@ -153,6 +153,15 @@
         .map(function (p) { return pieceHTML(p); }).join("");
       return;
     }
+    /* Guides : data-pieces="ids:verres-piano,nappe-monza" = ces pièces-là, dans cet ordre */
+    var ids = el.getAttribute("data-pieces");
+    if (ids.indexOf("ids:") === 0) {
+      el.innerHTML = ids.slice(4).split(",").map(function (id) {
+        var p = D.pieces.filter(function (x) { return x.id === id.trim(); })[0];
+        return p ? pieceHTML(p) : "";
+      }).join("");
+      return;
+    }
     var list = D.pieces;
     if (G) {
       /* Ordre de la charte ; les nouvelles pièces pas encore mesurées passent en tête de leur univers à la fin */
