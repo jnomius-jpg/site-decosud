@@ -4,9 +4,9 @@
   var D = window.DECOSUD || { contact: {}, pieces: [] };
   var C = D.contact;
   var SPRITE = "assets/cigales.svg#c";
-  /* Essai de mise en page (brouillon) : ?piste=a (Revue) ou ?piste=b (Cabinet). Piste A par défaut. */
-  var PISTE = (location.search.match(/[?&]piste=([ab])/) || [])[1] || "a";
-  document.documentElement.classList.add("piste-" + PISTE);
+  /* Essai (brouillon) : présentation des photos, ?photo=aura (défaut) ou ?photo=voile */
+  var PHOTO = (location.search.match(/[?&]photo=(aura|voile)/) || [])[1] || "aura";
+  document.documentElement.classList.add("photo-" + PHOTO);
 
   function cig(cls) {
     return '<svg class="cig ' + (cls || "") + '" aria-hidden="true"><use href="' + SPRITE + '"/></svg>';
@@ -128,22 +128,19 @@
         return '<button type="button" class="swatch" aria-pressed="false" data-teinte="' + esc(t.nom) + '" title="' + esc(t.nom) + '" aria-label="' + esc(t.nom) + (t.photo ? ", en photo" : "") + '" style="--c:' + esc(bg) + '"></button>';
       }).join("") + '</div><button type="button" class="teinte-clear" hidden>Tout désélectionner</button></div>';
   }
-  var ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
-  function pieceHTML(p, i) {
+  function pieceHTML(p) {
     if (p.attente) return waitHTML(p);
     var price = priceOf(p);
-    var n = (i || 0) + 1;
     var views = p._images.length > 1 && !p.nuancier ? '<span class="views" aria-label="' + p._images.length + ' photos">' + p._images.length + " vues</span>" : "";
     var visual = p._image
-      ? '<img src="' + src(p._image) + '" alt="' + esc(p.nom + ", " + p.par) + '" loading="lazy">'
+      ? '<span class="aura" aria-hidden="true" style="background-image:url(&quot;' + src(p._image) + '&quot;)"></span><img src="' + src(p._image) + '" alt="' + esc(p.nom + ", " + p.par) + '" loading="lazy">'
       : '<div class="placeholder grain" style="background:' + (COLORS[p.couleur] || COLORS.terra) + '">' + cig() + '<span>Photo à venir</span></div>';
-    /* Légende : numéro, nom, matière, tarif, « Idée cadeau » et nombre de vues, puis « Se renseigner ».
+    /* Légende : nom, matière, tarif, « Idée cadeau » et nombre de vues, puis « Se renseigner ».
        La photo reste nue ; la mise en forme dépend de la piste (style.css, fin du fichier). */
     var tags = giftHTML(p) + views;
     return '<a class="piece reveal" data-id="' + esc(p.id) + '" data-univers="' + esc(p._univ.join(" ")) + '" href="visite.html?objet=' + encodeURIComponent(p.id) + '#demande">' +
-      '<div class="zoom">' + visual + '</div>' +
+      '<div class="zoom tile">' + visual + '</div>' +
       '<div class="cap">' +
-      '<span class="num" aria-hidden="true"><span class="num-ar">N\u00b0\u00a0' + (n < 10 ? "0" + n : n) + '</span><span class="num-ro">' + (ROMAN[i] || n) + '</span></span>' +
       '<p class="name">' + esc(fr(p.nom)) + '</p>' +
       '<p class="by">' + esc(fr(p.par)) + '</p>' +
       (price ? '<p class="price">' + esc(fr(price)) + "</p>" : "") +
@@ -174,8 +171,7 @@
       document.querySelectorAll('[data-pieces="all"] .piece').forEach(function (el) {
         var ok = !id || (el.getAttribute("data-univers") || "").split(" ").indexOf(id) > -1;
         el.hidden = !ok;
-        /* Rang dans le rythme de la grille (piste A : 2 grandes, puis 3 petites) */
-        if (ok) { el.setAttribute("data-rang", shown % 5); shown++; el.classList.add("in"); }
+        if (ok) { shown++; el.classList.add("in"); }
       });
       var empty = document.querySelector(".empty");
       if (empty) empty.hidden = shown > 0;

@@ -593,105 +593,89 @@ html.no-scroll { overflow: hidden; }
 .teinte-clear[hidden] { display: none; }
 
 /* ==========================================================
-   ESSAI DE MISE EN PAGE (brouillon) : Coups de cœur et Sélection
-   Deux pistes, choisies par ?piste=a (Revue, défaut) ou ?piste=b (Cabinet).
-   La photo reste nue, tout le texte passe dans la légende (.cap).
+   ESSAI (brouillon) : « Atelier » — Coups de cœur et Sélection
+   Fond papier en léger dégradé avec grain, photos étalonnées
+   présentées sur un « mur » (aura de leurs propres couleurs,
+   ou voile papier avec ?photo=voile), beaucoup d'air.
    ========================================================== */
-.piece .cap { position: relative; }
+:root {
+  --mur-haut: #FCFAF6;
+  --mur-bas: #F1EADF;      /* papier un peu plus chaud vers le bas */
+}
+/* Fond : dégradé très léger + grain, comme une feuille photographiée */
+.atelier { position: relative; isolation: isolate;
+  background: radial-gradient(120% 70% at 50% 0%, var(--mur-haut) 0%, rgba(252, 250, 246, 0) 70%),
+              linear-gradient(180deg, var(--mur-haut) 0%, #F7F2EA 45%, var(--mur-bas) 100%); }
+.atelier::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background-image: var(--grain); background-size: 220px; opacity: .07; mix-blend-mode: multiply; }
+
+/* En-tête des coups de cœur : petit, centré, calme */
+.coups-head { text-align: center; }
+.coups-seal { display: none; }
+.coups-kicker { margin-bottom: 18px; }
+.coups .coups-title { font-size: clamp(2.1rem, 3.4vw, 3.1rem); }
+.coups-sub { margin: 18px auto 0; max-width: 34ch; font-family: var(--serif); font-style: italic; font-size: clamp(1.02rem, 1.25vw, 1.15rem); line-height: 1.5; color: var(--pierre); }
+.coups.section { padding-top: clamp(80px, 9vw, 140px); padding-bottom: clamp(90px, 10vw, 160px); }
+
+/* La tuile : la photo posée au centre d'un mur, avec de l'air autour */
+.piece .tile { position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: #F3EDE3; isolation: isolate; }
+.piece .tile .aura { position: absolute; inset: -18%; z-index: 0; background-size: cover; background-position: center;
+  filter: blur(42px) saturate(.75) brightness(1.12); opacity: .42; transform: scale(1.1); }
+.piece .tile::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background-image: var(--grain); background-size: 200px; opacity: .08; mix-blend-mode: multiply; }
+.piece .tile img { position: absolute; z-index: 1; inset: 13% 15% 15%; width: 70%; height: 72%; object-fit: cover;
+  filter: saturate(.9) contrast(.96) sepia(.05) brightness(1.01);
+  box-shadow: 0 18px 40px -22px rgba(60, 40, 20, .35); transition: transform 1.2s cubic-bezier(.22, .61, .36, 1); }
+a.piece:hover .tile img { transform: scale(1.025); }
+.piece .tile .placeholder { position: absolute; inset: 13% 15% 15%; width: 70%; height: 72%; z-index: 1; }
+.photo-voile .piece .tile { background: linear-gradient(180deg, #F6F1E8 0%, #EDE5D8 100%); }
+.photo-voile .piece .tile .aura { display: none; }
+
+/* Légende : nue, centrée, trois lignes au plus */
+.piece .cap { text-align: center; margin-top: 22px; padding: 0 6%; }
 .piece .num { display: none; }
-.piece .tags { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin: 8px 0 0; }
+.piece .name { margin: 0; font-family: var(--serif); font-weight: 400; font-size: clamp(1.08rem, 1.2vw, 1.22rem); line-height: 1.3; letter-spacing: 0; }
+.piece .by { margin: 4px 0 0; font-size: 12.5px; color: var(--pierre); }
+.piece .price { margin: 8px 0 0; font-family: var(--serif); font-size: 1rem; }
+.piece .tags { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px 12px; margin: 8px 0 0; }
 .piece .tags .gift { position: static; padding: 0; border: 0; background: none; -webkit-backdrop-filter: none; backdrop-filter: none; font-size: 13.5px; gap: 5px; }
 .piece .tags .views { position: static; padding: 0; border-radius: 0; background: none; font-size: 10px; letter-spacing: .18em; color: var(--pierre); }
 .piece .tags .gift + .views::before { content: "·"; margin-right: 12px; letter-spacing: 0; }
-.coups-seal { display: none; }
-.coups-sub { margin: 0; font-family: var(--serif); font-style: italic; font-size: clamp(1.02rem, 1.3vw, 1.18rem); line-height: 1.45; color: var(--pierre); }
+.piece .ask { margin-top: 12px; padding: 0 0 2px; border: 0; border-bottom: 1px solid transparent; font-size: 10.5px; letter-spacing: .2em; color: var(--pierre); transition: color .3s, border-color .3s, opacity .4s; }
+.piece:hover .ask { color: var(--ink); border-bottom-color: var(--ink); }
+@media (hover: hover) { .piece .ask { opacity: 0; } .piece:hover .ask, .piece:focus-visible .ask { opacity: 1; } }
 
-/* ---------- Piste A · « Revue » (Kinfolk) : grandes marges, rythme décalé, légendes sobres ---------- */
-.piste-a .coups-head { display: grid; grid-template-columns: 1fr minmax(0, 22rem); align-items: end; gap: 24px 48px; padding-bottom: clamp(22px, 2.4vw, 34px); border-bottom: 1px solid var(--line); }
-.piste-a .coups-kicker { margin-bottom: 14px; }
-.piste-a .coups-title { font-size: clamp(2.3rem, 3.8vw, 3.5rem); text-align: left; }
-.piste-a .coups-sub { text-align: right; }
-.piste-a .scroller { --g: clamp(24px, 3.4vw, 60px); gap: var(--g); grid-auto-columns: calc((100% - 3 * var(--g)) / 4); align-items: start; margin-top: clamp(56px, 6vw, 96px); padding-bottom: clamp(40px, 5vw, 88px); }
-.piste-a .scroller > :nth-child(even) { margin-top: clamp(40px, 5vw, 88px); }
-.piste-a .scroll-ctrl { margin-top: 8px; padding-top: 22px; border-top: 1px solid var(--line); }
-.piste-a .arrow, .piste-b .arrow { border: 0; width: 40px; font-size: 20px; color: var(--pierre); transition: color .3s, transform .3s; }
-.piste-a .arrow:hover, .piste-b .arrow:hover { color: var(--ink); }
-.piste-a .arrow[data-scroll="prev"]:hover { transform: translateX(-3px); }
-.piste-a .arrow[data-scroll="next"]:hover { transform: translateX(3px); }
+/* Carrousel : trois pièces, de grands blancs */
+.coups .scroller { --g: clamp(28px, 5vw, 96px); gap: var(--g); grid-auto-columns: calc((100% - 2 * var(--g)) / 3); margin-top: clamp(64px, 7vw, 110px); }
+.coups .scroll-ctrl { margin-top: clamp(40px, 5vw, 70px); }
+.coups .arrow { border: 0; width: 40px; font-size: 20px; color: var(--pierre); transition: color .3s; }
+.coups .arrow:hover { color: var(--ink); }
 
-.piste-a .piece .cap { display: grid; grid-template-columns: 1fr auto; grid-template-areas: "num num" "name price" "by by" "tags tags" "ask ask"; column-gap: 18px; margin-top: 18px; }
-.piste-a .scroller .piece .num { display: block; grid-area: num; margin-bottom: 10px; font-size: 10.5px; font-weight: 500; letter-spacing: .22em; color: var(--pierre); }
-.piste-a .num-ro { display: none; }
-.piste-a .piece .name { grid-area: name; margin: 0; font-family: var(--serif); font-weight: 400; font-size: clamp(1.1rem, 1.25vw, 1.28rem); line-height: 1.25; letter-spacing: 0; }
-.piste-a .piece .price { grid-area: price; margin: 0; align-self: baseline; white-space: nowrap; text-align: right; font-size: clamp(.98rem, 1.05vw, 1.06rem); }
-.piste-a .piece .by { grid-area: by; margin: 5px 0 0; font-size: 12.5px; }
-.piste-a .piece .tags { grid-area: tags; }
-.piste-a .piece .ask { grid-area: ask; justify-self: start; margin-top: 14px; padding: 0; border: 0; font-size: 10.5px; letter-spacing: .2em; color: var(--pierre); transition: color .3s, opacity .4s; }
-.piste-a .piece:hover .ask { color: var(--ink); }
-@media (hover: hover) { .piste-a .piece .ask { opacity: 0; } .piste-a .piece:hover .ask, .piste-a .piece:focus-visible .ask { opacity: 1; } }
+/* Sélection : trois colonnes, rangées très espacées */
+.filters { gap: 6px clamp(20px, 2.6vw, 40px); margin-bottom: clamp(64px, 8vw, 120px); }
+.filters button { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: clamp(1.02rem, 1.2vw, 1.14rem); letter-spacing: .005em; text-transform: none; padding: 2px 0; }
+.filters .count { font-family: var(--sans); font-style: normal; font-size: 9.5px; letter-spacing: .06em; vertical-align: super; margin-left: 3px; }
+.pieces.three { column-gap: clamp(28px, 5vw, 96px); row-gap: clamp(80px, 9vw, 150px); }
 
-/* Sélection : 6 colonnes, rythme de 5 (une grande, une moyenne décalée, puis trois petites) */
-.piste-a .filters { gap: 6px clamp(20px, 2.6vw, 40px); margin-bottom: clamp(56px, 7vw, 110px); }
-.piste-a .filters button { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: clamp(1.02rem, 1.2vw, 1.16rem); letter-spacing: .005em; text-transform: none; padding: 2px 0; }
-.piste-a .filters .count { font-family: var(--sans); font-style: normal; font-size: 9.5px; letter-spacing: .06em; vertical-align: super; margin-left: 3px; }
-.piste-a .pieces.three { grid-template-columns: repeat(6, 1fr); column-gap: clamp(24px, 3.6vw, 64px); row-gap: clamp(72px, 8vw, 140px); align-items: start; }
-.piste-a .pieces.three > .piece { grid-column: span 2; }
-.piste-a .pieces.three > [data-rang="0"] { grid-column: span 3; }
-.piste-a .pieces.three > [data-rang="1"] { grid-column: span 3; padding: clamp(60px, 9vw, 160px) 0 0 clamp(40px, 7vw, 130px); }
+/* Le seuil (réf. porte dans un mur) : une ruelle de La Cadière, étroite, au centre d'un grand mur */
+.seuil { padding: calc(76px + clamp(48px, 6vw, 90px)) var(--gutter) clamp(40px, 5vw, 70px); text-align: center; }
+.seuil-porte { position: relative; margin: 0 auto; width: min(340px, 62vw); aspect-ratio: 9 / 19; overflow: hidden; background: #E6DDCF;
+  box-shadow: inset 0 0 0 10px rgba(255, 255, 255, .25); }
+.seuil-porte img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.85) contrast(.95) sepia(.08); }
+.seuil-porte span { position: absolute; left: 0; right: 0; top: 46%; color: #FCFAF6; font-size: 12px; font-weight: 500; letter-spacing: .32em; text-transform: uppercase; text-shadow: 0 1px 12px rgba(0, 0, 0, .35); }
+.seuil-legende { margin: 22px 0 0; font-family: var(--serif); font-style: italic; font-size: .98rem; color: var(--pierre); }
+.seuil + .page-head { padding-top: clamp(40px, 5vw, 70px); }
+
 @media (max-width: 1000px) {
-  .piste-a .coups-head { grid-template-columns: 1fr; }
-  .piste-a .coups-sub { text-align: left; max-width: 30ch; }
-  .piste-a .scroller { grid-auto-columns: 44%; }
-  .piste-a .pieces.three { grid-template-columns: repeat(2, 1fr); column-gap: 18px; row-gap: 56px; }
-  .piste-a .pieces.three > .piece, .piste-a .pieces.three > [data-rang] { grid-column: span 1; padding: 0; }
-  .piste-a .pieces.three > [data-rang="0"] { grid-column: 1 / -1; }
-  .piste-a .pieces.three > [data-rang="2"], .piste-a .pieces.three > [data-rang="4"] { margin-top: 40px; }
+  .coups .scroller { grid-auto-columns: 46%; }
+  .pieces.three { grid-template-columns: repeat(2, 1fr); column-gap: 18px; row-gap: 64px; }
 }
 @media (max-width: 560px) {
-  .piste-a .scroller { --g: 18px; grid-auto-columns: 72%; }
-  .piste-a .scroller > :nth-child(even) { margin-top: 32px; }
-  .piste-a .piece .cap { grid-template-areas: "num" "name" "by" "price" "tags" "ask"; grid-template-columns: 1fr; }
-  .piste-a .piece .price { text-align: left; margin-top: 4px; }
-  .piste-a .pieces.three > [data-rang="0"] .cap { grid-template-areas: "num num" "name price" "by by" "tags tags" "ask ask"; grid-template-columns: 1fr auto; }
-  .piste-a .pieces.three > [data-rang="0"] .price { text-align: right; margin-top: 0; }
-  .piste-a .piece .name { font-size: 1.04rem; }
+  .coups .scroller { --g: 20px; grid-auto-columns: 78%; }
+  .piece .tile img, .piece .tile .placeholder { inset: 11% 12% 12%; width: 76%; height: 77%; }
+  .pieces.three { row-gap: 52px; }
+  .pieces.three .piece .cap { padding: 0; margin-top: 16px; }
+  .pieces.three .piece .name { font-size: 1rem; }
 }
-
-/* ---------- Piste B · « Cabinet » (Astier de Villatte, Marin Montagut) : photos en passe-partout, légendes centrées ---------- */
-.piste-b .coups-head { text-align: center; }
-.piste-b .coups-seal { display: block; color: var(--ocre); font-size: 11px; margin-bottom: 18px; }
-.piste-b .coups-kicker { margin-bottom: 16px; }
-.piste-b .coups-title { font-style: italic; font-size: clamp(2.3rem, 4vw, 3.6rem); }
-.piste-b .coups-sub { margin: 16px auto 0; max-width: 34ch; }
-.piste-b .scroller { --g: clamp(24px, 4vw, 72px); gap: var(--g); grid-auto-columns: calc((100% - 2 * var(--g)) / 3); margin-top: clamp(56px, 6vw, 96px); }
-.piste-b .scroll-ctrl { flex-direction: column-reverse; gap: 18px; margin-top: 44px; }
-.piste-b .piece .zoom { padding: 9%; background: var(--sable); }
-.piste-b .piece .zoom img, .piste-b .piece .zoom .placeholder { box-shadow: 0 1px 0 rgba(30, 29, 26, .05), 0 0 0 1px rgba(30, 29, 26, .05); }
-.piste-b a.piece:hover .zoom img { transform: scale(1.025); }
-.piste-b .piece .cap { text-align: center; margin-top: 22px; }
-.piste-b .scroller .piece .num { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 12px; font-family: var(--serif); font-style: italic; font-size: 1rem; color: var(--pierre); }
-.piste-b .scroller .piece .num::before, .piste-b .scroller .piece .num::after { content: ""; width: 18px; height: 1px; background: var(--line); }
-.piste-b .num-ar { display: none; }
-.piste-b .piece .name { margin: 0; font-family: var(--serif); font-weight: 500; font-size: .9rem; line-height: 1.4; letter-spacing: .1em; text-transform: uppercase; }
-.piste-b .piece .by { margin: 4px 0 0; font-family: var(--serif); font-style: italic; font-size: 1.02rem; }
-.piste-b .piece .price { margin: 8px 0 0; font-family: var(--sans); font-size: 11.5px; letter-spacing: .12em; }
-.piste-b .piece .tags { justify-content: center; }
-.piste-b .piece .ask { margin-top: 12px; padding: 0; border: 0; font: italic 400 .98rem/1.3 var(--serif); letter-spacing: 0; text-transform: none; color: var(--pierre); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; text-decoration-color: var(--line); transition: color .3s, text-decoration-color .3s; }
-.piste-b .piece:hover .ask { color: var(--ink); text-decoration-color: currentColor; }
-.piste-b .filters { gap: 6px 0; margin-bottom: clamp(56px, 6vw, 96px); }
-.piste-b .filters button { font-family: var(--serif); font-size: .86rem; letter-spacing: .14em; }
-.piste-b .filters button + button::before { content: "·"; display: inline-block; margin: 0 clamp(12px, 1.6vw, 22px); color: var(--line); }
-.piste-b .filters button[aria-pressed="true"] { border-bottom-color: transparent; text-decoration: underline; text-underline-offset: 6px; text-decoration-thickness: 1px; }
-.piste-b .filters .count { font-family: var(--serif); font-style: italic; letter-spacing: 0; }
-.piste-b .pieces.three { grid-template-columns: repeat(4, 1fr); column-gap: clamp(20px, 3vw, 52px); row-gap: clamp(64px, 7vw, 120px); }
-@media (max-width: 1000px) {
-  .piste-b .scroller { grid-auto-columns: 46%; }
-  .piste-b .pieces.three { grid-template-columns: repeat(2, 1fr); column-gap: 16px; row-gap: 52px; }
-}
-@media (max-width: 560px) {
-  .piste-b .scroller { --g: 18px; grid-auto-columns: 74%; }
-  .piste-b .piece .zoom { padding: 7%; }
-  .piste-b .piece .name { font-size: .8rem; letter-spacing: .08em; }
-  .piste-b .piece .by { font-size: .95rem; }
-  .piste-b .filters button + button::before { margin: 0 10px; }
-}
+@media (max-width: 560px) { .pieces.three .piece .tile img, .pieces.three .piece .tile .placeholder { inset: 8% 9% 9%; width: 82%; height: 83%; } }
+@media (hover: none) { .piece .ask { color: var(--ink); opacity: .75; } }
