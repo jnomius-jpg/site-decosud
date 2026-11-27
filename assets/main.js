@@ -67,13 +67,20 @@
       '<div class="zoom"><div class="placeholder grain" style="background:' + p._wait.bg + ";color:" + p._wait.fg + '">' + cig() + "<span>Photo à venir</span></div></div>" +
       '<p class="name">Nouvelles pièces en chemin</p></div>';
   }
+  /* Badge « Idée cadeau » : petit nœud de ruban rouge dessiné au trait */
+  var BOW = '<svg class="bow" viewBox="0 0 24 16" aria-hidden="true"><path d="M12 7.6C10.2 4.4 6.2 2.3 4.1 3.4 2.6 4.2 3 7.4 5.6 8.5 7.6 9.3 10.2 8.6 12 7.6ZM12 7.6c1.8-3.2 5.8-5.3 7.9-4.2 1.5.8 1.1 4-1.5 5.1-2 .8-4.6.1-6.4-.9ZM11.1 8.4 8.2 14.6M12.9 8.4l2.9 6.2"/><circle cx="12" cy="7.8" r="1.15"/></svg>';
+  function giftHTML(p) {
+    if (!p.cadeau) return "";
+    return '<span class="gift">' + BOW + esc(typeof p.cadeau === "string" ? p.cadeau : "Idée cadeau") + "</span>";
+  }
   function pieceHTML(p) {
     if (p.attente) return waitHTML(p);
+    var views = p._images.length > 1 ? '<span class="views" aria-label="' + p._images.length + ' photos">' + p._images.length + " vues</span>" : "";
     var visual = p._image
       ? '<img src="' + src(p._image) + '" alt="' + esc(p.nom + ", " + p.par) + '" loading="lazy">'
       : '<div class="placeholder grain" style="background:' + (COLORS[p.couleur] || COLORS.terra) + '">' + cig() + '<span>Photo à venir</span></div>';
     return '<a class="piece reveal" data-id="' + esc(p.id) + '" data-univers="' + esc(p._univ.join(" ")) + '" href="visite.html?objet=' + encodeURIComponent(p.id) + '#demande">' +
-      '<div class="zoom">' + visual + '</div>' +
+      '<div class="zoom">' + visual + giftHTML(p) + views + '</div>' +
       '<p class="name">' + esc(p.nom) + '</p>' +
       '<p class="by">' + esc(p.par) + '</p>' +
       '<span class="ask">Se renseigner <span aria-hidden="true">→</span></span></a>';
@@ -228,7 +235,7 @@
     var done = panel.querySelector(".ask-done"), intro = panel.querySelector(".ask-intro"), opener = null;
     var openPanel = function (p) {
       opener = document.activeElement;
-      current = p; prefill = "";
+      current = p; prefill = ""; shown = 0;
       askForm.reset(); askForm.classList.remove("sent"); askForm.hidden = false; intro.hidden = false; done.hidden = true;
       askForm.querySelector(".err").hidden = true;
       askForm.elements.objet.value = p ? p.nom + (p.par ? " (" + p.par + ")" : "") : "";
@@ -237,13 +244,14 @@
       head.classList.toggle("has-gallery", !!gallery);
       head.innerHTML = p
         ? (gallery
-            ? '<div class="ask-gallery"><div class="ask-main"><img src="' + src(p._images[0].src) + '" alt="' + esc(p.nom + (p._images[0].legende ? ", " + p._images[0].legende : "")) + '"></div>' +
+            ? '<div class="ask-gallery"><div class="ask-main"><img src="' + src(p._images[0].src) + '" alt="' + esc(p.nom + (p._images[0].legende ? ", " + p._images[0].legende : "")) + '">' +
+              '<button type="button" class="ask-nav prev" data-step="-1" aria-label="Photo précédente">‹</button><button type="button" class="ask-nav next" data-step="1" aria-label="Photo suivante">›</button></div>' +
               '<p class="ask-cap">' + esc(p._images[0].legende) + "</p>" +
               '<div class="ask-thumbs">' + p._images.map(function (im, i) {
                 return '<button type="button" aria-label="' + esc(im.legende || "Photo " + (i + 1)) + '" title="' + esc(im.legende) + '" aria-pressed="' + (i === 0) + '" data-i="' + i + '"><img src="' + src(im.src) + '" alt="" loading="lazy"></button>';
               }).join("") + "</div></div>"
             : '<div class="ask-thumb">' + (p._image ? '<img src="' + src(p._image) + '" alt="">' : '<div class="placeholder grain" style="background:' + (COLORS[p.couleur] || COLORS.terra) + '">' + cig() + "</div>") + "</div>") +
-          '<div><p class="eyebrow">' + esc(p._univ.map(univName).filter(Boolean).join(" · ")) + '</p><h2 id="ask-titre">' + esc(p.nom) + '</h2><p class="by">' + esc(p.par) + "</p></div>"
+          '<div><p class="eyebrow">' + esc(p._univ.map(univName).filter(Boolean).join(" · ")) + '</p><h2 id="ask-titre">' + esc(p.nom) + '</h2><p class="by">' + esc(p.par) + "</p>" + giftHTML(p) + "</div>"
         : '<div><p class="eyebrow">Une question, un envoi ?</p><h2 id="ask-titre">Faire une <em>demande</em></h2></div>';
       /* Petit bloc de détails : seulement les champs renseignés */
       var rows = [];
@@ -272,11 +280,17 @@
       if (opener && opener.focus) opener.focus({ preventScroll: true });
     };
     /* Mini-galerie : une vignette remplace la photo principale */
+    var shown = 0;
     head.addEventListener("click", function (e) {
+      var nav = e.target.closest(".ask-nav");
       var t = e.target.closest(".ask-thumbs button");
-      if (!t) return;
-      var im = current && current._images[+t.getAttribute("data-i")];
+      if (!current || (!t && !nav)) return;
+      var n = current._images.length;
+      var i = nav ? (shown + +nav.getAttribute("data-step") + n) % n : +t.getAttribute("data-i");
+      t = head.querySelectorAll(".ask-thumbs button")[i];
+      var im = current._images[i];
       if (!im) return;
+      shown = i;
       var main = head.querySelector(".ask-main img");
       main.src = src(im.src).replace(/&amp;/g, "&");
       main.alt = current.nom + (im.legende ? ", " + im.legende : "");
@@ -284,7 +298,7 @@
       head.querySelectorAll(".ask-thumbs button").forEach(function (b) { b.setAttribute("aria-pressed", b === t); });
       /* Pré-remplit la variante dans le message (sans écraser ce que la personne a écrit) */
       if (im.variante) {
-        var msg = askForm.elements.message, line = "Modèle souhaité : " + im.variante;
+        var msg = askForm.elements.message, line = "Modèle souhaité : " + im.variante + (current.tarif ? " (" + current.tarif + ")" : "");
         if (!msg.value.trim() || msg.value === prefill) { msg.value = line; prefill = line; }
         else if (prefill && msg.value.indexOf(prefill) === 0) { msg.value = line + msg.value.slice(prefill.length); prefill = line; }
       }

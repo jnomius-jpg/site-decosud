@@ -161,7 +161,16 @@ a:hover .zoom img, .zoom:hover img { transform: scale(1.05); }
 .pieces { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(16px, 2vw, 28px); margin-top: clamp(40px, 5vw, 70px); }
 .pieces.three { grid-template-columns: repeat(3, 1fr); row-gap: clamp(40px, 5vw, 72px); }
 .piece { display: block; }
-.piece .zoom { aspect-ratio: 4 / 5; }
+.piece .zoom { aspect-ratio: 4 / 5; position: relative; }
+/* Badge « Idée cadeau » (nœud rouge) et indicateur de galerie */
+.gift { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px 4px 8px; border: 1px solid rgba(166, 36, 36, .22); border-radius: 999px;
+  background: rgba(252, 250, 246, .9); color: var(--ink); font-family: var(--serif); font-style: italic; font-size: 13px; line-height: 1.2; letter-spacing: .01em; white-space: nowrap; }
+.gift .bow { width: 17px; height: 12px; flex: none; fill: none; stroke: #A62424; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+.piece .gift { position: absolute; top: 12px; left: 12px; z-index: 1; -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+.piece .views { position: absolute; right: 10px; bottom: 10px; z-index: 1; padding: 2px 8px; border-radius: 999px; background: rgba(252, 250, 246, .82);
+  color: var(--pierre); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; }
+.ask-head .gift { margin-top: 12px; }
+@media (max-width: 560px) { .piece .gift { top: 8px; left: 8px; font-size: 12px; padding: 3px 8px 3px 6px; } .gift .bow { width: 15px; height: 11px; } }
 .piece .name { font-size: 13.5px; font-weight: 500; margin: 14px 0 0; letter-spacing: .01em; }
 .piece .by { font-size: 13px; color: var(--pierre); margin: 2px 0 0; }
 .piece .ask { display: inline-block; margin-top: 10px; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; border-bottom: 1px solid var(--line); padding-bottom: 2px; transition: border-color .3s; }
@@ -521,7 +530,11 @@ html.no-scroll { overflow: hidden; }
 .ask-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .ask-thumb .placeholder .cig { font-size: 16px; }
 .ask-head.has-gallery { flex-direction: column; align-items: stretch; gap: 20px; }
-.ask-main { width: 100%; height: min(52vh, 125vw); overflow: hidden; background: var(--sable); }
+.ask-main { position: relative; width: 100%; height: min(52vh, 125vw); overflow: hidden; background: var(--sable); }
+.ask-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 34px; height: 34px; border: 0; border-radius: 50%; background: rgba(252, 250, 246, .86);
+  color: var(--ink); font: 300 22px/1 var(--serif); cursor: pointer; opacity: .75; transition: opacity .3s; display: grid; place-items: center; padding: 0 0 3px; }
+.ask-nav:hover, .ask-nav:focus-visible { opacity: 1; }
+.ask-nav.prev { left: 10px; } .ask-nav.next { right: 10px; }
 .ask-main img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .ask-cap { font-size: 12px; color: var(--pierre); margin: 8px 0 0; min-height: 1em; }
 .ask-cap:empty { display: none; }
