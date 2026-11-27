@@ -591,3 +591,107 @@ html.no-scroll { overflow: hidden; }
 .teinte-clear { display: block; margin: 12px 0 0; border: 0; background: none; padding: 0; font: italic 400 13px/1.4 var(--serif); color: var(--pierre); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
 .teinte-clear:hover { color: var(--ink); }
 .teinte-clear[hidden] { display: none; }
+
+/* ==========================================================
+   ESSAI DE MISE EN PAGE (brouillon) : Coups de cœur et Sélection
+   Deux pistes, choisies par ?piste=a (Revue, défaut) ou ?piste=b (Cabinet).
+   La photo reste nue, tout le texte passe dans la légende (.cap).
+   ========================================================== */
+.piece .cap { position: relative; }
+.piece .num { display: none; }
+.piece .tags { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin: 8px 0 0; }
+.piece .tags .gift { position: static; padding: 0; border: 0; background: none; -webkit-backdrop-filter: none; backdrop-filter: none; font-size: 13.5px; gap: 5px; }
+.piece .tags .views { position: static; padding: 0; border-radius: 0; background: none; font-size: 10px; letter-spacing: .18em; color: var(--pierre); }
+.piece .tags .gift + .views::before { content: "·"; margin-right: 12px; letter-spacing: 0; }
+.coups-seal { display: none; }
+.coups-sub { margin: 0; font-family: var(--serif); font-style: italic; font-size: clamp(1.02rem, 1.3vw, 1.18rem); line-height: 1.45; color: var(--pierre); }
+
+/* ---------- Piste A · « Revue » (Kinfolk) : grandes marges, rythme décalé, légendes sobres ---------- */
+.piste-a .coups-head { display: grid; grid-template-columns: 1fr minmax(0, 22rem); align-items: end; gap: 24px 48px; padding-bottom: clamp(22px, 2.4vw, 34px); border-bottom: 1px solid var(--line); }
+.piste-a .coups-kicker { margin-bottom: 14px; }
+.piste-a .coups-title { font-size: clamp(2.3rem, 3.8vw, 3.5rem); text-align: left; }
+.piste-a .coups-sub { text-align: right; }
+.piste-a .scroller { --g: clamp(24px, 3.4vw, 60px); gap: var(--g); grid-auto-columns: calc((100% - 3 * var(--g)) / 4); align-items: start; margin-top: clamp(56px, 6vw, 96px); padding-bottom: clamp(40px, 5vw, 88px); }
+.piste-a .scroller > :nth-child(even) { margin-top: clamp(40px, 5vw, 88px); }
+.piste-a .scroll-ctrl { margin-top: 8px; padding-top: 22px; border-top: 1px solid var(--line); }
+.piste-a .arrow, .piste-b .arrow { border: 0; width: 40px; font-size: 20px; color: var(--pierre); transition: color .3s, transform .3s; }
+.piste-a .arrow:hover, .piste-b .arrow:hover { color: var(--ink); }
+.piste-a .arrow[data-scroll="prev"]:hover { transform: translateX(-3px); }
+.piste-a .arrow[data-scroll="next"]:hover { transform: translateX(3px); }
+
+.piste-a .piece .cap { display: grid; grid-template-columns: 1fr auto; grid-template-areas: "num num" "name price" "by by" "tags tags" "ask ask"; column-gap: 18px; margin-top: 18px; }
+.piste-a .scroller .piece .num { display: block; grid-area: num; margin-bottom: 10px; font-size: 10.5px; font-weight: 500; letter-spacing: .22em; color: var(--pierre); }
+.piste-a .num-ro { display: none; }
+.piste-a .piece .name { grid-area: name; margin: 0; font-family: var(--serif); font-weight: 400; font-size: clamp(1.1rem, 1.25vw, 1.28rem); line-height: 1.25; letter-spacing: 0; }
+.piste-a .piece .price { grid-area: price; margin: 0; align-self: baseline; white-space: nowrap; text-align: right; font-size: clamp(.98rem, 1.05vw, 1.06rem); }
+.piste-a .piece .by { grid-area: by; margin: 5px 0 0; font-size: 12.5px; }
+.piste-a .piece .tags { grid-area: tags; }
+.piste-a .piece .ask { grid-area: ask; justify-self: start; margin-top: 14px; padding: 0; border: 0; font-size: 10.5px; letter-spacing: .2em; color: var(--pierre); transition: color .3s, opacity .4s; }
+.piste-a .piece:hover .ask { color: var(--ink); }
+@media (hover: hover) { .piste-a .piece .ask { opacity: 0; } .piste-a .piece:hover .ask, .piste-a .piece:focus-visible .ask { opacity: 1; } }
+
+/* Sélection : 6 colonnes, rythme de 5 (une grande, une moyenne décalée, puis trois petites) */
+.piste-a .filters { gap: 6px clamp(20px, 2.6vw, 40px); margin-bottom: clamp(56px, 7vw, 110px); }
+.piste-a .filters button { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: clamp(1.02rem, 1.2vw, 1.16rem); letter-spacing: .005em; text-transform: none; padding: 2px 0; }
+.piste-a .filters .count { font-family: var(--sans); font-style: normal; font-size: 9.5px; letter-spacing: .06em; vertical-align: super; margin-left: 3px; }
+.piste-a .pieces.three { grid-template-columns: repeat(6, 1fr); column-gap: clamp(24px, 3.6vw, 64px); row-gap: clamp(72px, 8vw, 140px); align-items: start; }
+.piste-a .pieces.three > .piece { grid-column: span 2; }
+.piste-a .pieces.three > [data-rang="0"] { grid-column: span 3; }
+.piste-a .pieces.three > [data-rang="1"] { grid-column: span 3; padding: clamp(60px, 9vw, 160px) 0 0 clamp(40px, 7vw, 130px); }
+@media (max-width: 1000px) {
+  .piste-a .coups-head { grid-template-columns: 1fr; }
+  .piste-a .coups-sub { text-align: left; max-width: 30ch; }
+  .piste-a .scroller { grid-auto-columns: 44%; }
+  .piste-a .pieces.three { grid-template-columns: repeat(2, 1fr); column-gap: 18px; row-gap: 56px; }
+  .piste-a .pieces.three > .piece, .piste-a .pieces.three > [data-rang] { grid-column: span 1; padding: 0; }
+  .piste-a .pieces.three > [data-rang="0"] { grid-column: 1 / -1; }
+  .piste-a .pieces.three > [data-rang="2"], .piste-a .pieces.three > [data-rang="4"] { margin-top: 40px; }
+}
+@media (max-width: 560px) {
+  .piste-a .scroller { --g: 18px; grid-auto-columns: 72%; }
+  .piste-a .scroller > :nth-child(even) { margin-top: 32px; }
+  .piste-a .piece .cap { grid-template-areas: "num" "name" "by" "price" "tags" "ask"; grid-template-columns: 1fr; }
+  .piste-a .piece .price { text-align: left; margin-top: 4px; }
+  .piste-a .pieces.three > [data-rang="0"] .cap { grid-template-areas: "num num" "name price" "by by" "tags tags" "ask ask"; grid-template-columns: 1fr auto; }
+  .piste-a .pieces.three > [data-rang="0"] .price { text-align: right; margin-top: 0; }
+  .piste-a .piece .name { font-size: 1.04rem; }
+}
+
+/* ---------- Piste B · « Cabinet » (Astier de Villatte, Marin Montagut) : photos en passe-partout, légendes centrées ---------- */
+.piste-b .coups-head { text-align: center; }
+.piste-b .coups-seal { display: block; color: var(--ocre); font-size: 11px; margin-bottom: 18px; }
+.piste-b .coups-kicker { margin-bottom: 16px; }
+.piste-b .coups-title { font-style: italic; font-size: clamp(2.3rem, 4vw, 3.6rem); }
+.piste-b .coups-sub { margin: 16px auto 0; max-width: 34ch; }
+.piste-b .scroller { --g: clamp(24px, 4vw, 72px); gap: var(--g); grid-auto-columns: calc((100% - 2 * var(--g)) / 3); margin-top: clamp(56px, 6vw, 96px); }
+.piste-b .scroll-ctrl { flex-direction: column-reverse; gap: 18px; margin-top: 44px; }
+.piste-b .piece .zoom { padding: 9%; background: var(--sable); }
+.piste-b .piece .zoom img, .piste-b .piece .zoom .placeholder { box-shadow: 0 1px 0 rgba(30, 29, 26, .05), 0 0 0 1px rgba(30, 29, 26, .05); }
+.piste-b a.piece:hover .zoom img { transform: scale(1.025); }
+.piste-b .piece .cap { text-align: center; margin-top: 22px; }
+.piste-b .scroller .piece .num { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 12px; font-family: var(--serif); font-style: italic; font-size: 1rem; color: var(--pierre); }
+.piste-b .scroller .piece .num::before, .piste-b .scroller .piece .num::after { content: ""; width: 18px; height: 1px; background: var(--line); }
+.piste-b .num-ar { display: none; }
+.piste-b .piece .name { margin: 0; font-family: var(--serif); font-weight: 500; font-size: .9rem; line-height: 1.4; letter-spacing: .1em; text-transform: uppercase; }
+.piste-b .piece .by { margin: 4px 0 0; font-family: var(--serif); font-style: italic; font-size: 1.02rem; }
+.piste-b .piece .price { margin: 8px 0 0; font-family: var(--sans); font-size: 11.5px; letter-spacing: .12em; }
+.piste-b .piece .tags { justify-content: center; }
+.piste-b .piece .ask { margin-top: 12px; padding: 0; border: 0; font: italic 400 .98rem/1.3 var(--serif); letter-spacing: 0; text-transform: none; color: var(--pierre); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; text-decoration-color: var(--line); transition: color .3s, text-decoration-color .3s; }
+.piste-b .piece:hover .ask { color: var(--ink); text-decoration-color: currentColor; }
+.piste-b .filters { gap: 6px 0; margin-bottom: clamp(56px, 6vw, 96px); }
+.piste-b .filters button { font-family: var(--serif); font-size: .86rem; letter-spacing: .14em; }
+.piste-b .filters button + button::before { content: "·"; display: inline-block; margin: 0 clamp(12px, 1.6vw, 22px); color: var(--line); }
+.piste-b .filters button[aria-pressed="true"] { border-bottom-color: transparent; text-decoration: underline; text-underline-offset: 6px; text-decoration-thickness: 1px; }
+.piste-b .filters .count { font-family: var(--serif); font-style: italic; letter-spacing: 0; }
+.piste-b .pieces.three { grid-template-columns: repeat(4, 1fr); column-gap: clamp(20px, 3vw, 52px); row-gap: clamp(64px, 7vw, 120px); }
+@media (max-width: 1000px) {
+  .piste-b .scroller { grid-auto-columns: 46%; }
+  .piste-b .pieces.three { grid-template-columns: repeat(2, 1fr); column-gap: 16px; row-gap: 52px; }
+}
+@media (max-width: 560px) {
+  .piste-b .scroller { --g: 18px; grid-auto-columns: 74%; }
+  .piste-b .piece .zoom { padding: 7%; }
+  .piste-b .piece .name { font-size: .8rem; letter-spacing: .08em; }
+  .piste-b .piece .by { font-size: .95rem; }
+  .piste-b .filters button + button::before { margin: 0 10px; }
+}
