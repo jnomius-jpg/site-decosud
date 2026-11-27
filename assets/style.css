@@ -680,3 +680,63 @@ html.no-scroll { overflow: hidden; }
   .grille-charte .piece .name { font-size: 1rem; }
   .tuile-ambiance figcaption { flex-direction: column; gap: 6px; padding: 16px; }
 }
+
+/* ==========================================================
+   LES GUIDES : page article (même ouverture que l'accueil)
+   ========================================================== */
+a.guide { display: block; color: inherit; text-decoration: none; }
+a.guide:hover .zoom img { transform: scale(1.04); }
+.guide .soon.lire { color: var(--encre); border-bottom: 1px solid var(--line); padding-bottom: 2px; transition: border-color .3s; }
+a.guide:hover .soon.lire { border-color: var(--encre); }
+
+.guide-cover .eyebrow { margin-bottom: 26px; }
+.guide-cover .eyebrow a { color: inherit; text-decoration: none; border-bottom: 1px solid var(--line); }
+.guide-cover .cover-quote blockquote { max-width: 34ch; margin: 0 auto; text-wrap: balance; }
+.triptyque { display: grid; grid-template-columns: 1.15fr .8fr 1.15fr; gap: 3px; width: 84%; max-width: 1200px; margin: 0 auto; aspect-ratio: 24 / 10; }
+.triptyque figure { margin: 0; overflow: hidden; background: var(--sable); }
+.triptyque img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.guide-intro { max-width: 760px; padding-top: clamp(70px, 9vw, 130px); text-align: center; }
+.guide-intro .lede { font-size: clamp(1.15rem, 1.5vw, 1.35rem); margin: 0; }
+.sommaire ol { list-style: none; padding: 0; margin: clamp(44px, 5vw, 64px) 0 0; border-top: 1px solid var(--line); text-align: left; }
+.sommaire li { border-bottom: 1px solid var(--line); }
+.sommaire a { display: flex; gap: 22px; align-items: baseline; padding: 14px 4px; color: inherit; text-decoration: none; font-family: var(--serif); font-size: 1.2rem; transition: padding var(--slow); }
+.sommaire a:hover { padding-left: 12px; }
+.sommaire span { width: 2.2em; font-size: .78rem; letter-spacing: .2em; color: var(--taupe); }
+
+.etape { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 110px); align-items: center; padding-top: clamp(90px, 11vw, 170px); max-width: 1200px; scroll-margin-top: 60px; }
+.etape.inverse .etape-photo { order: 2; }
+.etape-photo { margin: 0; aspect-ratio: 4 / 5; overflow: hidden; background: var(--sable); }
+.etape-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.etape-txt { max-width: 460px; }
+.etape-txt p { margin: 0 0 16px; }
+.etape .num { font-family: var(--serif); font-size: .85rem; letter-spacing: .3em; color: var(--taupe); margin-bottom: 14px; }
+.astuce { margin-top: 28px !important; padding-top: 18px; border-top: 1px solid var(--line); font-family: var(--serif); font-style: italic; font-size: 1.12rem; line-height: 1.5; }
+.astuce span { display: block; font-family: var(--sans); font-style: normal; font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: var(--terre-cuite); margin-bottom: 6px; }
+
+.etape-schema { align-items: start; }
+.regles { margin: 22px 0 22px; padding-left: 1.4em; }
+.regles li { margin-bottom: 8px; padding-left: 4px; }
+.regles li::marker { font-family: var(--serif); color: var(--taupe); }
+.regles b { font-weight: 500; }
+.schema { margin: 0; padding: clamp(24px, 3vw, 44px); background: var(--sable); color: var(--encre); position: sticky; top: 110px; }
+.schema svg { width: 100%; height: auto; display: block; }
+.schema .pastilles circle { fill: var(--encre); }
+.schema .pastilles text { fill: var(--lin); }
+.schema figcaption { margin-top: 18px; font-family: var(--serif); font-style: italic; font-size: 1rem; line-height: 1.5; color: var(--taupe); }
+
+.guide-pieces { padding-top: clamp(110px, 13vw, 190px); }
+.guide-pieces .center:last-child { margin-top: clamp(36px, 4vw, 56px); }
+.guide-visite { max-width: 680px; padding: clamp(110px, 13vw, 190px) var(--gutter); }
+.guide-visite .cig { font-size: 10px; color: var(--ocre); transform: rotate(18deg); margin-bottom: 22px; }
+.guide-visite .actions { display: flex; gap: 28px; align-items: center; justify-content: center; flex-wrap: wrap; }
+.guide-visite .pill.ink { margin-top: 0; align-self: center; }
+
+@media (max-width: 800px) {
+  .triptyque { width: 100%; aspect-ratio: 4 / 3; grid-template-columns: 1.1fr .9fr; grid-template-rows: 1fr 1fr; }
+  .triptyque figure:first-child { grid-row: span 2; }
+  .etape { grid-template-columns: 1fr; padding-top: 80px; }
+  .etape.inverse .etape-photo { order: 0; }
+  .etape-txt { max-width: none; }
+  .schema { position: static; }
+}
