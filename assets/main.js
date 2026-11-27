@@ -125,25 +125,55 @@
         return '<button type="button" class="swatch" aria-pressed="false" data-teinte="' + esc(t.nom) + '" title="' + esc(t.nom) + '" aria-label="' + esc(t.nom) + (t.photo ? ", en photo" : "") + '" style="--c:' + esc(bg) + '"></button>';
       }).join("") + '</div><button type="button" class="teinte-clear" hidden>Tout désélectionner</button></div>';
   }
-  function pieceHTML(p) {
+  /* Charte couleurs : vues grille étalonnées, ordre et tuiles d'ambiance (assets/grille.js, généré par outils/ordonner_grille.py) */
+  var G = window.DECOSUD_GRILLE || null;
+  function pieceHTML(p, grille) {
     if (p.attente) return waitHTML(p);
     var price = priceOf(p);
     var views = p._images.length > 1 && !p.nuancier ? '<span class="views" aria-label="' + p._images.length + ' photos">' + p._images.length + " vues</span>" : "";
+    var M = grille && G && G.mesures[p.id];
+    var vue1 = p._image; /* photos d'origine, sans étalonnage (choix de Jules, 27/11) */
+    var vue2 = M && p._images[1] ? '<img class="vue2" src="' + src(p._images[1].src) + '" alt="" loading="lazy">' : "";
+    var points = M && p._images.length > 1 ? '<span class="points" aria-hidden="true">' + new Array(Math.min(p._images.length, 5) + 1).join("<i></i>") + "</span>" : "";
     var visual = p._image
-      ? '<img src="' + src(p._image) + '" alt="' + esc(p.nom + ", " + p.par) + '" loading="lazy">'
+      ? '<img src="' + src(vue1) + '" alt="' + esc(p.nom + ", " + p.par) + '" loading="lazy">' + vue2 + points
       : '<div class="placeholder grain" style="background:' + (COLORS[p.couleur] || COLORS.terra) + '">' + cig() + '<span>Photo à venir</span></div>';
     return '<a class="piece reveal" data-id="' + esc(p.id) + '" data-univers="' + esc(p._univ.join(" ")) + '" href="visite.html?objet=' + encodeURIComponent(p.id) + '#demande">' +
       '<div class="zoom">' + visual + giftHTML(p) + views + '</div>' +
-      '<p class="name">' + esc(fr(p.nom)) + '</p>' +
+      '<div class="cap"><p class="name">' + esc(fr(p.nom)) + '</p>' +
       '<p class="by">' + esc(fr(p.par)) + '</p>' +
       (price ? '<p class="price">' + esc(fr(price)) + "</p>" : "") +
-      '<span class="ask">Se renseigner <span aria-hidden="true">→</span></span></a>';
+      '<span class="ask">Se renseigner <span aria-hidden="true">→</span></span></div></a>';
   }
   document.querySelectorAll("[data-pieces]").forEach(function (el) {
-    var list = el.getAttribute("data-pieces") === "coups"
-      ? D.pieces.filter(function (p) { return p.coupDeCoeur && !p.attente; }).sort(function (a, b) { return (+a.coupDeCoeur || 99) - (+b.coupDeCoeur || 99); })
-      : D.pieces;
-    el.innerHTML = list.map(pieceHTML).join("");
+    var coups = el.getAttribute("data-pieces") === "coups";
+    if (coups) {
+      el.innerHTML = D.pieces.filter(function (p) { return p.coupDeCoeur && !p.attente; })
+        .sort(function (a, b) { return (+a.coupDeCoeur || 99) - (+b.coupDeCoeur || 99); })
+        .map(function (p) { return pieceHTML(p); }).join("");
+      return;
+    }
+    var list = D.pieces;
+    if (G) {
+      /* Ordre de la charte ; les nouvelles pièces pas encore mesurées passent en tête de leur univers à la fin */
+      var rang = {}; G.ordre.forEach(function (id, i) { rang[id] = i; });
+      list = D.pieces.slice().sort(function (a, b) {
+        var ra = a.attente ? 1e6 : (a.id in rang ? rang[a.id] : 1e5), rb = b.attente ? 1e6 : (b.id in rang ? rang[b.id] : 1e5);
+        return ra - rb;
+      });
+    }
+    var tuiles = {}; (G && G.tuiles || []).forEach(function (t) { tuiles[t.apres] = t; });
+    el.innerHTML = list.map(function (p, i) {
+      var t = tuiles[i];
+      var tuile = t ? '<a class="tuile-ambiance" href="#' + esc(t.univers) + '"><img src="' + src(t.image) + '" alt="" loading="lazy">' +
+        '<figcaption><span class="t-nom">' + esc(t.nom) + '</span><span class="t-lien">Voir les pièces <span aria-hidden="true">→</span></span></figcaption></a>' : "";
+      return tuile + pieceHTML(p, true);
+    }).join("") + Object.keys(G && G.univers || {}).map(function (u) {
+      /* Tuile d'ambiance propre à chaque univers : visible seulement quand ce filtre est actif */
+      var t = G.univers[u].tuiles[0];
+      return '<div class="tuile-ambiance tuile-univers" data-pour="' + esc(u) + '" hidden><img src="' + src(t.image) + '" alt="" loading="lazy">' +
+        '<figcaption><span class="t-nom">' + esc(t.nom) + '</span></figcaption></div>';
+    }).join("");
   });
 
   /* ---------- Filtres par univers (page Sélection) ----------
@@ -164,6 +194,19 @@
         var ok = !id || (el.getAttribute("data-univers") || "").split(" ").indexOf(id) > -1;
         el.hidden = !ok;
         if (ok) { shown++; el.classList.add("in"); }
+      });
+      /* « Tout » : ordre mélangé de la charte. Un univers : son propre ordre (CSS order), sans mélange, et sa tuile. */
+      var U = id && G && G.univers && G.univers[id], rangU = {};
+      if (U) U.ordre.forEach(function (pid, i) { rangU[pid] = i; });
+      document.querySelectorAll('[data-pieces="all"] .piece').forEach(function (el) {
+        var pid = el.getAttribute("data-id");
+        el.style.order = U ? (el.classList.contains("wait") ? 2000 : 2 * (pid in rangU ? rangU[pid] : 900) + 1) : "";
+      });
+      document.querySelectorAll(".tuile-ambiance").forEach(function (t) {
+        var pour = t.getAttribute("data-pour");
+        if (!pour) { t.hidden = !!id; return; }
+        t.hidden = !U || pour !== id;
+        t.style.order = U && pour === id ? 2 * U.tuiles[0].apres : "";
       });
       var empty = document.querySelector(".empty");
       if (empty) empty.hidden = shown > 0;
