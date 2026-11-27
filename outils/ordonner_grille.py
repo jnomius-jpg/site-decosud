@@ -29,6 +29,23 @@ def penalite(items, cc):
     bonus = sum(1 for it in items[:COLS] if it["id"] not in cc)  # premier écran : les coups de cœur
     return len(locaux) + 0.5 * bonus, locaux
 
+def recuire(items, cc, n):
+    """Recuit simulé : l'ordre qui enfreint le moins de règles de placement."""
+    if len(items) < 3: return items[:]
+    random.seed(7)
+    best = items[:]; random.shuffle(best)
+    bp, _ = penalite(best, cc); cur, cp = best[:], bp
+    T = 2.0
+    for it in range(n):
+        i, j = random.sample(range(len(cur)), 2)
+        cand = cur[:]; cand[i], cand[j] = cand[j], cand[i]
+        p, _ = penalite(cand, cc)
+        if p <= cp or random.random() < math.exp((cp - p) / T):
+            cur, cp = cand, p
+            if p < bp: best, bp = cand[:], p
+        T = max(0.02, T * 0.9999)
+    return best
+
 def main():
     pieces = json.load(open(sys.argv[1]))
     items, sans = [], []
@@ -38,18 +55,7 @@ def main():
         m = mesurer(f); fam = famille(m)
         items.append(dict(m, id=p["id"], nom=p["id"], fam=fam, acc=est_accent(m, fam)))
     cc = {p["id"] for p in pieces if p["coupDeCoeur"]}
-    random.seed(7)
-    best = items[:]; random.shuffle(best)
-    bp, _ = penalite(best, cc); cur, cp = best[:], bp
-    T = 2.0
-    for it in range(60000):
-        i, j = random.sample(range(len(cur)), 2)
-        cand = cur[:]; cand[i], cand[j] = cand[j], cand[i]
-        p, _ = penalite(cand, cc)
-        if p <= cp or random.random() < math.exp((cp - p) / T):
-            cur, cp = cand, p
-            if p < bp: best, bp = cand[:], p
-        T = max(0.02, T * 0.9999)
+    best = recuire(items, cc, 60000)
     # tuiles d'ambiance après les rangées 3, 6, 9…
     amb_fam = {}
     for src, u, nom in AMBIANCES:
@@ -63,7 +69,19 @@ def main():
         if not choix: break
         a = choix[0]; utilisees.add(a[0])
         tuiles.append(dict(apres=r * COLS, image=a[0], univers=a[1], nom=a[2]))
-    out = dict(ordre=[it["id"] for it in best] + sans, colonnes=COLS, tuiles=tuiles,
+    # chaque univers a son propre ordre (pas de mélange) et sa propre tuile d'ambiance
+    par_univers, rapports = {}, {}
+    univ_de = {p["id"]: p.get("univers", []) for p in pieces}
+    for src, u, nom in AMBIANCES:
+        sous = [it for it in items if u in univ_de.get(it["id"], [])]
+        if not sous: continue
+        o = recuire(sous, cc, 20000)
+        n = len(o)
+        apres = 9 if n >= 12 else (6 if n >= 8 else n)
+        par_univers[u] = dict(ordre=[it["id"] for it in o] + [i for i in sans if u in univ_de.get(i, [])],
+                              tuiles=[dict(apres=apres, image=src, univers=u, nom=nom)])
+        rapports[u] = len(penalite(o, cc)[1])
+    out = dict(ordre=[it["id"] for it in best] + sans, colonnes=COLS, tuiles=tuiles, univers=par_univers,
                mesures={it["id"]: dict(fam=it["fam"], accent=bool(it["acc"]), L=round(it["L"], 1), M3=round(it["M3"], 1),
                                     vue2=os.path.exists(os.path.join(RACINE, "assets/img/grille", it["id"] + "-2.webp"))) for it in best})
     with open(os.path.join(RACINE, "assets/grille.js"), "w") as fh:
@@ -74,6 +92,7 @@ def main():
     print("Familles :", dict(collections.Counter(i["fam"] for i in best)), "| accents :", sum(i["acc"] for i in best), "/", len(best))
     print("Sans photo (placées à la fin) :", sans)
     print("Tuiles d'ambiance :", [(t["apres"], t["univers"]) for t in tuiles])
+    print("Univers (pièces, écarts de placement) :", {u: (len(v["ordre"]), rapports[u]) for u, v in par_univers.items()})
     print("\nGrille conforme." if not pb else f"\nÀ corriger ({len(pb)}) :\n- " + "\n- ".join(pb))
 
 if __name__ == "__main__":

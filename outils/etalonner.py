@@ -2,12 +2,12 @@
 
 Usage : python3 outils/etalonner.py source.jpg sortie.webp
 Applique la même recette à toutes les photos, sans réglage photo par photo :
-  1. balance des blancs : neutres ramenés à a* ≈ +1,5, b* ≈ +5 (chaleur légère, jamais b* < 0 ni > +10) ;
-  2. TSL : bleus −15 % de chroma, verts tirés vers le jaune et −10 %, oranges +5 en clarté ;
-  3. clarté : courbe qui amène la clarté moyenne de la photo vers L* 70 (vue situation 62-76),
-     noirs relevés (L* ≥ 10, rendu mat), hautes lumières protégées (≤ 1 % de blancs purs) ;
-  4. couleur : chroma réduite seulement si la photo dépasse M3 36 (jamais en dessous de 55 % de l'original,
-     pour ne pas tomber dans le « beige Instagram ») ;
+  1. balance des blancs : neutres ramenés à a* ≈ +2,5, b* ≈ +7,5 (chaleur franche, jamais b* < 0 ni > +10) ;
+  2. TSL : bleus −15 % de chroma, verts tirés vers le jaune et −10 %, oranges +4 en clarté ;
+  3. clarté : courbe qui amène la clarté moyenne vers L* 60 au plus (on éclaircit peu) (vue situation 62-76), puis courbe en S douce
+     pour le relief, noirs à L* 8 (mats sans être laiteux), blancs plafonnés à 96,5 ;
+  4. couleur : chroma réduite seulement au-delà de M3 52, et jamais de plus de 15 %
+     (pas de « beige Instagram ») ;
   5. format 4:5, export WebP.
 """
 import sys, math
@@ -15,9 +15,13 @@ import numpy as np
 from PIL import Image
 from skimage.color import rgb2lab, lab2rgb
 
-CIBLE_L = 70.0      # clarté moyenne visée : nos photos sont des vues « situation » (cible 62-76) ; vue grille 78-92 quand on aura des photos sur fond uni
-NOIR_MIN = 10.0     # L* des noirs (8-12)
-M3_MAX = 36.0       # colorfulness visée d'une photo colorée (cible 22-40 ; on vise bas pour garder la grille sous M3 30)
+CIBLE_L = 60.0      # clarté moyenne visée (vue situation 62-76) : on reste dans le bas pour garder de la densité
+NOIR_MIN = 8.0      # L* des noirs (8-12) : bas de la fourchette, pour éviter le rendu laiteux
+BLANC_MAX = 96.5    # hautes lumières protégées
+CONTRASTE = 0.18    # courbe en S douce autour du milieu (plus de relief)
+CHAUD_B = 7.5       # b* visé pour les neutres (cible +3 à +8, on prend le haut : plus de chaleur)
+CHAUD_A = 2.5       # a* visé pour les neutres (cible 0 à +3)
+M3_MAX = 52.0       # au-delà, on retient la couleur (accent : 45-58, jamais plus de 60)
 
 def m3(rgb):
     R, G, B = [rgb[..., i].ravel() * 255 for i in range(3)]
@@ -37,35 +41,36 @@ def etalonner(im):
     lab = rgb2lab(rgb)
     L, a, b = lab[..., 0], lab[..., 1], lab[..., 2]
     C = np.hypot(a, b)
-    # 1. Balance des blancs sur les zones neutres et claires
+    # 1. Balance des blancs sur les zones neutres et claires, calée chaude
     neutres = (C < 14) & (L > 55)
     if neutres.sum() > 0.02 * L.size:
-        a -= np.median(a[neutres]) - 1.5
-        b -= np.median(b[neutres]) - 5.0
+        a -= np.median(a[neutres]) - CHAUD_A
+        b -= np.median(b[neutres]) - CHAUD_B
     # 2. TSL
     h = np.degrees(np.arctan2(b, a)) % 360
     C = np.hypot(a, b)
     bleus = (h > 200) & (h < 290)
     verts = (h > 100) & (h < 170)
-    oranges = (h > 30) & (h < 75)
+    oranges = (h > 50) & (h < 75)   # bois, osier, terre cuite claire (pas les rouges)
     C = np.where(bleus, C * 0.85, C)
     C = np.where(verts, C * 0.90, C)
     h = np.where(verts, h - 8, h)
-    L = np.where(oranges, np.minimum(L + 5 * np.clip(C / 30, 0, 1), 100), L)
-    # 3. Clarté : courbe gamma sur L*, noirs relevés, blancs protégés
+    L = np.where(oranges, np.minimum(L + 4 * np.clip(C / 30, 0, 1), 100), L)
+    # 3. Clarté : gamma vers la cible, puis courbe en S (contraste), noirs et blancs bornés
     x = np.clip(L / 100, 0, 1)
     moy = max(x.mean(), 0.05)
     g = math.log(CIBLE_L / 100) / math.log(moy) if moy < CIBLE_L / 100 else 1.0
-    g = max(g, 0.45)
-    y = x ** g
-    y = NOIR_MIN / 100 + (0.985 - NOIR_MIN / 100) * y   # noirs mats, blancs à 98,5 maxi
+    y = x ** max(g, 0.75)
+    y = y + CONTRASTE * np.sin(2 * np.pi * (y - 0.5)) / (2 * np.pi) * 2   # S douce
+    y = np.clip(y, 0, 1)
+    y = NOIR_MIN / 100 + (BLANC_MAX / 100 - NOIR_MIN / 100) * y
     L = y * 100
-    # 4. Chroma : seulement si trop colorée
+    # 4. Chroma : on garde la vie de la couleur, on ne plafonne que les photos criardes
     a = C * np.cos(np.radians(h)); b = C * np.sin(np.radians(h))
     out = np.clip(lab2rgb(np.dstack([L, a, b])), 0, 1)
     c = m3(out)
     if c > M3_MAX:
-        k = max(M3_MAX / c, 0.55)
+        k = max(M3_MAX / c, 0.85)
         out = np.clip(lab2rgb(np.dstack([L, a * k, b * k])), 0, 1)
     return Image.fromarray((out * 255).round().astype(np.uint8))
 

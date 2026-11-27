@@ -168,6 +168,11 @@
       var tuile = t ? '<a class="tuile-ambiance" href="#' + esc(t.univers) + '"><img src="' + src(t.image) + '" alt="" loading="lazy">' +
         '<figcaption><span class="t-nom">' + esc(t.nom) + '</span><span class="t-lien">Voir les pièces <span aria-hidden="true">→</span></span></figcaption></a>' : "";
       return tuile + pieceHTML(p, true);
+    }).join("") + Object.keys(G && G.univers || {}).map(function (u) {
+      /* Tuile d'ambiance propre à chaque univers : visible seulement quand ce filtre est actif */
+      var t = G.univers[u].tuiles[0];
+      return '<div class="tuile-ambiance tuile-univers" data-pour="' + esc(u) + '" hidden><img src="' + src(t.image) + '" alt="" loading="lazy">' +
+        '<figcaption><span class="t-nom">' + esc(t.nom) + '</span></figcaption></div>';
     }).join("");
   });
 
@@ -190,7 +195,19 @@
         el.hidden = !ok;
         if (ok) { shown++; el.classList.add("in"); }
       });
-      document.querySelectorAll(".tuile-ambiance").forEach(function (t) { t.hidden = !!id; });
+      /* « Tout » : ordre mélangé de la charte. Un univers : son propre ordre (CSS order), sans mélange, et sa tuile. */
+      var U = id && G && G.univers && G.univers[id], rangU = {};
+      if (U) U.ordre.forEach(function (pid, i) { rangU[pid] = i; });
+      document.querySelectorAll('[data-pieces="all"] .piece').forEach(function (el) {
+        var pid = el.getAttribute("data-id");
+        el.style.order = U ? (el.classList.contains("wait") ? 2000 : 2 * (pid in rangU ? rangU[pid] : 900) + 1) : "";
+      });
+      document.querySelectorAll(".tuile-ambiance").forEach(function (t) {
+        var pour = t.getAttribute("data-pour");
+        if (!pour) { t.hidden = !!id; return; }
+        t.hidden = !U || pour !== id;
+        t.style.order = U && pour === id ? 2 * U.tuiles[0].apres : "";
+      });
       var empty = document.querySelector(".empty");
       if (empty) empty.hidden = shown > 0;
     };

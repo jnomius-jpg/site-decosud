@@ -612,7 +612,7 @@ html.no-scroll { overflow: hidden; }
 .wrap-wide > .scroll-ctrl { padding: 0 calc(var(--gutter) - clamp(12px, 1.7vw, 26px)); }
 
 /* Étalonnage chaud des coups de cœur (les photos de la Sélection sont étalonnées en amont, voir outils/etalonner.py) */
-.coups .piece .zoom img { filter: sepia(.16) saturate(1.1) contrast(1.04) brightness(.97); }
+.coups .piece .zoom img { filter: sepia(.12) saturate(1.1) contrast(1.04); }
 
 /* Coups de cœur : les 5 pièces côte à côte, hautes, titre sur la photo */
 .coups .scroller { grid-auto-columns: calc((100% - 4 * 6px) / 5); gap: 6px; }
@@ -620,7 +620,8 @@ html.no-scroll { overflow: hidden; }
 .coups .piece > .zoom, .coups .piece > .cap { grid-area: 1 / 1; }
 .coups .piece .zoom { aspect-ratio: 2 / 3; }
 .coups .piece .zoom::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  background: radial-gradient(90% 55% at 50% 52%, rgba(35, 22, 12, .34), rgba(35, 22, 12, .08) 75%), linear-gradient(180deg, rgba(35, 22, 12, 0) 60%, rgba(35, 22, 12, .25)); }
+  /* voile noir léger, 12 à 22 %, pour détacher le texte crème sans éteindre la photo */
+  background: radial-gradient(80% 45% at 50% 50%, rgba(0, 0, 0, .22), rgba(0, 0, 0, .12) 80%); }
 .coups .piece .cap { position: relative; z-index: 2; align-self: center; text-align: center; padding: 0 10%; color: var(--creme); pointer-events: none; }
 .coups .piece .name { margin: 0; font-family: var(--serif); font-weight: 400; font-size: clamp(.95rem, 1.22vw, 1.28rem); line-height: 1.25; letter-spacing: .1em; text-transform: uppercase; text-shadow: 0 1px 14px rgba(20, 12, 6, .35); }
 .coups .piece .by { margin: 6px 0 0; font-size: 12px; letter-spacing: .02em; color: var(--creme); opacity: .9; text-shadow: 0 1px 10px rgba(20, 12, 6, .35); }
@@ -648,12 +649,12 @@ html.no-scroll { overflow: hidden; }
    ========================================================== */
 .grille-charte .wrap-wide { max-width: var(--max); padding-left: var(--gutter); padding-right: var(--gutter); }
 .grille-charte .pieces.three { grid-template-columns: repeat(3, 1fr); column-gap: 32px; row-gap: 48px; }
-.grille-charte .piece { background: var(--sable); border-radius: 2px; overflow: hidden; }
+.grille-charte .piece { background: none; border: 0; border-radius: 0; box-shadow: none; }
 .grille-charte .piece .zoom { aspect-ratio: 4 / 5; background: var(--sable); }
 .grille-charte .piece .zoom img { transition: opacity .6s ease, transform 900ms cubic-bezier(.22,.61,.36,1); }
 .grille-charte .piece .zoom .vue2 { position: absolute; inset: 0; opacity: 0; }
 @media (hover: hover) { .grille-charte a.piece:hover .zoom .vue2 { opacity: 1; } .grille-charte a.piece:hover .zoom img { transform: none; } }
-.grille-charte .piece .cap { padding: 16px 18px 18px; }
+.grille-charte .piece .cap { padding: 14px 0 0; }
 .grille-charte .piece .name { margin: 0; font-family: var(--serif); font-weight: 400; font-size: 1.12rem; line-height: 1.3; color: var(--encre); letter-spacing: 0; text-transform: none; }
 .grille-charte .piece .by { margin: 3px 0 0; font-size: 12.5px; color: var(--taupe); }
 .grille-charte .piece .price { margin: 6px 0 0; font-family: var(--serif); font-size: 1rem; color: var(--taupe); }
@@ -676,7 +677,7 @@ html.no-scroll { overflow: hidden; }
 @media (min-width: 1441px) { .grille-charte .pieces.three { grid-template-columns: repeat(4, 1fr); grid-auto-flow: row dense; } }
 @media (max-width: 1000px) { .grille-charte .pieces.three { grid-template-columns: repeat(2, 1fr); column-gap: 16px; row-gap: 32px; grid-auto-flow: row dense; } }
 @media (max-width: 560px) {
-  .grille-charte .piece .cap { padding: 12px 12px 14px; }
+  .grille-charte .piece .cap { padding: 10px 0 0; }
   .grille-charte .piece .name { font-size: 1rem; }
   .tuile-ambiance figcaption { flex-direction: column; gap: 6px; padding: 16px; }
 }
